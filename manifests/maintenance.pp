@@ -1,9 +1,9 @@
 class pe_databases::maintenance (
   Boolean $disable_maintenace = false,
-  $maint_cron_weekday         = 6,
-  $maint_cron_hour            = 1,
-  $maint_cron_minute          = 0,
-  $logging_directory          = '/var/log/puppetlabs/pe_databases_cron'
+  Integer $maint_cron_weekday = 6,
+  Integer $maint_cron_hour    = 1,
+  Integer $maint_cron_minute  = 0,
+  String  $logging_directory  = '/var/log/puppetlabs/pe_databases_cron'
 ){
 
   $ensure_cron = $disable_maintenace ? {
