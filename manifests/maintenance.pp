@@ -1,16 +1,22 @@
 class pe_databases::maintenance (
-  $maint_cron_weekday = 6, 
-  $maint_cron_hour    = 1,
-  $maint_cron_minute  = 0,
-  $logging_directory  = '/var/log/puppetlabs/pe_databases_cron'
+  Boolean $disable_maintenace = false,
+  $maint_cron_weekday         = 6,
+  $maint_cron_hour            = 1,
+  $maint_cron_minute          = 0,
+  $logging_directory          = '/var/log/puppetlabs/pe_databases_cron'
 ){
 
-  file { $logging_directory : 
+  $ensure_cron = $disable_maintenace ? {
+    true    => absent,
+    default => present
+  }
+
+  file { $logging_directory :
     ensure => directory,
   }
 
   cron { 'Maintain PE databases' :
-    ensure  => present,
+    ensure  => $ensure_cron,
     user    => 'root',
     weekday => $maint_cron_weekday,
     hour    => $maint_cron_hour,
