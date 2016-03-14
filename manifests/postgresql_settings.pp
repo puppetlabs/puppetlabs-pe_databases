@@ -1,7 +1,8 @@
 class postgresql_settings (
-  Float[0,1] $autovacuum_scale_factor = 0.05,
-  Boolean $manage_postgresql_service  = true,
-  Boolean $all_in_one_pe_install      = true,
+  Float[0,1] $autovacuum_vacuum_scale_factor   = 0.08,
+  Float[0,1] $autovacuum_analyze_scale_factor  = 0.04,
+  Boolean $manage_postgresql_service           = true,
+  Boolean $all_in_one_pe_install               = true,
 ) {
 
   $postgresql_service_resource_name = 'postgresqld'
@@ -27,11 +28,17 @@ class postgresql_settings (
   #The value attribute of postgresql_conf requires a string despite validating a float above
   #https://tickets.puppetlabs.com/browse/MODULES-2960
   #http://www.postgresql.org/docs/9.4/static/runtime-config-autovacuum.html
-  postgresql_conf { ['autovacuum_vacuum_scale_factor', 'autovacuum_analyze_scale_factor'] :
+  Postgresql_conf {
     ensure => present,
     target => '/opt/puppetlabs/server/data/postgresql/9.4/data/postgresql.conf',
-    value  => "${autovacuum_scale_factor}"
     notify => $notify_postgresql_service,
   }
 
+  postgresql_conf { 'autovacuum_vacuum_scale_factor' :
+    value => "${autovacuum_vacuum_scale_factor}",
+  }
+
+  postgresql_conf { 'autovacuum_analyze_scale_factor' :
+    value => "${autovacuum_analyze_scale_factor}",
+  }
 }
