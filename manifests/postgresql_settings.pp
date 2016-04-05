@@ -1,8 +1,17 @@
 class pe_databases::postgresql_settings (
-  Float[0,1] $autovacuum_vacuum_scale_factor   = 0.08,
-  Float[0,1] $autovacuum_analyze_scale_factor  = 0.04,
-  Boolean $manage_postgresql_service           = true,
-  Boolean $all_in_one_pe_install               = true,
+  Float[0,1] $autovacuum_vacuum_scale_factor           = 0.08,
+  Float[0,1] $autovacuum_analyze_scale_factor          = 0.04,
+  Integer    $autovacuum_max_workers                   = min(8, $::processors['count'] / 2),
+  Integer    $log_autovacuum_min_duration              = 0,
+  Integer    $log_temp_files                           = 0,
+  String     $maintenance_work_mem                     = "${::memory['system']['total_bytes'] / 1024 / 1024 / 16}MB",
+  String     $work_mem                                 = '8MB',
+  Integer    $max_connections                          = 1000,
+  Float[0,1] $checkpoint_completion_target             = 0.9,
+  Float[0,1] $checkpoint_segments                      = 128,
+  Boolean    $manage_postgresql_service                = true,
+  Boolean    $all_in_one_pe_install                    = true,
+  Boolean    $manage_fact_values_autovacuum_cost_delay = true,
 ) {
 
   $postgresql_service_resource_name = 'postgresqld'
@@ -40,5 +49,48 @@ class pe_databases::postgresql_settings (
 
   postgresql_conf { 'autovacuum_analyze_scale_factor' :
     value => "${autovacuum_analyze_scale_factor}",
+  }
+
+  postgresql_conf { 'autovacuum_max_workers' :
+    value => "${autovacuum_max_workers}",
+  }
+
+  postgresql_conf { 'log_autovacuum_min_duration' :
+    value => "${log_autovacuum_min_duration}",
+  }
+
+  postgresql_conf { 'log_temp_files' :
+    value => "${log_temp_files}",
+  }
+
+  postgresql_conf { 'maintenance_work_mem' :
+    value => "${maintenance_work_mem}",
+  }
+
+  postgresql_conf { 'work_mem' :
+    value => "${work_mem}",
+  }
+
+  postgresql_conf { 'max_connections' :
+    value => "${max_connections}",
+  }
+
+  postgresql_conf { 'checkpoint_completion_target' :
+    value => "${checkpoint_completion_target}",
+  }
+
+  postgresql_conf { 'checkpoint_segments' :
+    value => "${checkpoint_segments}",
+  }
+
+  if $manage_fact_values_autovacuum_cost_delay {
+    postgresql_psql { 'Set autovacuum_cost_delay=0 for fact_values' :
+      command    => 'ALTER TABLE fact_values SET ( autovacuum_vacuum_cost_delay = 0 )',
+      unless     => 'SELECT reloptions FROM pg_class WHERE relname = \'fact_values\' AND CAST(reloptions as text) LIKE \'%autovacuum_vacuum_cost_delay=0%\'',
+      db         => 'pe-puppetdb',
+      psql_user  => 'pe-postgres',
+      psql_group => 'pe-postgres',
+      psql_path  => '/opt/puppetlabs/server/bin/psql',
+    }
   }
 }
