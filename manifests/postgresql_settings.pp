@@ -9,7 +9,7 @@ class pe_databases::postgresql_settings (
   Integer    $max_connections                          = 1000,
   Hash       $arbitrary_postgresql_conf_settings       = {},
   Float[0,1] $checkpoint_completion_target             = 0.9,
-  Float[0,1] $checkpoint_segments                      = 128,
+  Integer    $checkpoint_segments                      = 128,
   Boolean    $manage_postgresql_service                = true,
   Boolean    $all_in_one_pe_install                    = true,
   Boolean    $manage_fact_values_autovacuum_cost_delay = true,
