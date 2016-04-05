@@ -1,4 +1,4 @@
-class postgresql_settings (
+class pe_databases::postgresql_settings (
   Float[0,1] $autovacuum_vacuum_scale_factor   = 0.08,
   Float[0,1] $autovacuum_analyze_scale_factor  = 0.04,
   Boolean $manage_postgresql_service           = true,
