@@ -7,6 +7,7 @@ class pe_databases::postgresql_settings (
   String     $maintenance_work_mem                     = "${::memory['system']['total_bytes'] / 1024 / 1024 / 16}MB",
   String     $work_mem                                 = '8MB',
   Integer    $max_connections                          = 1000,
+  Hash       $arbitrary_postgresql_conf_settings       = {},
   Float[0,1] $checkpoint_completion_target             = 0.9,
   Float[0,1] $checkpoint_segments                      = 128,
   Boolean    $manage_postgresql_service                = true,
@@ -81,6 +82,14 @@ class pe_databases::postgresql_settings (
 
   postgresql_conf { 'checkpoint_segments' :
     value => "${checkpoint_segments}",
+  }
+
+  if !empty($arbitrary_postgresql_conf_settings) {
+    $arbitrary_postgresql_conf_settings.each | $key, $value | {
+      postgresql_conf { $key :
+        value => "${value}",
+      }
+    }
   }
 
   if $manage_fact_values_autovacuum_cost_delay {
