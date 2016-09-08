@@ -93,13 +93,6 @@ class pe_databases::postgresql_settings (
   }
 
   if $manage_fact_values_autovacuum_cost_delay {
-    postgresql_psql { 'Set autovacuum_cost_delay=0 for fact_values' :
-      command    => 'ALTER TABLE fact_values SET ( autovacuum_vacuum_cost_delay = 0 )',
-      unless     => 'SELECT reloptions FROM pg_class WHERE relname = \'fact_values\' AND CAST(reloptions as text) LIKE \'%autovacuum_vacuum_cost_delay=0%\'',
-      db         => 'pe-puppetdb',
-      psql_user  => 'pe-postgres',
-      psql_group => 'pe-postgres',
-      psql_path  => '/opt/puppetlabs/server/bin/psql',
-    }
+    pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero { 'fact_values' : }
   }
 }
