@@ -1,5 +1,23 @@
 class pe_databases (
-  Array[String] $databases_to_backup   = [ 'pe-activity', 'pe-classifier', 'pe-postgres', 'pe-puppetdb', 'pe-rbac', 'pe-orchestrator' ],
+  Array[Hash] $databases_and_backup_schedule = [
+    {
+      'databases' => ['pe-activity', 'pe-classifier', 'pe-postgres', 'pe-rbac', 'pe-orchestrator'],
+      'schedule'  =>
+      {
+        'minute' => '30',
+        'hour'   => '22',
+      },
+    },
+    {
+      'databases' => ['pe-puppetdb'],
+      'schedule'  =>
+      {
+        'minute'  => '0',
+        'hour'    => '2',
+        'weekday' => '7',
+      },
+    }
+  ],
   Boolean $manage_database_maintenance = true,
   Boolean $manage_postgresql_settings  = true,
 ) {
@@ -12,9 +30,14 @@ class pe_databases (
     include pe_databases::postgresql_settings
   }
 
-  if !empty($databases_to_backup) {
-    $databases_to_backup.each | String $db | {
-      pe_databases::backup{ $db :}
+  if !empty($databases_and_backup_schedule) {
+    $databases_and_backup_schedule.each | Hash $dbs_and_schedule | {
+      pe_databases::backup{ "${dbs_and_schedule['databases']}" :
+        databases_to_backup => $dbs_and_schedule['databases'],
+        minute              => $dbs_and_schedule['schedule']['minute'],
+        hour                => $dbs_and_schedule['schedule']['hour'],
+        weekday             => $dbs_and_schedule['schedule']['weekday'],
+      }
     }
   }
 }

@@ -1,0 +1,25 @@
+<%- | Array[String]  $databases_to_backup,
+      String $logging_directory,
+      String $backup_directory,
+| -%>
+
+#!/bin/bash
+# This file is managed by Puppet
+
+<% $databases_to_backup.each | String $database | { -%>
+  echo "Starting dump of database: <%= $database -%>" >> <%= $logging_directory -%>/<%= $database -%>.log
+
+  <% if $database == 'pe-classifier' { -%>
+    #Save space before backing up
+    /opt/puppetlabs/server/bin/psql -d pe-classifier -c 'TRUNCATE TABLE node_check_ins'
+  <% } -%>
+
+  /opt/puppetlabs/server/bin/pg_dump -Fc <%= $database %> -f <%= $backup_directory %>/<%= $database %>_`date +'%m_%d_%y_%R'`.bin
+
+  result="$?"
+  if [[ $result -eq 0 ]]; then
+    echo "Completed dump of database: <%= $database -%>" >> <%= $logging_directory -%>/<%= $database -%>.log
+  else
+    echo "Failed to dump database <%= $database -%>. Exit code is: ${result}" >> <%= $logging_directory -%>/<%= $database -%>.log
+  fi
+<% } -%>
