@@ -1,6 +1,6 @@
 define pe_databases::backup (
   $db_name          = $title,
-  $pg_dump_command  = '/opt/puppetlabs/server/bin/pg_dump -Fc''  
+  $pg_dump_command  = '/opt/puppetlabs/server/bin/pg_dump -Fc',
   $dump_path        = '/opt/puppetlabs/server/data/postgresql/9.4/backups/',
   $script_directory = '/usr/local/bin',
   $minute           = '30',
