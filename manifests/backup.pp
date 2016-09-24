@@ -23,15 +23,15 @@ class pe_databases::backup (
   String $backup_logging_directory = '/var/log/puppetlabs/pe_databases_backup',
 ) {
 
-  ensure_resource( 'file', [ '/opt/puppetlabs/pe_databases', '/opt/puppetlabs/pe_databases/scripts', $backup_directory ],
-    { 'ensure' => 'directory' }
-  )
+  file { ['/opt/puppetlabs/pe_databases', '/opt/puppetlabs/pe_databases/scripts', $backup_directory ] :
+    ensure => directory,
+  }
 
-  ensure_resource( 'file', $backup_logging_directory,
-    { 'ensure' => 'directory',
-      'owner' => 'pe-postgres',
-      'group' => 'pe-postgres', }
-  )
+  file { $backup_logging_directory :
+    ensure => 'directory',
+    owner  => 'pe-postgres',
+    group  => 'pe-postgres',
+  }
 
   file { 'puppet_enterprise_db_backup_script' :
     ensure => file,
@@ -45,7 +45,7 @@ class pe_databases::backup (
   $databases_and_backup_schedule.each | Hash $dbs_and_schedule | {
 
     $databases_to_backup = $dbs_and_schedule['databases']
-    $db_string = join($databases_to_backup, " ")
+    $db_string = join($databases_to_backup, ' ')
 
     cron { "puppet_enterprise_database_backup_${databases_to_backup}":
       ensure  => present,
