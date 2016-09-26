@@ -4,8 +4,6 @@ class pe_databases::postgresql_settings (
   Integer    $autovacuum_max_workers                   = pe_max( 3, pe_min( 8, $::processors['count'] / 3)),
   Integer    $log_autovacuum_min_duration              = -1,
   Integer    $log_temp_files                           = -1,
-  String     $maintenance_work_mem                     = "${::memory['system']['total_bytes'] / 1024 / 1024 / 3}MB",
-  String     $autovacuum_work_mem                      = "${::memory['system']['total_bytes'] / 1024 / 1024 / 3/ $autovacuum_max_workers}MB",
   String     $work_mem                                 = '8MB',
   Integer    $max_connections                          = 1000,
   Hash       $arbitrary_postgresql_conf_settings       = {},
@@ -14,6 +12,14 @@ class pe_databases::postgresql_settings (
   Boolean    $manage_postgresql_service                = true,
   Boolean    $all_in_one_pe_install                    = true,
   Boolean    $manage_fact_values_autovacuum_cost_delay = true,
+  String     $maintenance_work_mem                     = $all_in_one_pe_install ? {
+                                                           false => "${::memory['system']['total_bytes'] / 1024 / 1024 / 3}MB",
+                                                           true  => "${::memory['system']['total_bytes'] / 1024 / 1024 / 8}MB",
+                                                         },
+  String     $autovacuum_work_mem                      = $all_in_one_pe_install ? {
+                                                           false => "${::memory['system']['total_bytes'] / 1024 / 1024 / 3/ $autovacuum_max_workers}MB",
+                                                           true  => "${::memory['system']['total_bytes'] / 1024 / 1024 / 8/ $autovacuum_max_workers}MB",
+                                                         },
 ) {
 
   $postgresql_service_resource_name = 'postgresqld'
