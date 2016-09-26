@@ -1,37 +1,44 @@
 define pe_databases::backup (
-  $db_name          = $title,
-  $pg_dump_command  = '/opt/puppetlabs/server/bin/pg_dump -Fc',
-  $dump_path        = '/opt/puppetlabs/server/data/postgresql/9.4/backups/',
-  $script_directory = '/usr/local/bin',
-  $minute           = '30',
-  $hour             = '23',
-  $monthday         = '*',
+  Array[String] $databases_to_backup = [ 'pe-activity', 'pe-classifier', 'pe-postgres', 'pe-puppetdb', 'pe-rbac', 'pe-orchestrator' ],
+  String $backup_directory           = '/opt/puppetlabs/server/data/postgresql/9.4/backups',
+  String $script_directory           = '/opt/puppetlabs/pe_databases/scripts',
+  String $minute                     = '30',
+  String $hour                       = '23',
+  String $weekday                    = '*',
+  String $logging_directory          = '/var/log/puppetlabs/pe_databases_backup',
 ) {
 
-  validate_string($pg_dump_command)
-  validate_absolute_path($dump_path)
-  validate_absolute_path($script_directory)
-  validate_string($minute)
-  validate_string($hour)
-  validate_string($monthday)
+  ensure_resource( 'file', [ '/opt/puppetlabs/pe_databases', $script_directory, $backup_directory ],
+    { 'ensure' => 'directory' }
+  )
 
-  file { "${script_directory}/dump_${db_name}.sh":
+  ensure_resource( 'file', $logging_directory,
+    { 'ensure' => 'directory',
+       'owner' => 'pe-postgres',
+       'group' => 'pe-postgres', }
+  )
+
+  $script_path = "${script_directory}/puppet_enterprise_database_${databases_to_backup}_backup.sh"
+
+  file { $script_path :
     ensure  => file,
-    content => template('pe_databases/backup/db_dump.sh.erb'),
+    content => epp('pe_databases/puppet_enterprise_database_backup.sh.epp',
+                   { databases_to_backup => $databases_to_backup,
+                     logging_directory   => $logging_directory,
+                     backup_directory    => $backup_directory,
+                   }),
     owner   => 'pe-postgres',
     group   => 'pe-postgres',
     mode    => '0750',
-    before  => Cron["${db_name}_db_dump"],
+    before  => Cron["puppet_enterprise_database_backup_${databases_to_backup}"],
   }
 
-  cron { "${db_name}_db_dump":
+  cron { "puppet_enterprise_database_backup_${databases_to_backup}":
     ensure   => present,
-    command  => "${script_directory}/dump_${db_name}.sh",
+    command  => $script_path,
     user     => 'pe-postgres',
     minute   => $minute,
     hour     => $hour,
-    monthday => $monthday,
-    require  => File['dump_directory'],
+    weekday  => $weekday,
   }
-
 }
