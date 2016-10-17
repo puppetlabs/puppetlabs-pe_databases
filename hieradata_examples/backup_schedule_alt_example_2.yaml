@@ -1,0 +1,42 @@
+pe_databases::backup::databases_and_backup_schedule:
+  -
+    'databases':
+      - 'pe-classifier'
+    'schedule':
+      'minute': '30'
+      'hour':   '22'
+  -
+    'databases':
+      - 'pe-puppetdb'
+    'schedule':
+      'minute': '0'
+      'hour': '2'
+      'weekday': '7'
+  -
+    'databases':
+      - 'pe-activity'
+    'schedule':
+      'minute': '0'
+      'hour': '4'
+      'weekday': '6'
+  -
+    'databases':
+      - 'pe-postgres'
+    'schedule':
+      'minute': '0'
+      'hour': '3'
+      'weekday': '5'
+  -
+    'databases':
+      - 'pe-rbac'
+    'schedule':
+      'minute': '0'
+      'hour': '1'
+      'weekday': '1'
+  -
+    'databases':
+      - 'pe-orchestrator'
+    'schedule':
+      'minute': '0'
+      'hour': '7'
+      'weekday': '2'

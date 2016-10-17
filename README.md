@@ -1,6 +1,12 @@
 Table of Contents
 =================
 
+* [Overview](#overview)
+  * [What does this module provide?](#what-does-this-module-provide)
+  * [Items you may want to configure](#items-you-may-want-to-configure)
+    * [Backup schedule](#backup-schedule)
+    * [Disable the maintenance cron job](#disable-the-maintenance-cron-job)
+* [General PostgreSQL Recommendations](#general-postgresql-recommendations)
   * [Tuning](#tuning)
   * [Backups](#backups)
   * [Maintenance](#maintenance)
@@ -12,6 +18,35 @@ Table of Contents
     * [autovacuum_work_mem](#autovacuum_work_mem)
     * [autovacuum_max_workers](#autovacuum_max_workers)
     * [checkpoint_segments and checkpoint_completion_target](#checkpoint_segments-and-checkpoint_completion_target)
+
+# Overview
+
+This module is meant to provide the basic tuning, maintenance, and backups you need for your PE PostgreSQL instance.
+
+## What does this module provide?
+
+By default you get the following:
+
+1.  Backups for all of your databases
+  - PuppetDB is backed up once a week
+  - The other PE databases are backed up every night
+  - The node_check_ins table is TRUNCATED from the pe-classifier database to keep the size down
+2.  A weekly reindex and vacuum analyze run on all databases
+3.  Slightly better default settings for PE PostgreSQL
+
+## Items you may want to configure
+
+### Backup schedule
+
+You can modify the default backup schedule by provide an array of hashes that describes the databases and the schedule to back them up on.  Please refer to the [hieradata_examples](./hieradata_examples) directory of this repo to see examples
+
+NOTE: If you change the default schedule you'll likely stop managing a crontab entry and there's not a clean way to remove unmanaged crontab entries.  So you may want to simply delete the pe-postgres crontab entry and let puppet repopulate it.  `crontab -r -u pe-postgres`
+
+### Disable the maintenance cron job
+
+If you run into your maintenance cron job having DEADLOCK errors as described in the [reindexing section](#reindexing) you may want to disable it.  You can do so by setting `pe_databases::maintenance::disable_maintenace: true` in your hieradata.
+
+# General PostgreSQL Recommendations
 
 ## Tuning
 
