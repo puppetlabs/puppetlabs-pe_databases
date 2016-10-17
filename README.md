@@ -42,6 +42,10 @@ You can modify the default backup schedule by provide an array of hashes that de
 
 NOTE: If you change the default schedule you'll likely stop managing a crontab entry and there's not a clean way to remove unmanaged crontab entries.  So you may want to simply delete the pe-postgres crontab entry and let puppet repopulate it.  `crontab -r -u pe-postgres`
 
+### Backup Retention policy
+
+By default the script will only hold two backups for each database.  When the script runs it will remove the older of the two backups before starting the backup process.  You can configure the retention by setting `pe_databases::backup::retention_policy: <#number of backups to store>`.
+
 ### Disable the maintenance cron job
 
 If you run into your maintenance cron job having DEADLOCK errors as described in the [reindexing section](#reindexing) you may want to disable it.  You can do so by setting `pe_databases::maintenance::disable_maintenace: true` in your hieradata.
