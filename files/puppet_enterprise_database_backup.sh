@@ -2,6 +2,7 @@
 
 BACKUPDIR=/opt/puppetlabs/server/data/postgresql/9.4/backups
 LOGDIR=/var/log/puppetlabs/pe_databases_backup
+RETENTION=2
 
 while [[ $# -gt 0 ]]; do
   arg="$1"
@@ -14,6 +15,10 @@ while [[ $# -gt 0 ]]; do
       LOGDIR="$2"
       shift; shift
       ;;
+    -r)
+      RETENTION="$2"
+      shift; shift
+      ;;
     *)
       DATABASES="${DATABASES} $1"
       shift
@@ -21,12 +26,18 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+let RETENTION_ENFORCE=$RETENTION-1
+
 if [[ -z "${DATABASES}" ]]; then
-  echo "Usage: $0 [-l LOG_DIRECTORY] [-t BACKUP_TARGET] <DATABASE1> [DATABASE...]"
+  echo "Usage: $0 [-l LOG_DIRECTORY] [-t BACKUP_TARGET] [-r RETENTION] <DATABASE1> [DATABASE...]"
   exit 1
 fi
 
 for db in $DATABASES; do
+  echo "Enforcing retention policy of storing only ${RETENTION_ENFORCE} backups for ${db}" >> ${LOGDIR}/${db}.log 2>&1
+
+  ls -1tr ${BACKUPDIR}/${db}_* | head -n -${RETENTION_ENFORCE} | xargs -d '\n' rm -f --
+
   echo "Starting dump of database: ${db}" >> ${LOGDIR}/${db}.log 2>&1
 
   if [ ${db} == "pe-classifier" ]; then
