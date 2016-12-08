@@ -12,7 +12,9 @@ class pe_databases::postgresql_settings (
   Boolean    $manage_postgresql_service                = true,
   Boolean    $all_in_one_pe_install                    = true,
   Boolean    $manage_fact_values_autovacuum_cost_delay = true,
-  Optional[Float[0,1]] $factsets_autovacuum_vacuum_scale_factor  = 0.80,
+  Optional[Float[0,1]] $factsets_autovacuum_vacuum_scale_factor = 0.80,
+  Optional[Float[0,1]] $reports_autovacuum_vacuum_scale_factor  = 0.01,
+  Boolean    $manage_reports_autovacuum_cost_delay     = true,
   String     $maintenance_work_mem                     = $all_in_one_pe_install ? {
                                                            false => "${::memory['system']['total_bytes'] / 1024 / 1024 / 3}MB",
                                                            true  => "${::memory['system']['total_bytes'] / 1024 / 1024 / 8}MB",
@@ -115,5 +117,18 @@ class pe_databases::postgresql_settings (
       table_attribute       => 'autovacuum_vacuum_scale_factor',
       table_attribute_value => "${factsets_autovacuum_vacuum_scale_factor}",
     }
+  }
+
+  if !empty($reports_autovacuum_vacuum_scale_factor) {
+    pe_databases::set_table_attribute { "Set autovacuum_vacuum_scale_factor=${reports_autovacuum_vacuum_scale_factor} for reports" :
+      db                    => 'pe-puppetdb',
+      table_name            => 'reports',
+      table_attribute       => 'autovacuum_vacuum_scale_factor',
+      table_attribute_value => "${reports_autovacuum_vacuum_scale_factor}",
+    }
+  }
+
+  if $manage_reports_autovacuum_cost_delay {
+    pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero { 'reports' : }
   }
 }
