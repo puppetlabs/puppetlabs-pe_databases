@@ -3,6 +3,7 @@ Table of Contents
 
 * [Overview](#overview)
   * [What does this module provide?](#what-does-this-module-provide)
+  * [Usage](#usage)
   * [Items you may want to configure](#items-you-may-want-to-configure)
     * [Backup schedule](#backup-schedule)
     * [Disable the maintenance cron job](#disable-the-maintenance-cron-job)
@@ -33,6 +34,12 @@ By default you get the following:
   - The node_check_ins table is TRUNCATED from the pe-classifier database to keep the size down
 2.  A weekly reindex and vacuum analyze run on all databases
 3.  Slightly better default settings for PE PostgreSQL
+
+## Usage
+
+In order to use this module, you will need to classify the database node (normally the Master of Masters or the Master in Monolithic installations, or the PuppetDB node in Split/LEI installations) with the `pe_databases` class. One way to do this is to create a new Node Group in the Console, and pin the node in question to it, after which you can use this node group to apply the class. Alternatively if you are not using an external PostgresDB, using the `PE PuppetDB` Node group to add the class to the database node may be easier.
+
+It is not recommended to use the `PE Master` Node Group as this will likely cause errors if there are Compile Masters in your infrastructure. This is because if the class is applied to a node with no database on it, the catalog compilation will fail.
 
 ## Items you may want to configure
 
