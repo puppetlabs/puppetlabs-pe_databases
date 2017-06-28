@@ -37,9 +37,9 @@ By default you get the following:
 
 ## Usage
 
-In order to use this module, you will need to classify the database node (normally the Master of Masters or the Master in Monolithic installations, or the PuppetDB node in Split/LEI installations) with the `pe_databases` class. One way to do this is to create a new Node Group in the Console, and pin the node in question to it, after which you can use this node group to apply the class. Alternatively if you are not using an external PostgresDB, using the `PE PuppetDB` Node group to add the class to the database node may be easier.
+In order to use this module, you will classify the node running pe-postgresql with the `pe_databases` class.  This will the MoM in a monolithic installation or the PuppetDB node in a Split/LEI install.  
 
-It is not recommended to use the `PE Master` Node Group as this will likely cause errors if there are Compile Masters in your infrastructure. This is because if the class is applied to a node with no database on it, the catalog compilation will fail.
+It is recommended to create a new node group 'PE Database' in the PE console and pin the node running pe-postgresql.  It is not recommended to classify using a pre-existing node group in the PE console.
 
 ## Items you may want to configure
 
