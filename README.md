@@ -37,9 +37,9 @@ By default you get the following:
 
 ## Usage
 
-In order to use this module, you will classify the node running pe-postgresql with the `pe_databases` class.  This will the MoM in a monolithic installation or the PuppetDB node in a Split/LEI install.  
+In order to use this module, you will classify the node running pe-postgresql with the `pe_databases` class.  This is the MoM in a monolithic installation or the PuppetDB node in a Split/LEI install.  
 
-It is recommended to create a new node group 'PE Database' in the PE console and pin the node running pe-postgresql.  It is not recommended to classify using a pre-existing node group in the PE console.
+To classify via the PE console, you will create a new node group called 'PE Database' and pin the node running pe-postgresql to the group.  It is not recommended to classify using a pre-existing node group in the PE console.
 
 ## Items you may want to configure
 
