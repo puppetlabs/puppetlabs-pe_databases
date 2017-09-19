@@ -95,8 +95,14 @@ class pe_databases::postgresql_settings (
     value => "${checkpoint_completion_target}",
   }
 
+  $checkpoint_segments_ensure = $psql_version ? {
+    '9.4'   => 'present',
+    default => 'absent',
+  }
+
   postgresql_conf { 'checkpoint_segments' :
-    value => "${checkpoint_segments}",
+    ensure => $checkpoint_segments_ensure,
+    value  => "${checkpoint_segments}",
   }
 
   if !empty($arbitrary_postgresql_conf_settings) {
