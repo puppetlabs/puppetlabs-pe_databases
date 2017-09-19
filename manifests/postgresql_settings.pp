@@ -106,7 +106,8 @@ class pe_databases::postgresql_settings (
     }
   }
 
-  if ( versioncmp('2017.2.0', $facts['pe_server_version']) >= 0
+  if ( ( versioncmp('2017.2.0', $facts['pe_server_version']) > 0 or
+         versioncmp('2017.3.0', $facts['pe_server_version']) <= 0 )
        and $manage_fact_values_autovacuum_cost_delay ) {
     pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero { 'fact_values' : }
   }
