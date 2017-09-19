@@ -4,6 +4,12 @@ class pe_databases (
   Boolean $manage_postgresql_settings  = true,
 ) {
 
+  if ( versioncmp('2017.3.0', $facts['pe_server_version']) >= 0 ) {
+    $psql_version = '9.6'
+  } else {
+    $psql_version = '9.4'
+  }
+
   if $manage_database_maintenance {
     include pe_databases::maintenance
   }

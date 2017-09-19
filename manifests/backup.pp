@@ -18,7 +18,8 @@ class pe_databases::backup (
       },
     }
   ],
-  String  $backup_directory         = '/opt/puppetlabs/server/data/postgresql/9.4/backups',
+  String  $psql_version             = $pe_databases::psql_version,
+  String  $backup_directory         = "/opt/puppetlabs/server/data/postgresql/${psql_version}/backups",
   String  $backup_script_path       = '/opt/puppetlabs/pe_databases/scripts/puppet_enterprise_database_backup.sh',
   String  $backup_logging_directory = '/var/log/puppetlabs/pe_databases_backup',
   Integer $retention_policy         = 2,

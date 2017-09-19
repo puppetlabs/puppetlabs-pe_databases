@@ -23,6 +23,7 @@ class pe_databases::postgresql_settings (
                                                            false => "${::memory['system']['total_bytes'] / 1024 / 1024 / 3/ $autovacuum_max_workers}MB",
                                                            true  => "${::memory['system']['total_bytes'] / 1024 / 1024 / 8/ $autovacuum_max_workers}MB",
                                                          },
+  String     $psql_version                             = $pe_databases::psql_version,
 ) {
 
   $postgresql_service_resource_name = 'postgresqld'
@@ -50,7 +51,7 @@ class pe_databases::postgresql_settings (
   #http://www.postgresql.org/docs/9.4/static/runtime-config-autovacuum.html
   Postgresql_conf {
     ensure => present,
-    target => '/opt/puppetlabs/server/data/postgresql/9.4/data/postgresql.conf',
+    target => "/opt/puppetlabs/server/data/postgresql/${psql_version}/data/postgresql.conf",
     notify => $notify_postgresql_service,
   }
 
