@@ -1,3 +1,7 @@
+## Z Release 0.11.2
+
+ - Fix metadata.json version
+
 ## Z Release 0.11.1
 
  - Correct logic for detecting PostgreSQL version
