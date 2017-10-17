@@ -32,7 +32,7 @@ class pe_databases::maintenance (
     weekday => [2,6],
     hour     => 4,
     minute   => 30,
-    command  => "${vacuum_script_path} facts > ${logging_directory}/facts_output.log 2>| tee ${logging_directory}/facts_error.log",
+    command  => "${vacuum_script_path} facts",
     require  => File[$logging_directory, $script_directory],
   }
 
@@ -42,7 +42,7 @@ class pe_databases::maintenance (
     weekday  => [0,4],
     hour     => 4,
     minute   => 30,
-    command  => "${vacuum_script_path} catalogs > ${logging_directory}/catalogs_output.log 2>| tee ${logging_directory}/catalogs_error.log",
+    command  => "${vacuum_script_path} catalogs",
     require  => File[$logging_directory, $script_directory],
   }
 
@@ -52,7 +52,7 @@ class pe_databases::maintenance (
     monthday => 20,
     hour     => 5,
     minute   => 30,
-    command  => "${vacuum_script_path} other > ${logging_directory}/other_output.log 2>| tee ${logging_directory}/other_error.log",
+    command  => "${vacuum_script_path} other",
     require  => File[$logging_directory, $script_directory],
   }
 
