@@ -1,8 +1,8 @@
 class pe_databases::maintenance (
   Boolean $disable_maintenace = false,
-  Integer $maint_cron_weekday = 6,
-  Integer $maint_cron_hour    = 1,
-  Integer $maint_cron_minute  = 0,
+  Optional[Integer] $maint_cron_weekday = undef, #DEPRECATED
+  Optional[Integer] $maint_cron_hour    = undef, #DEPRECATED
+  Optional[Integer] $maint_cron_minute  = undef, #DEPRECATED
   String  $logging_directory  = '/var/log/puppetlabs/pe_databases_cron',
   String  $script_directory   = $pe_databases::scripts_dir,
 ){
@@ -65,5 +65,15 @@ class pe_databases::maintenance (
     minute  => $maint_cron_minute,
     command => "su - pe-postgres -s /bin/bash -c '/opt/puppetlabs/server/bin/reindexdb --all; /opt/puppetlabs/server/bin/vacuumdb --analyze --verbose --all' > ${logging_directory}/output.log 2> ${logging_directory}/output_error.log",
     require => File[$logging_directory, $script_directory],
+  }
+
+  if empty($maint_cron_weekday) == false {
+    warning('pe_databases::maintenance::maint_cron_weekday is deprecated and will be removed in a future release')
+  }
+  if empty($maint_cron_hour) == false {
+    warning('pe_databases::maintenance::maint_cron_hour is deprecated and will be removed in a future release')
+  }
+  if empty($maint_cron_minute) == false {
+    warning('pe_databases::maintenance::maint_cron_minute is deprecated and will be removed in a future release')
   }
 }
