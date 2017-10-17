@@ -31,7 +31,7 @@ By default you get the following:
   - PuppetDB is backed up once a week
   - The other PE databases are backed up every night
   - The node_check_ins table is TRUNCATED from the pe-classifier database to keep the size down
-2.  A weekly reindex and vacuum analyze run on all databases
+2.  Maintenance cron jobs to keep your PuppetDB tables lean and fast
 3.  Slightly better default settings for PE PostgreSQL
 
 ## Items you may want to configure
@@ -48,7 +48,7 @@ By default the script will only hold two backups for each database.  When the sc
 
 ### Disable the maintenance cron job
 
-If you run into your maintenance cron job having DEADLOCK errors as described in the [reindexing section](#reindexing) you may want to disable it.  You can do so by setting `pe_databases::maintenance::disable_maintenace: true` in your hieradata.
+The maintenance cron jobs will perform a VACUUM FULL on various PuppetDB tables to keep them small and make your PuppetDB performance better.  A VACUUM FULL is a blocking operation and you will see the PuppetDB command queue grow while the cron jobs run.  The blocking should be short lived and the PuppetDB command queue should work itself down after, however, if for some reason you experience issues you can disable the maintenance cron jobs.  You can do so by setting `pe_databases::maintenance::disable_maintenace: true` in your hieradata.
 
 # General PostgreSQL Recommendations
 
@@ -78,19 +78,22 @@ This module provides a script for backing up the Puppet Enterprise databases and
 
 Note: You may be able to improve the performance ( reduce time to completion ) of maintenance tasks by increasing the [maintenance_work_mem](#maintenance_work_mem) setting.
 
-This module provides a monthly cron job that performs a reindex and then a VACUUM ANALYZE.  This cron job should be monitored to make sure the reindex is not failing on a DEADLOCK error as discussed in the [reindexing](#reindexing) section.
+This module provides cron jobs to VACUUM FULL various tables in the PuppetDB database
+ - facts tables are VACUUMed Tuesdays and Saturdays at 4:30AM
+ - catalogs tables are VACUUMed Sundays and Thursdays at 4:30AM
+ - other tables are VACUUMed on the 20th of the Month at 5:30AM
 
 ### Vacuuming
 
 Generally speaking PostgreSQL keeps itself in good shape with a process called [auto vacuuming](https://www.postgresql.org/docs/9.4/static/runtime-config-autovacuum.html).  This is on by default and tuned for Puppet Enterprise out of the box.
 
-There are a few things that autovacuum does not touch though and it is prudent to run an infrequent VACUUM ANALYZE to prevent any issues that could manifest.
+Note that there is a difference between VACUUM and VACUUM FULL.  VACUUM FULL rewrites a table on disk while VACUUM simply marks deleted row so the space that row occupied can be used for new data.
 
-Please note that you should never need to run VACUUM FULL.  VACUUM FULL rewrites the entire database and is a blocking operation that will take down your Puppet Enterprise installation while it runs.  It is rarely necessary and causes a lot of I/O and downtime for Puppet Enterprise.  If you think you need to run VACUUM FULL then be prepared to have your Puppet Enterprise installation down for a while.
+VACUUM FULL is generally not necessary and if run too frequently can cause excessive disk I/O.  However, in the case of PuppetDB the way we constantly receive and update data causes bloat in the database and it is beneficial to VACUUM FULL the facts and catalogs tables every few days.  We, however, do not recommend a VACUUM FULL on the reports or resource_events tables because they are too big and may cause extended downtime if VACUUM FULL is performed on them.
 
 ### Reindexing
 
-Reindexing is also a prudent exercise.  It may not be necessary very often but doing every month or so can definitely prevent performance issues in the long run.
+Reindexing is also a prudent exercise.  It may not be necessary very often but doing every month or so can definitely prevent performance issues in the long run.  In the scope of what this module provides, a VACUUM FULL will rewrite the table and all of its indexes so tables are reindexed during the VACUUM FULL maintenance cron jobs.  That only leaves the reports and resource_events tables not getting reindexed.  Unfortunately, the most common place to get a DEADLOCK error mentioned below is when reindexing the reports table.
 
 Reindexing is a blocking operation.  While an index is rebuilt the data in the table cannot change and operations have to wait for the index rebuild to complete.  If you don’t have a large installation or you have a lot of memory / a fast disk you may be able to complete a reindex while your Puppet Enterprise installation is up.  PuppetDB will backup commands in its command queue and the console may throw some errors about not being able to load data.  After the reindex is complete the PuppetDB command queue will work through and the console UI will work as expected.
 

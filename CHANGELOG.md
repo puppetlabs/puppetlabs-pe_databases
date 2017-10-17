@@ -1,3 +1,8 @@
+## Minor Release 0.12.0
+
+ - Improve maintenance cron jobs [#12](https://github.com/npwalker/pe_databases/pull/12)
+   - Change from reindexing all tables to VACUUM FULL on just the smaller tables
+
 ## Z Release 0.11.2
 
  - Fix metadata.json version
