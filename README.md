@@ -3,6 +3,7 @@ Table of Contents
 
 * [Overview](#overview)
   * [What does this module provide?](#what-does-this-module-provide)
+  * [Usage](#usage)
   * [Items you may want to configure](#items-you-may-want-to-configure)
     * [Backup schedule](#backup-schedule)
     * [Disable the maintenance cron job](#disable-the-maintenance-cron-job)
@@ -33,6 +34,12 @@ By default you get the following:
   - The node_check_ins table is TRUNCATED from the pe-classifier database to keep the size down
 2.  A weekly reindex and vacuum analyze run on all databases
 3.  Slightly better default settings for PE PostgreSQL
+
+## Usage
+
+In order to use this module, you will classify the node running pe-postgresql with the `pe_databases` class.  This is the MoM in a monolithic installation or the PuppetDB node in a Split/LEI install.  
+
+To classify via the PE console, you will create a new node group called 'PE Database' and pin the node running pe-postgresql to the group.  It is not recommended to classify using a pre-existing node group in the PE console.
 
 ## Items you may want to configure
 
