@@ -20,14 +20,10 @@ class pe_databases::backup (
   ],
   String  $psql_version             = $pe_databases::psql_version,
   String  $backup_directory         = "/opt/puppetlabs/server/data/postgresql/${psql_version}/backups",
-  String  $backup_script_path       = '/opt/puppetlabs/pe_databases/scripts/puppet_enterprise_database_backup.sh',
+  String  $backup_script_path       = "${pe_databases::scripts_dir}/puppet_enterprise_database_backup.sh",
   String  $backup_logging_directory = '/var/log/puppetlabs/pe_databases_backup',
   Integer $retention_policy         = 2,
 ) {
-
-  file { ['/opt/puppetlabs/pe_databases', '/opt/puppetlabs/pe_databases/scripts', $backup_directory ] :
-    ensure => directory,
-  }
 
   file { $backup_logging_directory :
     ensure => 'directory',
