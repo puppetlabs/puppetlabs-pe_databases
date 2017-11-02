@@ -1,3 +1,7 @@
+## Z Release 0.12.1
+
+ - Add `--analyze` during VACUUM FULL commands run in maintenance [#13](https://github.com/npwalker/pe_databases/pull/13)
+
 ## Minor Release 0.12.0
 
  - Improve maintenance cron jobs [#12](https://github.com/npwalker/pe_databases/pull/12)
