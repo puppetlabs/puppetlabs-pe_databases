@@ -30,6 +30,6 @@ SQL="SELECT t.relname::varchar AS table_name
 for TABLE in $(su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/bin/psql -d pe-puppetdb -c \"$SQL\" --tuples-only")
 do
   #echo $TABLE
-  su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/bin/vacuumdb -d pe-puppetdb -t $TABLE --full"
+  su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/bin/vacuumdb -d pe-puppetdb -t $TABLE --full --analyze"
   sleep $SLEEP
 done
