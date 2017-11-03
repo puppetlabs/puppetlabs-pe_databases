@@ -113,31 +113,10 @@ class pe_databases::postgresql_settings (
     }
   }
 
-  if ( ( versioncmp('2017.2.0', $facts['pe_server_version']) > 0 or
-         versioncmp('2017.3.0', $facts['pe_server_version']) <= 0 )
-       and $manage_fact_values_autovacuum_cost_delay ) {
-    pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero { 'fact_values' : }
-  }
-
-  if !empty($factsets_autovacuum_vacuum_scale_factor) {
-    pe_databases::set_table_attribute { "Set autovacuum_vacuum_scale_factor=${factsets_autovacuum_vacuum_scale_factor} for factsets" :
-      db                    => 'pe-puppetdb',
-      table_name            => 'factsets',
-      table_attribute       => 'autovacuum_vacuum_scale_factor',
-      table_attribute_value => "${factsets_autovacuum_vacuum_scale_factor}",
-    }
-  }
-
-  if !empty($reports_autovacuum_vacuum_scale_factor) {
-    pe_databases::set_table_attribute { "Set autovacuum_vacuum_scale_factor=${reports_autovacuum_vacuum_scale_factor} for reports" :
-      db                    => 'pe-puppetdb',
-      table_name            => 'reports',
-      table_attribute       => 'autovacuum_vacuum_scale_factor',
-      table_attribute_value => "${reports_autovacuum_vacuum_scale_factor}",
-    }
-  }
-
-  if $manage_reports_autovacuum_cost_delay {
-    pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero { 'reports' : }
+  class { 'pe_databases::postgresql_settings::table_settings' :
+    manage_fact_values_autovacuum_cost_delay => $manage_fact_values_autovacuum_cost_delay,
+    manage_reports_autovacuum_cost_delay     => $manage_reports_autovacuum_cost_delay,
+    factsets_autovacuum_vacuum_scale_factor  => $factsets_autovacuum_vacuum_scale_factor,
+    reports_autovacuum_vacuum_scale_factor   => $reports_autovacuum_vacuum_scale_factor,
   }
 }
