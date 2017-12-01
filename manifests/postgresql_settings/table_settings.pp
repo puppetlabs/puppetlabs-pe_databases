@@ -18,7 +18,7 @@ class pe_databases::postgresql_settings::table_settings (
       db                    => 'pe-puppetdb',
       table_name            => 'factsets',
       table_attribute       => 'autovacuum_vacuum_scale_factor',
-      table_attribute_value => "${factsets_autovacuum_vacuum_scale_factor}",
+      table_attribute_value => sprintf('%#.2f', $factsets_autovacuum_vacuum_scale_factor),
     }
   }
 
@@ -27,7 +27,7 @@ class pe_databases::postgresql_settings::table_settings (
       db                    => 'pe-puppetdb',
       table_name            => 'reports',
       table_attribute       => 'autovacuum_vacuum_scale_factor',
-      table_attribute_value => "${reports_autovacuum_vacuum_scale_factor}",
+      table_attribute_value => sprintf('%#.2f', $reports_autovacuum_vacuum_scale_factor),
     }
   }
 
@@ -36,7 +36,7 @@ class pe_databases::postgresql_settings::table_settings (
       db                    => 'pe-puppetdb',
       table_name            => 'catalogs',
       table_attribute       => 'autovacuum_vacuum_scale_factor',
-      table_attribute_value => "${catalogs_autovacuum_vacuum_scale_factor}",
+      table_attribute_value => sprintf('%#.2f', $catalogs_autovacuum_vacuum_scale_factor),
     }
   }
 
@@ -45,7 +45,7 @@ class pe_databases::postgresql_settings::table_settings (
       db                    => 'pe-puppetdb',
       table_name            => 'certnames',
       table_attribute       => 'autovacuum_vacuum_scale_factor',
-      table_attribute_value => "${certnames_autovacuum_vacuum_scale_factor}",
+      table_attribute_value => sprintf('%#.2f', $certnames_autovacuum_vacuum_scale_factor),
     }
   }
 

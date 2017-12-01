@@ -56,43 +56,43 @@ class pe_databases::postgresql_settings (
   }
 
   postgresql_conf { 'autovacuum_vacuum_scale_factor' :
-    value => "${autovacuum_vacuum_scale_factor}",
+    value => sprintf('%#.2f', $autovacuum_vacuum_scale_factor),
   }
 
   postgresql_conf { 'autovacuum_analyze_scale_factor' :
-    value => "${autovacuum_analyze_scale_factor}",
+    value => sprintf('%#.2f', $autovacuum_analyze_scale_factor),
   }
 
   postgresql_conf { 'autovacuum_max_workers' :
-    value => "${autovacuum_max_workers}",
+    value => String($autovacuum_max_workers),
   }
 
   postgresql_conf { 'autovacuum_work_mem' :
-    value => "${autovacuum_work_mem}",
+    value => String($autovacuum_work_mem),
   }
 
   postgresql_conf { 'log_autovacuum_min_duration' :
-    value => "${log_autovacuum_min_duration}",
+    value => String($log_autovacuum_min_duration),
   }
 
   postgresql_conf { 'log_temp_files' :
-    value => "${log_temp_files}",
+    value => String($log_temp_files),
   }
 
   postgresql_conf { 'maintenance_work_mem' :
-    value => "${maintenance_work_mem}",
+    value => String($maintenance_work_mem),
   }
 
   postgresql_conf { 'work_mem' :
-    value => "${work_mem}",
+    value => String($work_mem),
   }
 
   postgresql_conf { 'max_connections' :
-    value => "${max_connections}",
+    value => String($max_connections),
   }
 
   postgresql_conf { 'checkpoint_completion_target' :
-    value => "${checkpoint_completion_target}",
+    value => sprintf('%#.2f', $checkpoint_completion_target),
   }
 
   $checkpoint_segments_ensure = $psql_version ? {
@@ -102,7 +102,7 @@ class pe_databases::postgresql_settings (
 
   postgresql_conf { 'checkpoint_segments' :
     ensure => $checkpoint_segments_ensure,
-    value  => "${checkpoint_segments}",
+    value  => String($checkpoint_segments),
   }
 
   if !empty($arbitrary_postgresql_conf_settings) {
