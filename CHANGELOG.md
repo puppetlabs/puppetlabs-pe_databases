@@ -1,3 +1,8 @@
+## Minor Release 0.13.0
+
+ - Manage certnames and catalogs tables autovacuum_vacuum_scale_factor [#14](https://github.com/npwalker/pe_databases/pull/14)
+ - Change way we cast strings to appease puppet lint
+
 ## Z Release 0.12.1
 
  - Add `--analyze` during VACUUM FULL commands run in maintenance [#13](https://github.com/npwalker/pe_databases/pull/13)
