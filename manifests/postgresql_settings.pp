@@ -108,7 +108,7 @@ class pe_databases::postgresql_settings (
   if !empty($arbitrary_postgresql_conf_settings) {
     $arbitrary_postgresql_conf_settings.each | $key, $value | {
       postgresql_conf { $key :
-        value => "${value}",
+        value => String($value),
       }
     }
   }
