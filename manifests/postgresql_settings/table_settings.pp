@@ -11,8 +11,9 @@ class pe_databases::postgresql_settings::table_settings (
   Optional[Float[0,1]] $certnames_autovacuum_vacuum_scale_factor = 0.75,
 ) {
 
-  if ( ( versioncmp('2017.2.0', $facts['pe_server_version']) > 0 or
-         versioncmp('2017.3.0', $facts['pe_server_version']) <= 0 )
+  if ( versioncmp('2017.2.0', $facts['pe_server_version']) > 0 or
+       ( versioncmp('2017.3.0', $facts['pe_server_version']) <= 0 and
+         versioncmp('2018.1.0', $facts['pe_server_version']) > 0)
        and $manage_fact_values_autovacuum_cost_delay ) {
     pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero { 'fact_values' : }
   }
