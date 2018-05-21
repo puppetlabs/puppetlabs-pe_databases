@@ -23,7 +23,7 @@ class pe_databases::maintenance (
     source => 'puppet:///modules/pe_databases/vacuum_full_tables.sh',
     owner  => 'pe-postgres',
     group  => 'pe-postgres',
-    mode   => '744',
+    mode   => '0744',
   }
 
   cron { 'VACUUM FULL facts tables' :
