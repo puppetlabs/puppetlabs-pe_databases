@@ -8,7 +8,14 @@
   "project_page": "https://github.com/npwalker/pe_databases",
   "issues_url": "https://github.com/npwalker/pe_databases/issues",
   "dependencies": [
-    {"name":"puppetlabs-postgresql","version_requirement":">= 4.7.0"}
+    {
+      "name": "puppetlabs-postgresql",
+      "version_requirement": ">= 4.7.0"
+    },
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.0.0"
+    }
   ],
   "operatingsystem_support": [
     {
@@ -63,6 +70,13 @@
     {
       "name": "pe",
       "version_requirement": ">= 2015.2.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.0"
     }
-  ]
+  ],
+  "pdk-version": "1.6.0.pre (heads/master-0-g1c719d9)",
+  "template-url": "https://github.com/puppetlabs/pdk-templates",
+  "template-ref": "heads/master-0-g34e3266"
 }

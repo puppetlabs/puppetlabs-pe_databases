@@ -1,7 +1,7 @@
 class pe_databases::postgresql_settings (
   Float[0,1] $autovacuum_vacuum_scale_factor           = 0.08,
   Float[0,1] $autovacuum_analyze_scale_factor          = 0.04,
-  Integer    $autovacuum_max_workers                   = pe_max( 3, pe_min( 8, $::processors['count'] / 3)),
+  Integer    $autovacuum_max_workers                   = max( 3, min( 8, $facts['processors']['count'] / 3)),
   Integer    $log_autovacuum_min_duration              = -1,
   Integer    $log_temp_files                           = -1,
   String     $work_mem                                 = '8MB',
@@ -16,12 +16,12 @@ class pe_databases::postgresql_settings (
   Optional[Float[0,1]] $reports_autovacuum_vacuum_scale_factor  = 0.01,
   Boolean    $manage_reports_autovacuum_cost_delay     = true,
   String     $maintenance_work_mem                     = $all_in_one_pe_install ? {
-                                                           false => "${::memory['system']['total_bytes'] / 1024 / 1024 / 3}MB",
-                                                           true  => "${::memory['system']['total_bytes'] / 1024 / 1024 / 8}MB",
+                                                           false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3}MB",
+                                                           true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8}MB",
                                                          },
   String     $autovacuum_work_mem                      = $all_in_one_pe_install ? {
-                                                           false => "${::memory['system']['total_bytes'] / 1024 / 1024 / 3/ $autovacuum_max_workers}MB",
-                                                           true  => "${::memory['system']['total_bytes'] / 1024 / 1024 / 8/ $autovacuum_max_workers}MB",
+                                                           false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3/ $autovacuum_max_workers}MB",
+                                                           true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8/ $autovacuum_max_workers}MB",
                                                          },
   String     $psql_version                             = $pe_databases::psql_version,
 ) {
