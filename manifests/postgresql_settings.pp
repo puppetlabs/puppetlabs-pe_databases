@@ -112,11 +112,4 @@ class pe_databases::postgresql_settings (
       }
     }
   }
-
-  class { 'pe_databases::postgresql_settings::table_settings' :
-    manage_fact_values_autovacuum_cost_delay => $manage_fact_values_autovacuum_cost_delay,
-    manage_reports_autovacuum_cost_delay     => $manage_reports_autovacuum_cost_delay,
-    factsets_autovacuum_vacuum_scale_factor  => $factsets_autovacuum_vacuum_scale_factor,
-    reports_autovacuum_vacuum_scale_factor   => $reports_autovacuum_vacuum_scale_factor,
-  }
 }
