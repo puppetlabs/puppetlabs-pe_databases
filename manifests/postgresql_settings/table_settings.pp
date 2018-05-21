@@ -1,8 +1,12 @@
 class pe_databases::postgresql_settings::table_settings (
-  Boolean    $manage_fact_values_autovacuum_cost_delay = $pe_databases::postgresql_settings::manage_fact_values_autovacuum_cost_delay,
-  Boolean    $manage_reports_autovacuum_cost_delay     = $pe_databases::postgresql_settings::manage_reports_autovacuum_cost_delay,
-  Optional[Float[0,1]] $factsets_autovacuum_vacuum_scale_factor = $pe_databases::postgresql_settings::factsets_autovacuum_vacuum_scale_factor,
-  Optional[Float[0,1]] $reports_autovacuum_vacuum_scale_factor  = $pe_databases::postgresql_settings::reports_autovacuum_vacuum_scale_factor,
+  Boolean    $manage_fact_values_autovacuum_cost_delay = lookup('pe_databases::postgresql_settings::manage_fact_values_autovacuum_cost_delay',
+                                                               {'default_value' => true}),
+  Boolean    $manage_reports_autovacuum_cost_delay     = lookup('pe_databases::postgresql_settings::manage_reports_autovacuum_cost_delay',
+                                                               {'default_value' => true}),
+  Optional[Float[0,1]] $factsets_autovacuum_vacuum_scale_factor = lookup('pe_databases::postgresql_settings::factsets_autovacuum_vacuum_scale_factor',
+                                                                        {'default_value' => 0.80}),
+  Optional[Float[0,1]] $reports_autovacuum_vacuum_scale_factor  = lookup('pe_databases::postgresql_settings::reports_autovacuum_vacuum_scale_factor',
+                                                                        {'default_value' => 0.01}),
   Optional[Float[0,1]] $catalogs_autovacuum_vacuum_scale_factor = 0.75,
   Optional[Float[0,1]] $certnames_autovacuum_vacuum_scale_factor = 0.75,
 ) {
