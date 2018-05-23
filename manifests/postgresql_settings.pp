@@ -39,8 +39,8 @@ class pe_databases::postgresql_settings (
 
   if $manage_postgresql_service {
     service { $postgresql_service_resource_name :
-      name   => $postgresql_service_name,
       ensure => running,
+      name   => $postgresql_service_name,
       enable => true,
       notify => $notify_console_services,
     }
