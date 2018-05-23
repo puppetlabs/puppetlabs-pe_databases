@@ -1,4 +1,5 @@
 class pe_databases::postgresql_settings (
+  #lint:ignore:2sp_soft_tabs
   Float[0,1] $autovacuum_vacuum_scale_factor           = 0.08,
   Float[0,1] $autovacuum_analyze_scale_factor          = 0.04,
   Integer    $autovacuum_max_workers                   = max( 3, min( 8, $facts['processors']['count'] / 3)),
@@ -24,6 +25,7 @@ class pe_databases::postgresql_settings (
                                                            true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8/ $autovacuum_max_workers}MB",
                                                          },
   String     $psql_version                             = $pe_databases::psql_version,
+  #lint:endignore
 ) {
 
   $postgresql_service_resource_name = 'postgresqld'
