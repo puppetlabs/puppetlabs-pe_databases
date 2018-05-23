@@ -14,6 +14,7 @@ class pe_databases (
 
   file { [$install_dir, $scripts_dir] :
     ensure => directory,
+    mode   => '0755',
   }
 
   if $manage_database_maintenance {
