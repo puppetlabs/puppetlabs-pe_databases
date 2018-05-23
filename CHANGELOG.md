@@ -1,3 +1,7 @@
+## Minor Release 0.14.0
+
+- Make compatible with PE 2018.1 [#17](https://github.com/npwalker/pe_databases/pull/17)
+
 ## Minor Release 0.13.0
 
  - Manage certnames and catalogs tables autovacuum_vacuum_scale_factor [#14](https://github.com/npwalker/pe_databases/pull/14)
