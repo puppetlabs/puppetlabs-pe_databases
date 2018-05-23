@@ -42,9 +42,9 @@ for db in $DATABASES; do
 
   if [ ${db} == "pe-classifier" ]; then
     #Save space before backing up by clearing unused node_check_ins table
-    /opt/puppetlabs/server/bin/psql -d pe-classifier -c 'TRUNCATE TABLE node_check_ins'
+    /opt/puppetlabs/server/bin/psql -d pe-classifier -c 'TRUNCATE TABLE node_check_ins' >> ${LOGDIR}/${db}.log 2>&1
     if [ $? != 0 ]; then
-      echo "Failed to truncate node_check_ins table."
+      echo "Failed to truncate node_check_ins table." >> ${LOGDIR}/${db}.log 2>&1
     fi
   fi
 
