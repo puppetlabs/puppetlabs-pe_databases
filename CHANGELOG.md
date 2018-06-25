@@ -1,3 +1,8 @@
+## Z Release 0.14.1
+
+ - Set permissions on pe_databases directories [#18](https://github.com/npwalker/pe_databases/pull/18)
+ - Log pe-classifier truncation to log files instead of STDOUT [#18](https://github.com/npwalker/pe_databases/pull/18)
+
 ## Minor Release 0.14.0
 
 - Make compatible with PE 2018.1 [#17](https://github.com/npwalker/pe_databases/pull/17)
