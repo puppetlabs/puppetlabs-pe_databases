@@ -9,6 +9,7 @@ class pe_databases::postgresql_settings::table_settings (
                                                                         {'default_value' => 0.01}),
   Optional[Float[0,1]] $catalogs_autovacuum_vacuum_scale_factor = 0.75,
   Optional[Float[0,1]] $certnames_autovacuum_vacuum_scale_factor = 0.75,
+  Optional[Float[0,1]] $fact_paths_autovacuum_vacuum_scale_factor = 0.80,
 ) {
 
   if ( versioncmp('2017.2.0', $facts['pe_server_version']) > 0 or
@@ -51,6 +52,15 @@ class pe_databases::postgresql_settings::table_settings (
       table_name            => 'certnames',
       table_attribute       => 'autovacuum_vacuum_scale_factor',
       table_attribute_value => sprintf('%#.2f', $certnames_autovacuum_vacuum_scale_factor),
+    }
+  }
+
+  if !empty($fact_paths_autovacuum_vacuum_scale_factor) {
+    pe_databases::set_table_attribute { "Set autovacuum_vacuum_scale_factor=${fact_paths_autovacuum_vacuum_scale_factor} for fact_paths" :
+      db                    => 'pe-puppetdb',
+      table_name            => 'fact_paths',
+      table_attribute       => 'autovacuum_vacuum_scale_factor',
+      table_attribute_value => sprintf('%#.2f', $fact_paths_autovacuum_vacuum_scale_factor),
     }
   }
 
