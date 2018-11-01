@@ -2,6 +2,7 @@ class pe_databases (
   Boolean $manage_database_backups     = true,
   Boolean $manage_database_maintenance = true,
   Boolean $manage_postgresql_settings  = true,
+  Boolean $manage_table_settings       = true,
   String  $install_dir                 = '/opt/puppetlabs/pe_databases',
   String  $scripts_dir                 = "${install_dir}/scripts"
 ) {
@@ -31,7 +32,7 @@ class pe_databases (
       reports_autovacuum_vacuum_scale_factor   => $pe_databases::postgresql_settings::reports_autovacuum_vacuum_scale_factor,
       require                                  => Class['pe_databases::postgresql_settings'],
     }
-  } else { #do not manage postgreql_settings in 2018.1.0
+  } elsif $manage_table_settings { #do not manage postgreql_settings in 2018.1.0
     include pe_databases::postgresql_settings::table_settings
   }
 
