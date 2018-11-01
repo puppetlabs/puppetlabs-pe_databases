@@ -1,6 +1,6 @@
 {
   "name": "npwalker-pe_databases",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "author": "npwalker",
   "summary": "A Puppet Module for Backing Up / Maintaining / Tuning Your Puppet Enterprise Databases",
   "license": "Apache-2.0",
@@ -15,6 +15,10 @@
     {
       "name": "puppetlabs-stdlib",
       "version_requirement": ">= 4.0.0"
+    },
+    {
+      "name": "puppetlabs-cron_core",
+      "version_requirement": ">= 1.0.0"
     }
   ],
   "operatingsystem_support": [

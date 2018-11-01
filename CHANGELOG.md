@@ -1,3 +1,6 @@
+## Z Release 0.14.2
+ - Allow not managing table settings [#21](https://github.com/npwalker/pe_databases/pull/21)
+
 ## Z Release 0.14.1
 
  - Set permissions on pe_databases directories [#18](https://github.com/npwalker/pe_databases/pull/18)
