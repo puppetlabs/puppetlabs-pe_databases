@@ -45,7 +45,7 @@ To classify via the PE console, you will create a new node group called 'PE Data
 
 ### Backup schedule
 
-You can modify the default backup schedule by provide an array of hashes that describes the databases and the schedule to back them up on.  Please refer to the [hieradata_examples](./hieradata_examples) directory of this repo to see examples
+You can modify the default backup schedule by provide an array of hashes that describes the databases and the schedule to back them up on.  Please refer to the [hieradata_examples](https://github.com/npwalker/pe_databases/tree/master/hieradata_examples) directory of this repo to see examples
 
 NOTE: If you change the default schedule you'll likely stop managing a crontab entry and there's not a clean way to remove unmanaged crontab entries.  So you may want to simply delete the pe-postgres crontab entry and let puppet repopulate it.  `crontab -r -u pe-postgres`
 
