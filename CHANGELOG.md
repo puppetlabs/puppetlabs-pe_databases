@@ -1,3 +1,9 @@
+## Minor Release 0.15.0
+
+- Make pg_repack the default way to perform maintenance [#25](https://github.com/npwalker/pe_databases/pull/25)
+- Start maintaining the reports table which we could not afford to perform a VACUUM FULL on
+- Rename typoed `pe_databases::maintenance::disable_maintenace` parameter to `pe_databases::maintenance::disable_maintenance`
+
 ## Z Release 0.14.2
  - Allow not managing table settings [#21](https://github.com/npwalker/pe_databases/pull/21)
 

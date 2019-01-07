@@ -1,6 +1,6 @@
 {
   "name": "npwalker-pe_databases",
-  "version": "0.14.2",
+  "version": "0.15.0",
   "author": "npwalker",
   "summary": "A Puppet Module for Backing Up / Maintaining / Tuning Your Puppet Enterprise Databases",
   "license": "Apache-2.0",
