@@ -21,34 +21,31 @@ class pe_databases::maintenance::pg_repack (
   $reports_tables  = '-t reports"'
   $logging         = "> ${logging_directory}/output.log 2>&1"
 
-  cron { 'pg_repack facts tables' :
+  Cron {
     ensure   => $ensure_cron,
     user     => 'root',
+    require  => File[$logging_directory],
+  }
+
+  cron { 'pg_repack facts tables' :
     weekday => [2,6],
     hour     => 4,
     minute   => 30,
     command  => "${repack} ${facts_tables} ${logging}",
-    require  => File[$logging_directory],
   }
 
   cron { 'pg_repack catalogs tables' :
-    ensure   => $ensure_cron,
-    user     => 'root',
     weekday  => [0,4],
     hour     => 4,
     minute   => 30,
     command  => "${repack} ${catalogs_tables} ${logging}",
-    require  => File[$logging_directory],
   }
 
   cron { 'pg_repack other tables' :
-    ensure   => $ensure_cron,
-    user     => 'root',
     monthday => 20,
     hour     => 5,
     minute   => 30,
     command  => "${repack} ${other_tables} ${logging}",
-    require  => File[$logging_directory],
   }
 
   cron { 'pg_repack reports tables' :
@@ -58,6 +55,5 @@ class pe_databases::maintenance::pg_repack (
     hour     => 5,
     minute   => 30,
     command  => "${repack} ${reports_tables} ${logging}",
-    require  => File[$logging_directory],
   }
 }
