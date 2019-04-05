@@ -22,3 +22,5 @@ Rakefile:
   extra_disabled_lint_checks:
     - '2sp_soft_tabs'
     - 'arrow_alignment'
+
+dist: 'xenial'
