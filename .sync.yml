@@ -23,3 +23,7 @@ Rakefile:
     - '2sp_soft_tabs'
     - 'arrow_alignment'
 
+.travis.yml:
+  includes:
+    - env: PUPPET_GEM_VERSION="= 4.6.1" CHECK=parallel_spec
+      rvm: 2.1.9
