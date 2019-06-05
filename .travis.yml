@@ -37,6 +37,9 @@ matrix:
     -
       env: DEPLOY_TO_FORGE=yes
       stage: deploy
+    -
+      env: PUPPET_GEM_VERSION="= 4.6.1" CHECK=parallel_spec
+      rvm: 2.1.9
 branches:
   only:
     - master
