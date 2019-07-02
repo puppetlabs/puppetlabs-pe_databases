@@ -23,4 +23,3 @@ Rakefile:
     - '2sp_soft_tabs'
     - 'arrow_alignment'
 
-dist: 'xenial'
