@@ -20,10 +20,20 @@ jobs:
       rm -f Gemfile.lock
       gem update --system $RUBYGEMS_VERSION --no-document
     displayName: 'gem update'
+  - script: ruby -v | tee ruby_version.txt
+    displayName: 'save ruby_version file'
+  - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+    #only perform caching if a caching vsts feed has been provided
+    condition: ne(variables.caching_vsts_feed, '')
+    inputs:
+      keyfile: 'ruby_version.txt, Gemfile'
+      targetfolder: 'vendor/bundle'
+      vstsFeed: $(caching_vsts_feed)
   - script: |
       gem --version
       bundle -v
       bundle install --jobs $(nproc) --path vendor/bundle
+      bundle clean --force
     displayName: 'bundle install'
   - script: bundle exec rake ${{ parameters.spec_command }}
     displayName: 'bundle exec rake ${{ parameters.spec_command }}'
