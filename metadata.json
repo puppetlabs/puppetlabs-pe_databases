@@ -76,7 +76,7 @@
       "version_requirement": ">= 4.0"
     }
   ],
-  "pdk-version": "1.11.1 (heads/master-0-g4f00e4a)",
+  "pdk-version": "1.14.0.pre (heads/master-0-g9158517)",
   "template-url": "https://github.com/npwalker/pdk-templates#add_circleci_and_azure_pipelines_support",
-  "template-ref": "remotes/origin/add_circleci_and_azure_pipelines_support-0-gd24cef7"
+  "template-ref": "remotes/origin/add_circleci_and_azure_pipelines_support-0-gdc89556"
 }
