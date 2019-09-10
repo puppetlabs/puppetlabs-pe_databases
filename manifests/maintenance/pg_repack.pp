@@ -15,7 +15,14 @@ class pe_databases::maintenance::pg_repack (
     default => present
   }
 
-  $repack          = 'su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/apps/postgresql/bin/pg_repack -d pe-puppetdb'
+  #PE 2019.1 starting shipping versioned pe-postgres packages where all paths are versioned
+  #So prior to 2019.1 use a non-versioned path and after use a versioned path
+  $postgresql_version = $facts['pe_postgresql_info']['installed_server_version']
+  $repack_executable = versioncmp('2019.1.0', $facts['pe_server_version']) ? {
+                       1       => '/opt/puppetlabs/server/apps/postgresql/bin/pg_repack',
+                       default => "/opt/puppetlabs/server/apps/postgresql/${$postgresql_version}/bin/pg_repack" }
+
+  $repack          = "su - pe-postgres -s /bin/bash -c \"${repack_executable} -d pe-puppetdb"
   $repack_jobs     = "--jobs ${jobs}"
   $facts_tables    = '-t factsets -t fact_paths"'
   $catalogs_tables = '-t catalogs -t catalog_resources -t edges -t certnames"'
