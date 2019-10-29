@@ -7,7 +7,9 @@ class pe_databases (
   String  $scripts_dir                 = "${install_dir}/scripts"
 ) {
 
-  if ( versioncmp('2017.3.0', $facts['pe_server_version']) <= 0 ) {
+  if ( versioncmp('2019.2.0', $facts['pe_server_version']) <= 0 ) {
+    $psql_version = "${facts['pe_postgresql_info']['installed_server_version']}"
+  } elsif ( versioncmp('2017.3.0', $facts['pe_server_version']) <= 0 ) {
     $psql_version = '9.6'
   } else {
     $psql_version = '9.4'
