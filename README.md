@@ -13,6 +13,7 @@ Table of Contents
   * [Maintenance](#maintenance)
     * [Vacuuming](#vacuuming)
     * [Reindexing](#reindexing)
+    * [Resource Events TTL](#resource-events-ttl)
   * [PostgreSQL Settings](#postgresql-settings)
     * [maintenance_work_mem](#maintenance_work_mem)
     * [work_mem](#work_mem)
@@ -105,6 +106,26 @@ Reindexing is also a prudent exercise.  It may not be necessary very often but d
 Reindexing is a blocking operation.  While an index is rebuilt the data in the table cannot change and operations have to wait for the index rebuild to complete.  If you don’t have a large installation or you have a lot of memory / a fast disk you may be able to complete a reindex while your Puppet Enterprise installation is up.  PuppetDB will backup commands in its command queue and the console may throw some errors about not being able to load data.  After the reindex is complete the PuppetDB command queue will work through and the console UI will work as expected.
 
 In some cases, you cannot complete a reindex while the Puppet Enterprise services are trying to use the database.  You may receive a DEADLOCK error because the table that is supposed to be reindexed has too many requests on it and the reindex command cannot complete.  In these cases you need to stop the Puppet Enterprise services, run the reindex, and then start the Puppet Enterprise services again.  If you are getting a DEADLOCK error you can reduce the frequency of reindexing, the most important times to reindex are when you add new nodes, so reindexing is more important early in your PE installation when you are adding new nodes but less important to do frequently when you are in a steady state.
+
+### Resource Events TTL
+
+Currently, PE stores `report-ttl` days of events in the `resource_events` table in the `puppetdb` database, while the Console only displays one day of events in the Event Inspector.
+
+To avoid performance issues related to slow queries of arbitrarily large `resource_events` table ...
+
+Run the following command just once to truncate the `resource_events` table.
+
+```
+su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/bin/psql -d pe-puppetdb -c 'TRUNCATE resource_events'"
+```
+
+Then set `pe_databases::maintenance::resource_events_ttl: 2` in your hieradata to establish a `resource-events-ttl`.
+
+This defines a cron job to delete old events from the `resource_events` table daily at at 4:15AM.
+
+> Failing to truncate the `resource_events` table before setting `pe_databases::maintenance::resource_events_ttl` may result in disk space issues, and will result in a long blocking operation during the next VACUUM FULL.
+ 
+Use this with older versions of PE, or until [PDB-2487](https://tickets.puppetlabs.com/browse/PDB-2487) implements a native PuppetDB `resource-events-ttl`.
 
 ## PostgreSQL Settings
 
