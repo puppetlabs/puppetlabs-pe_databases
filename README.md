@@ -56,7 +56,7 @@ By default the script will only hold two backups for each database.  When the sc
 
 ### Disable the maintenance cron job
 
-The maintenance cron jobs will perform a VACUUM FULL on various PuppetDB tables to keep them small and make your PuppetDB performance better.  A VACUUM FULL is a blocking operation and you will see the PuppetDB command queue grow while the cron jobs run.  The blocking should be short lived and the PuppetDB command queue should work itself down after, however, if for some reason you experience issues you can disable the maintenance cron jobs.  You can do so by setting `pe_databases::maintenance::disable_maintenace: true` in your hieradata.
+The maintenance cron jobs will perform a VACUUM FULL on various PuppetDB tables to keep them small and make your PuppetDB performance better.  A VACUUM FULL is a blocking operation and you will see the PuppetDB command queue grow while the cron jobs run.  The blocking should be short lived and the PuppetDB command queue should work itself down after, however, if for some reason you experience issues you can disable the maintenance cron jobs.  You can do so by setting `pe_databases::maintenance::disable_maintenance: true` in your hieradata.
 
 # General PostgreSQL Recommendations
 
