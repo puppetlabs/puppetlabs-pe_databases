@@ -1,12 +1,12 @@
 {
-  "name": "npwalker-pe_databases",
-  "version": "0.15.0",
-  "author": "npwalker",
+  "name": "puppetlabs-pe_databases",
+  "version": "1.0.0",
+  "author": "puppetlabs",
   "summary": "A Puppet Module for Backing Up / Maintaining / Tuning Your Puppet Enterprise Databases",
   "license": "Apache-2.0",
-  "source": "https://github.com/npwalker/pe_databases",
-  "project_page": "https://github.com/npwalker/pe_databases",
-  "issues_url": "https://github.com/npwalker/pe_databases/issues",
+  "source": "https://github.com/puppetlabs/puppetlabs-pe_databases",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-pe_databases",
+  "issues_url": "https://github.com/puppetlabs/puppetlabs-pe_databases/issues",
   "dependencies": [
     {
       "name": "puppetlabs-postgresql",
@@ -77,6 +77,6 @@
     }
   ],
   "pdk-version": "1.14.0.pre (heads/master-0-g9158517)",
-  "template-url": "https://github.com/npwalker/pdk-templates#add_circleci_and_azure_pipelines_support",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#add_circleci_and_azure_pipelines_support",
   "template-ref": "remotes/origin/add_circleci_and_azure_pipelines_support-0-gdc89556"
 }
