@@ -1,3 +1,7 @@
+## Major Release 1.0.0
+
+- Move from the npwalker namespace to the puppetlabs namespace.
+
 ## Minor Release 0.15.0
 
 - Make pg_repack the default way to perform maintenance [#25](https://github.com/npwalker/pe_databases/pull/25)
