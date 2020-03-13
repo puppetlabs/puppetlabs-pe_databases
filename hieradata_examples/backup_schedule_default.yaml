@@ -3,9 +3,10 @@ pe_databases::backup::databases_and_backup_schedule:
     'databases':
       - 'pe-activity'
       - 'pe-classifier'
+      - 'pe-inventory'
+      - 'pe-orchestrator'
       - 'pe-postgres'
       - 'pe-rbac'
-      - 'pe-orchestrator'
     'schedule':
       'minute': '30'
       'hour':   '22'
@@ -13,6 +14,6 @@ pe_databases::backup::databases_and_backup_schedule:
     'databases':
       - 'pe-puppetdb'
     'schedule':
-      'minute': '0'
-      'hour': '2'
+      'minute':  '0'
+      'hour':    '2'
       'weekday': '7'

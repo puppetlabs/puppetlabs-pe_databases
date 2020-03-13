@@ -48,11 +48,12 @@ It is not recommended to classify using a pre-existing node group in the PE Cons
 
 ### Backup Schedule
 
-You can modify the default backup schedule by provide an array of hashes that describes the databases and their backup schedule.
+You can modify the default backup schedule by provide an array of hashes that describes the databases to backup and their backup schedule.
 Please refer to the [hieradata_examples](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/master/hieradata_examples) directory of this repository for examples.
 
-> NOTE: If you change the default schedule, it will stop managing the default crontab entries, and there's not a clean way to automatically remove unmanaged crontab entries.
-So you may want to simply delete the pe-postgres crontab entries and let Puppet repopulate it via `crontab -r -u pe-postgres`
+> IMPORTANT NOTE: If you change the default schedule, it will stop managing the associated crontab entries, and there's not a clean way to automatically remove unmanaged crontab entries.
+So you should delete all pe-postgres crontab entries via `crontab -r -u pe-postgres` and let Puppet repopulate them if you change the default schedule.
+Otherwise, you will create duplicate backups.
 
 ### Backup Retention Policy
 
