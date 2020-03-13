@@ -1,7 +1,19 @@
+# Backup PostgreSQL
+#
+# @summary Backup PostgreSQL
+
 class pe_databases::backup (
-  Array[Hash] $databases_and_backup_schedule = [
+  Array[Hash] $databases_and_backup_schedule =
+  [
     {
-      'databases' => ['pe-activity', 'pe-classifier', 'pe-postgres', 'pe-rbac', 'pe-orchestrator'],
+      'databases' =>
+      [
+        'pe-activity',
+        'pe-classifier',
+        'pe-orchestrator',
+        'pe-postgres',
+        'pe-rbac',
+      ],
       'schedule'  =>
       {
         'minute' => '30',
@@ -41,7 +53,6 @@ class pe_databases::backup (
   }
 
   $databases_and_backup_schedule.each | Hash $dbs_and_schedule | {
-
     $databases_to_backup = $dbs_and_schedule['databases']
     $db_string = join($databases_to_backup, ' ')
 
