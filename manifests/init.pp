@@ -11,7 +11,10 @@ class pe_databases (
   String  $scripts_dir                 = "${install_dir}/scripts"
 ) {
 
-  $psql_version = $facts['pe_postgresql_info']['installed_server_version']
+  $psql_version = $facts['pe_postgresql_info']['installed_server_version'] ? {
+    undef   => undef,
+    default => String($facts['pe_postgresql_info']['installed_server_version'])
+  }
 
   file { [$install_dir, $scripts_dir] :
     ensure => directory,
