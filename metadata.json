@@ -67,13 +67,14 @@
       "operatingsystemrelease": [
         "14.04",
         "16.04",
-        "18.04"      ]
+        "18.04"
+      ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.5"
+      "version_requirement": ">= 5.5.0"
     }
   ],
   "pdk-version": "1.14.0.pre (heads/master-0-g9158517)",
