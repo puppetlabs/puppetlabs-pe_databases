@@ -1,65 +1,85 @@
 #!/bin/bash
 
-PG_VERSION=$(/usr/local/bin/facter -p pe_postgresql_info.installed_server_version)
-BACKUPDIR=/opt/puppetlabs/server/data/postgresql/$PG_VERSION/backups
-LOGDIR=/var/log/puppetlabs/pe_databases_backup
-RETENTION=2
+usage() {
+  echo "usage: $0  [-t BACKUP_TARGET] [-l LOG_DIRECTORY] [-r retention] <DATABASE> [DATABASE_N ...]"
+  exit 1
+}
 
-while [[ $# -gt 0 ]]; do
-  arg="$1"
-  case $arg in
+while [[ $1 ]]; do
+  case "$1" in
     -t)
-      BACKUPDIR="$2"
-      shift; shift
+      backup_dir="$2"
+      shift 2
       ;;
     -l)
-      LOGDIR="$2"
-      shift; shift
+      log_dir="$2"
+      shift 2
       ;;
     -r)
-      RETENTION="$2"
-      shift; shift
+      retention="$2"
+      shift 2
       ;;
-    *)
-      DATABASES="${DATABASES} $1"
+    # If given the end of options string, shift it out and break
+    --)
       shift
+      break
+      ;;
+    # No need to shift if we've processed all options
+    *)
+      break
       ;;
   esac
 done
 
-if [[ -z "${DATABASES}" ]]; then
-  echo "Usage: $0  [-t BACKUP_TARGET] [-l LOG_DIRECTORY] [-r RETENTION] <DATABASE> [DATABASE_N ...]"
-  exit 1
-fi
+# The remaining parameters will be the databases to backup
+databases=("$@")
+# shellcheck disable=SC2128
+# We only care if the array contains any elements
+[[ $databases ]] || usage
 
-RETENTION_ENFORCE=$((RETENTION-1))
+[[ $pg_version ]] || pg_version="$(/usr/local/bin/facter -p pe_postgresql_info.installed_server_version)"
+backup_dir="${backup_dir:-/opt/puppetlabs/server/data/postgresql/$pg_version/backups}"
+log_dir="${log_dir:-/var/log/puppetlabs/pe_databases_backup}"
+retention="${retention:-2}"
 
-for db in $DATABASES; do
-  echo "Enforcing retention policy of storing only ${RETENTION_ENFORCE} backups for ${db}" >> "${LOGDIR}/${db}.log" 2>&1
+for db in "${databases[@]}"; do
+  # For each db, redirect all output to the log inside the backup dir
+  exec &>"${log_dir}/${db}.log"
+  echo "Enforcing retention policy of storing only $retention backups for $db"
 
-  ls -1tr ${BACKUPDIR}/${db}_* | head -n -${RETENTION_ENFORCE} | xargs -d '\n' rm -f --
+  unset backups
+  # Starting inside <(), use stat to print mtime and the filename and pipe to sort
+  # Add the filename to the backups array, giving us a sorted list of filenames
+  while IFS= read -r -d '' line; do
+    backups+=("${line#* }")
+  done < <(stat --printf '%Y %n\0' "${backup_dir}/${db}_"* 2>/dev/null | sort -nz)
 
-  echo "Starting dump of database: ${db}" >> "${LOGDIR}/${db}.log" 2>&1
+  # Our array offset will be the number of backups - $retention + 1
+  # e.g. if we have 2 existing backups and retention=2, offset will be one
+  # We'll delete from element 0 to 1 of the array, leaving one backup.
+  # The subsequent backup will leave us with 2 again
+  offset=$(( ${#backups[@]} - retention + 1 ))
 
-  if [ "${db}" == "pe-classifier" ]; then
+  if (( offset > 0 )); then
+  # Continue if we're retaining more copies of the db than currently exist
+  # This will also be true if no backups currently exist
+    rm -f -- "${backups[@]:0:$offset}"
+  fi
+
+  echo "Starting dump of database: $db"
+
+  if [[ $db == 'pe-classifier' ]]; then
     # Save space before backing up by clearing unused node_check_ins table.
-    /opt/puppetlabs/server/bin/psql -d pe-classifier -c 'TRUNCATE TABLE node_check_ins' >> "${LOGDIR}/${db}.log" 2>&1
-
-    result=$?
-    if [ $result != 0 ]; then
-      echo "Failed to truncate node_check_ins table" >> "${LOGDIR}/${db}.log" 2>&1
-    fi
+    /opt/puppetlabs/server/bin/psql -d pe-classifier -c 'TRUNCATE TABLE node_check_ins' || \
+      echo "Failed to truncate node_check_ins table"
   fi
 
-  DATETIME=$(date +%m_%d_%y_%H_%M)
+  datetime="$(date +%Y%m%d%S)"
 
-  /opt/puppetlabs/server/bin/pg_dump -Fc "${db}" -f "${BACKUPDIR}/${db}_$DATETIME.bin" >> "${LOGDIR}/${db}.log" 2>&1
-
-  result=$?
-  if [[ $result -eq 0 ]]; then
-    echo "Completed dump of database: ${db}" >> "${LOGDIR}/${db}.log" 2>&1
-  else
-    echo "Failed to dump database ${db}. Exit code is: ${result}" >> "${LOGDIR}/${db}.log" 2>&1
+  /opt/puppetlabs/server/bin/pg_dump -Fc "$db" -f "${backup_dir}/${db}_$datetime.bin" || {
+    echo "Failed to dump database $db"
     exit 1
-  fi
+  }
+
+  echo "Completed dump of database: ${db}"
 done
