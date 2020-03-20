@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-  echo "usage: $0  [-t BACKUP_TARGET] [-l LOG_DIRECTORY] [-r retention] <DATABASE> [DATABASE_N ...]"
+  echo "usage: $0 [-t TARGET_BACKUP_DIRECTORY] [-l LOG_DIRECTORY] [-r RETENTION] <DATABASE> [DATABASE_N ...]"
   exit 1
 }
 
