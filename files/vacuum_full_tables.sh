@@ -2,9 +2,9 @@
 
 usage() {
   cat <<EOF
-echo "usage: $0 <table set> [sleep duration]"
-where <table set> is one of: facts catalogs other
-and [sleep duration] is an optional integer of seconds to sleep.  Defaults to 300
+echo "usage: $0 <TABLE_SET> [SLEEP_DURATION]"
+where <TABLE_SET> is one of: facts catalogs other
+and [SLEEP_DURATION] is an optional integer of seconds to sleep. Defaults to 300
 EOF
   exit 1
 }
@@ -27,7 +27,6 @@ case "$1" in
     usage
 esac
 
-
 SQL="SELECT t.relname::varchar AS table_name
   FROM pg_class t
   JOIN pg_namespace n
@@ -35,6 +34,7 @@ SQL="SELECT t.relname::varchar AS table_name
   WHERE t.relkind = 'r'
     AND t.relname IN ( $(IFS=,; echo "${vacuum_tables[*]}") )"
 
+# shellcheck disable=SC2207
 tables=($(su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/bin/psql -d pe-puppetdb -c \"$SQL\" --tuples-only"))
 
 for table in "${tables[@]}"; do
