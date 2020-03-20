@@ -2,8 +2,9 @@
 
 usage() {
   cat <<EOF
-echo "usage: $0 <table>"
-where <table> is one of: facts catalogs other
+echo "usage: $0 <table set> [sleep duration]"
+where <table set> is one of: facts catalogs other
+and [sleep duration] is an optional integer of seconds to sleep.  Defaults to 300
 EOF
   exit 1
 }
@@ -12,7 +13,6 @@ EOF
 
 sleep_duration="${2:-300}"
 
-# TODO: Is this used in PE 2018 and newer? RE: fact_values
 case "$1" in
   'facts')
     vacuum_tables=("'facts'" "'factsets'" "'fact_paths'" "'fact_values'")

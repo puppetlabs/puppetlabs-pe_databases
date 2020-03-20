@@ -1,5 +1,10 @@
 #!/bin/bash
 
+usage() {
+  echo "usage: $0  [-t BACKUP_TARGET] [-l LOG_DIRECTORY] [-r retention] <DATABASE> [DATABASE_N ...]"
+  exit 1
+}
+
 while [[ $1 ]]; do
   case "$1" in
     -t)
@@ -30,10 +35,7 @@ done
 databases=("$@")
 # shellcheck disable=SC2128
 # We only care if the array contains any elements
-[[ $databases ]] || {
-  echo "Usage: $0  [-t BACKUP_TARGET] [-l LOG_DIRECTORY] [-r retention] <DATABASE> [DATABASE_N ...]"
-  exit 1
-}
+[[ $databases ]] || usage
 
 [[ $pg_version ]] || pg_version="$(/usr/local/bin/facter -p pe_postgresql_info.installed_server_version)"
 backup_dir="${backup_dir:-/opt/puppetlabs/server/data/postgresql/$pg_version/backups}"
@@ -63,7 +65,6 @@ for db in "${databases[@]}"; do
   # This will also be true if no backups currently exist
     rm -f -- "${backups[@]:0:$offset}"
   fi
-
 
   echo "Starting dump of database: $db"
 
