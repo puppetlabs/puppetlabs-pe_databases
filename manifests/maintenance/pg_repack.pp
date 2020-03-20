@@ -18,8 +18,9 @@ class pe_databases::maintenance::pg_repack (
 
   $postgresql_version = $facts['pe_postgresql_info']['installed_server_version']
   $repack_executable = versioncmp('2019.1.0', $facts['pe_server_version']) ? {
-                         1       => '/opt/puppetlabs/server/apps/postgresql/bin/pg_repack',
-                         default => "/opt/puppetlabs/server/apps/postgresql/${$postgresql_version}/bin/pg_repack" }
+                          1       => '/opt/puppetlabs/server/apps/postgresql/bin/pg_repack',
+                          default => "/opt/puppetlabs/server/apps/postgresql/${$postgresql_version}/bin/pg_repack"
+                          }
 
   $repack          = "su - pe-postgres -s /bin/bash -c \"${repack_executable} -d pe-puppetdb"
   $repack_jobs     = "--jobs ${jobs}"
@@ -28,8 +29,9 @@ class pe_databases::maintenance::pg_repack (
   $catalogs_tables = '-t catalogs -t catalog_resources -t edges -t certnames"'
   $other_tables    = '-t producers -t resource_params -t resource_params_cache"'
   $reports_tables  = versioncmp('2019.1.0', $facts['pe_server_version']) ? {
-                       1       => '-t reports"',
-                       default => '-t reports -t resource_events"' }
+                        1       => '-t reports"',
+                        default => '-t reports -t resource_events"'
+                        }
   $logging         = "> ${logging_directory}/output.log 2>&1"
 
   Cron {
@@ -40,16 +42,16 @@ class pe_databases::maintenance::pg_repack (
 
   cron { 'pg_repack facts tables' :
     weekday => [2,6],
-    hour     => 4,
-    minute   => 30,
-    command  => "${repack} ${repack_jobs} ${facts_tables} ${logging}",
+    hour    => 4,
+    minute  => 30,
+    command => "${repack} ${repack_jobs} ${facts_tables} ${logging}",
   }
 
   cron { 'pg_repack catalogs tables' :
-    weekday  => [0,4],
-    hour     => 4,
-    minute   => 30,
-    command  => "${repack} ${repack_jobs} ${catalogs_tables} ${logging}",
+    weekday => [0,4],
+    hour    => 4,
+    minute  => 30,
+    command => "${repack} ${repack_jobs} ${catalogs_tables} ${logging}",
   }
 
   cron { 'pg_repack other tables' :
