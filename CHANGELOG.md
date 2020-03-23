@@ -1,3 +1,8 @@
+## Minor Release 1.0.1
+
+- Correct lint issues found on the Forge
+- Update to PDK 1.17.0
+
 ## Major Release 1.0.0
 
 - Move from the npwalker namespace to the puppetlabs namespace.
