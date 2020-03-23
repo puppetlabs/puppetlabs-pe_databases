@@ -3,6 +3,7 @@
 # Facts specified here will override the values provided by rspec-puppet-facts.
 ---
 ipaddress: "172.16.254.254"
+ipaddress6: "FE80:0000:0000:0000:AAAA:AAAA:AAAA"
 is_pe: false
 macaddress: "AA:AA:AA:AA:AA:AA"
 pe_server_version: 2018.1.0
@@ -14,4 +15,3 @@ processors:
   count: 8
 pe_postgresql_info:
   installed_server_version: 9.6
-

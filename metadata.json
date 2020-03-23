@@ -77,7 +77,7 @@
       "version_requirement": ">= 5.5.0"
     }
   ],
-  "pdk-version": "1.14.0.pre (heads/master-0-g9158517)",
-  "template-url": "https://github.com/puppetlabs/pdk-templates#add_circleci_and_azure_pipelines_support",
-  "template-ref": "remotes/origin/add_circleci_and_azure_pipelines_support-0-gdc89556"
+  "pdk-version": "1.17.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#master",
+  "template-ref": "tags/1.17.0-0-gd3a4319"
 }
