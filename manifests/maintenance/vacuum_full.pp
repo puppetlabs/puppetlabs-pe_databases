@@ -29,23 +29,23 @@ class pe_databases::maintenance::vacuum_full (
   }
 
   Cron {
-    ensure   => $ensure_cron,
-    user     => 'root',
-    require  => File[$logging_directory, $script_directory],
+    ensure  => $ensure_cron,
+    user    => 'root',
+    require => File[$logging_directory, $script_directory],
   }
 
   cron { 'VACUUM FULL facts tables' :
-    weekday  => [2,6],
-    hour     => 4,
-    minute   => 30,
-    command  => "${vacuum_script_path} facts",
+    weekday => [2,6],
+    hour    => 4,
+    minute  => 30,
+    command => "${vacuum_script_path} facts",
   }
 
   cron { 'VACUUM FULL catalogs tables' :
-    weekday  => [0,4],
-    hour     => 4,
-    minute   => 30,
-    command  => "${vacuum_script_path} catalogs",
+    weekday => [0,4],
+    hour    => 4,
+    minute  => 30,
+    command => "${vacuum_script_path} catalogs",
   }
 
   cron { 'VACUUM FULL other tables' :

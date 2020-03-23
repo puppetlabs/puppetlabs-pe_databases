@@ -29,10 +29,10 @@ class pe_databases (
   if $manage_postgresql_settings and (versioncmp('2018.1.0', $facts['pe_server_version']) > 0) {
     include pe_databases::postgresql_settings
     class { 'pe_databases::postgresql_settings::table_settings' :
-      manage_reports_autovacuum_cost_delay     => $pe_databases::postgresql_settings::manage_reports_autovacuum_cost_delay,
-      factsets_autovacuum_vacuum_scale_factor  => $pe_databases::postgresql_settings::factsets_autovacuum_vacuum_scale_factor,
-      reports_autovacuum_vacuum_scale_factor   => $pe_databases::postgresql_settings::reports_autovacuum_vacuum_scale_factor,
-      require                                  => Class['pe_databases::postgresql_settings'],
+      manage_reports_autovacuum_cost_delay    => $pe_databases::postgresql_settings::manage_reports_autovacuum_cost_delay,
+      factsets_autovacuum_vacuum_scale_factor => $pe_databases::postgresql_settings::factsets_autovacuum_vacuum_scale_factor,
+      reports_autovacuum_vacuum_scale_factor  => $pe_databases::postgresql_settings::reports_autovacuum_vacuum_scale_factor,
+      require                                 => Class['pe_databases::postgresql_settings'],
     }
   } elsif $manage_table_settings {
     # This is to provide for situations, like PE XL,
