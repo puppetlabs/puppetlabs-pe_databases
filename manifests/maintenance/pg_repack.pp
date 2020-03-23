@@ -15,11 +15,11 @@ class pe_databases::maintenance::pg_repack (
 
   # PE 2019.1 starting shipping versioned pe-postgres packages where all paths are versioned.
   # So, prior to 2019.1 use a non-versioned path, and after use a versioned path.
-
+  # TODO: Use $pe_databases::psql_version after identifying why it is cast to ${psql_version}00000 in spec tests.
   $postgresql_version = $facts['pe_postgresql_info']['installed_server_version']
   $repack_executable = versioncmp('2019.1.0', $facts['pe_server_version']) ? {
                           1       => '/opt/puppetlabs/server/apps/postgresql/bin/pg_repack',
-                          default => "/opt/puppetlabs/server/apps/postgresql/${$postgresql_version}/bin/pg_repack"
+                          default => "/opt/puppetlabs/server/apps/postgresql/${postgresql_version}/bin/pg_repack"
                           }
 
   $repack          = "su - pe-postgres -s /bin/bash -c \"${repack_executable} -d pe-puppetdb"
@@ -28,10 +28,12 @@ class pe_databases::maintenance::pg_repack (
   $facts_tables    = '-t factsets -t fact_paths"'
   $catalogs_tables = '-t catalogs -t catalog_resources -t edges -t certnames"'
   $other_tables    = '-t producers -t resource_params -t resource_params_cache"'
+
   $reports_tables  = versioncmp('2019.1.0', $facts['pe_server_version']) ? {
                         1       => '-t reports"',
                         default => '-t reports -t resource_events"'
                         }
+
   $logging         = "> ${logging_directory}/output.log 2>&1"
 
   Cron {
