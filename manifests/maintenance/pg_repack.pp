@@ -28,11 +28,8 @@ class pe_databases::maintenance::pg_repack (
   $facts_tables    = '-t factsets -t fact_paths"'
   $catalogs_tables = '-t catalogs -t catalog_resources -t edges -t certnames"'
   $other_tables    = '-t producers -t resource_params -t resource_params_cache"'
-
-  $reports_tables  = versioncmp('2019.1.0', $facts['pe_server_version']) ? {
-                        1       => '-t reports"',
-                        default => '-t reports -t resource_events"'
-                        }
+  $reports_table   = '-t reports"'
+  $resource_events_table = '-t resource_events"'
 
   $logging         = "> ${logging_directory}/output.log 2>&1"
 
@@ -63,10 +60,31 @@ class pe_databases::maintenance::pg_repack (
     command  => "${repack} ${repack_jobs} ${other_tables} ${logging}",
   }
 
-  cron { 'pg_repack reports tables' :
-    monthday => 10,
-    hour     => 5,
-    minute   => 30,
-    command  => "${repack} ${repack_jobs} ${reports_tables} ${logging}",
+  if versioncmp($facts['pe_server_version'], '2019.7.0') < 0 {
+    cron { 'pg_repack reports tables' :
+      monthday => 10,
+      hour     => 5,
+      minute   => 30,
+      command  => "${repack} ${repack_jobs} ${reports_table} ${logging}",
+    }
+  }
+  else {
+    cron { 'pg_repack reports tables' :
+      ensure   => 'absent',
+    }
+  }
+
+  if versioncmp($facts['pe_server_version'], '2019.3.0') < 0 {
+    cron { 'pg_repack resource_events tables' :
+      monthday => 15,
+      hour     => 5,
+      minute   => 30,
+      command  => "${repack} ${repack_jobs} ${resource_events_table} ${logging}",
+    }
+  }
+  else {
+    cron { 'pg_repack resource_events tables' :
+      ensure   => 'absent',
+    }
   }
 }
