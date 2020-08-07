@@ -1,3 +1,10 @@
+## Minor Release 1.1.0
+
+- The reports and resource_events tables are no longer repacked when the tables are partitioned
+- Update repack logging to separate files
+- Update Puppet VS Code Extension ID
+- Update to PDK 1.18.1
+
 ## Minor Release 1.0.1
 
 - Correct lint issues found on the Forge
