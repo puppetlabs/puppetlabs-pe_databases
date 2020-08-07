@@ -6,6 +6,8 @@ ipaddress: "172.16.254.254"
 ipaddress6: "FE80:0000:0000:0000:AAAA:AAAA:AAAA"
 is_pe: false
 macaddress: "AA:AA:AA:AA:AA:AA"
+pe_postgresql_info:
+  installed_server_version: 9.6
 pe_server_version: 2018.1.0
 memory:
   system:
@@ -13,5 +15,3 @@ memory:
     total_bytes: 17179869184
 processors:
   count: 8
-pe_postgresql_info:
-  installed_server_version: 9.6

@@ -6,7 +6,7 @@ appveyor.yml:
 .project:
   delete: true
 .gitlab-ci.yml:
-  delete: true 
+  delete: true
 
 spec/default_facts.yml:
   extra_facts:
@@ -18,7 +18,14 @@ spec/default_facts.yml:
     processors:
       "count": 8
 
-.travis.yml:
-  includes:
-    - env: PUPPET_GEM_VERSION="= 4.6.1" CHECK=parallel_spec
-      rvm: 2.1.9
+spec/default_facts.yml:
+  extra_facts:
+    pe_postgresql_info:
+      installed_server_version: 9.6
+    pe_server_version: 2018.1.0
+    memory:
+      system:
+        total: 16.00 GiB
+        total_bytes: 17179869184
+    processors:
+      count: 8

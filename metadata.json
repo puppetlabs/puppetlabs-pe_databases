@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-pe_databases",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "puppetlabs",
   "summary": "A Puppet Module for Backing Up / Maintaining / Tuning Your Puppet Enterprise Databases",
   "license": "Apache-2.0",
@@ -77,7 +77,7 @@
       "version_requirement": ">= 5.5.0"
     }
   ],
-  "pdk-version": "1.17.0",
+  "pdk-version": "1.18.1",
   "template-url": "https://github.com/puppetlabs/pdk-templates#master",
-  "template-ref": "tags/1.17.0-0-gd3a4319"
+  "template-ref": "heads/master-0-gd610ead"
 }
