@@ -31,8 +31,6 @@ class pe_databases::maintenance::pg_repack (
   $reports_table   = '-t reports"'
   $resource_events_table = '-t resource_events"'
 
-  $logging         = "> ${logging_directory}/output.log 2>&1"
-
   Cron {
     ensure   => $ensure_cron,
     user     => 'root',
@@ -43,21 +41,21 @@ class pe_databases::maintenance::pg_repack (
     weekday => [2,6],
     hour    => 4,
     minute  => 30,
-    command => "${repack} ${repack_jobs} ${facts_tables} ${logging}",
+    command => "${repack} ${repack_jobs} ${facts_tables} > ${logging_directory}/facts_repack.log 2>&1",
   }
 
   cron { 'pg_repack catalogs tables' :
     weekday => [0,4],
     hour    => 4,
     minute  => 30,
-    command => "${repack} ${repack_jobs} ${catalogs_tables} ${logging}",
+    command => "${repack} ${repack_jobs} ${catalogs_tables} > ${logging_directory}/catalogs_repack.log 2>&1",
   }
 
   cron { 'pg_repack other tables' :
     monthday => 20,
     hour     => 5,
     minute   => 30,
-    command  => "${repack} ${repack_jobs} ${other_tables} ${logging}",
+    command  => "${repack} ${repack_jobs} ${other_tables} > ${logging_directory}/other_repack.log 2>&1",
   }
 
   if versioncmp($facts['pe_server_version'], '2019.7.0') < 0 {
@@ -65,7 +63,7 @@ class pe_databases::maintenance::pg_repack (
       monthday => 10,
       hour     => 5,
       minute   => 30,
-      command  => "${repack} ${repack_jobs} ${reports_table} ${logging}",
+      command  => "${repack} ${repack_jobs} ${reports_table} > ${logging_directory}/reports_repack.log 2>&1",
     }
   }
   else {
@@ -79,12 +77,16 @@ class pe_databases::maintenance::pg_repack (
       monthday => 15,
       hour     => 5,
       minute   => 30,
-      command  => "${repack} ${repack_jobs} ${resource_events_table} ${logging}",
+      command  => "${repack} ${repack_jobs} ${resource_events_table} > ${logging_directory}/resource_events_repack.log 2>&1",
     }
   }
   else {
     cron { 'pg_repack resource_events tables' :
       ensure   => 'absent',
     }
+  }
+
+  file { "${logging_directory}/output.log" :
+    ensure => absent,
   }
 }
