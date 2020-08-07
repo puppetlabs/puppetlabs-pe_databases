@@ -17,3 +17,15 @@ spec/default_facts.yml:
         "total_bytes": 17179869184
     processors:
       "count": 8
+
+spec/default_facts.yml:
+  extra_facts:
+    pe_postgresql_info:
+      installed_server_version: 9.6
+    pe_server_version: 2018.1.0
+    memory:
+      system:
+        total: 16.00 GiB
+        total_bytes: 17179869184
+    processors:
+      count: 8
