@@ -30,6 +30,7 @@ class pe_databases::maintenance::pg_repack (
   $other_tables    = '-t producers -t resource_params -t resource_params_cache"'
   $reports_table   = '-t reports"'
   $resource_events_table = '-t resource_events"'
+  $catalog_inputs_table = '-t catalog_inputs"'
 
   Cron {
     ensure   => $ensure_cron,
@@ -82,6 +83,20 @@ class pe_databases::maintenance::pg_repack (
   }
   else {
     cron { 'pg_repack resource_events tables' :
+      ensure   => 'absent',
+    }
+  }
+
+  if versioncmp($facts['pe_server_version'], '2019.8.2') >= 0 {
+    cron { 'pg_repack catalog_inputs tables' :
+      weekday => [1,5],
+      hour    => 4,
+      minute  => 30,
+      command => "${repack} ${repack_jobs} ${catalog_inputs_table} > ${logging_directory}/catalog_inputs_repack.log 2>&1",
+    }
+  }
+  else {
+    cron { 'pg_repack catalog_inputs tables' :
       ensure   => 'absent',
     }
   }
