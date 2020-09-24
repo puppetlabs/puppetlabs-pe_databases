@@ -9,6 +9,7 @@ class pe_databases::postgresql_settings (
   Integer    $autovacuum_max_workers                            = max(3, min(8, $facts['processors']['count'] / 3)),
   Integer    $log_autovacuum_min_duration                       = -1,
   Integer    $log_temp_files                                    = -1,
+  Integer    $autovacuum_vacuum_cost_limit                      = 2000,
   String     $work_mem                                          = '8MB',
   Integer    $max_connections                                   = 1000,
   Hash       $arbitrary_postgresql_conf_settings                = {},
@@ -76,7 +77,11 @@ class pe_databases::postgresql_settings (
   postgresql_conf { 'autovacuum_work_mem' :
     value => String($autovacuum_work_mem),
   }
-
+  
+  postgresql_conf { '$autovacuum_vacuum_cost_limit ' :
+    value => String($$autovacuum_vacuum_cost_limit),
+  }
+  
   postgresql_conf { 'log_autovacuum_min_duration' :
     value => String($log_autovacuum_min_duration),
   }
