@@ -4,6 +4,7 @@
 
 class pe_databases::maintenance (
   Boolean $disable_maintenance = false,
+  Boolean $disable_logrotate   = false,
   String  $logging_directory   = '/var/log/puppetlabs/pe_databases_cron',
   String  $log_level           = 'debug',
   String  $script_directory    = $pe_databases::scripts_dir,
@@ -28,5 +29,15 @@ class pe_databases::maintenance (
 
   file { $logging_directory :
     ensure => directory,
+  }
+
+  $logrotate_ensure = $disable_logrotate ? {
+    true    => 'absent',
+    default =>  'file'
+  }
+
+  file { '/etc/logrotate.d/pe_databases' :
+    ensure  => $logrotate_ensure,
+    content => epp('pe_databases/logrotate.epp', { 'logging_directory' => $logging_directory })
   }
 }

@@ -44,21 +44,21 @@ class pe_databases::maintenance::pg_repack (
     weekday => [2,6],
     hour    => 4,
     minute  => 30,
-    command => "${repack} ${args} ${facts_tables} ${repack_end} > ${logging_directory}/facts_repack.log 2>&1",
+    command => "${repack} ${args} ${facts_tables} ${repack_end} >> ${logging_directory}/facts_repack.log 2>&1",
   }
 
   cron { 'pg_repack catalogs tables' :
     weekday => [0,4],
     hour    => 4,
     minute  => 30,
-    command => "${repack} ${args} ${catalogs_tables} ${repack_end} > ${logging_directory}/catalogs_repack.log 2>&1",
+    command => "${repack} ${args} ${catalogs_tables} ${repack_end} >> ${logging_directory}/catalogs_repack.log 2>&1",
   }
 
   cron { 'pg_repack other tables' :
     monthday => 20,
     hour     => 5,
     minute   => 30,
-    command  => "${repack} ${args} ${other_tables} ${repack_end} > ${logging_directory}/other_repack.log 2>&1",
+    command  => "${repack} ${args} ${other_tables} ${repack_end} >> ${logging_directory}/other_repack.log 2>&1",
   }
 
   if versioncmp($facts['pe_server_version'], '2019.7.0') < 0 {
@@ -66,7 +66,7 @@ class pe_databases::maintenance::pg_repack (
       monthday => 10,
       hour     => 5,
       minute   => 30,
-      command  => "${repack} ${args} ${reports_table} ${repack_end} > ${logging_directory}/reports_repack.log 2>&1",
+      command  => "${repack} ${args} ${reports_table} ${repack_end} >> ${logging_directory}/reports_repack.log 2>&1",
     }
   }
   else {
@@ -80,7 +80,7 @@ class pe_databases::maintenance::pg_repack (
       monthday => 15,
       hour     => 5,
       minute   => 30,
-      command  => "${repack} ${args} ${resource_events_table} ${repack_end} > ${logging_directory}/resource_events_repack.log 2>&1",
+      command  => "${repack} ${args} ${resource_events_table} ${repack_end} >> ${logging_directory}/resource_events_repack.log 2>&1",
     }
   }
   else {

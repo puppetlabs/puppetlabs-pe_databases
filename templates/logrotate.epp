@@ -1,0 +1,8 @@
+<%- | String $logging_directory = $pe_databases::maintenance::logging_directory | -%>
+<%= $logging_directory -%>/*.log {
+    daily
+    missingok
+    rotate 16
+    compress
+    notifempty
+}
