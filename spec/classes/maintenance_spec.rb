@@ -8,6 +8,8 @@ describe 'pe_databases::maintenance' do
 
       it { is_expected.to compile }
 
+      it { is_expected.to contain_file('/etc/logrotate.d/pe_databases') }
+
       context 'on PE 2019.0.0' do
         before(:each) do
           facts['pe_server_version'] = '2019.0.0'
