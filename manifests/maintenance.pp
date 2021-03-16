@@ -5,6 +5,7 @@
 class pe_databases::maintenance (
   Boolean $disable_maintenance = false,
   String  $logging_directory   = '/var/log/puppetlabs/pe_databases_cron',
+  String  $log_level           = 'debug',
   String  $script_directory    = $pe_databases::scripts_dir,
 ){
 
