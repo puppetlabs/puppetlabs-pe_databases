@@ -55,7 +55,7 @@ class pe_databases::postgresql_settings (
   # https://tickets.puppetlabs.com/browse/MODULES-2960
   # http://www.postgresql.org/docs/9.4/static/runtime-config-autovacuum.html
 
-  Postgresql_conf {
+  Pe_postgresql_conf {
     ensure => present,
     target => "/opt/puppetlabs/server/data/postgresql/${psql_version}/data/postgresql.conf",
     notify => $notify_postgresql_service,
