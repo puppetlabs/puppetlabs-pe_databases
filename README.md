@@ -1,25 +1,27 @@
 Table of Contents
 =================
 
-* [Overview](#overview)
-  * [What does this module provide?](#what-does-this-module-provide)
-  * [Usage](#usage)
-  * [Items you may want to configure](#items-you-may-want-to-configure)
-    * [Backup Schedule](#backup-schedule)
-    * [Backup Retention Policy](#backup-retention-policy)
-    * [Disable Maintenance](#disable-maintenance)
-* [General PostgreSQL Recommendations](#general-postgresql-recommendations)
-  * [Tuning](#tuning)
-  * [Backups](#backups)
-  * [Maintenance](#maintenance)
-    * [Vacuuming](#vacuuming)
-    * [Reindexing](#reindexing)
-  * [PostgreSQL Settings](#postgresql-settings)
-    * [maintenance_work_mem](#maintenance_work_mem)
-    * [work_mem](#work_mem)
-    * [autovacuum_work_mem](#autovacuum_work_mem)
-    * [autovacuum_max_workers](#autovacuum_max_workers)
-    * [checkpoint_segments and checkpoint_completion_target](#checkpoint_segments-and-checkpoint_completion_target)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+  - [What does this module provide?](#what-does-this-module-provide)
+  - [Usage](#usage)
+  - [Items you may want to configure](#items-you-may-want-to-configure)
+    - [Backup Schedule](#backup-schedule)
+    - [Backup Retention Policy](#backup-retention-policy)
+    - [Disable Maintenance](#disable-maintenance)
+- [General PostgreSQL Recommendations](#general-postgresql-recommendations)
+  - [Tuning](#tuning)
+  - [Backups](#backups)
+  - [Maintenance](#maintenance)
+    - [Vacuuming](#vacuuming)
+    - [Reindexing](#reindexing)
+  - [PostgreSQL Settings](#postgresql-settings)
+    - [maintenance_work_mem](#maintenance_work_mem)
+    - [work_mem](#work_mem)
+    - [autovacuum_work_mem](#autovacuum_work_mem)
+    - [autovacuum_max_workers](#autovacuum_max_workers)
+    - [checkpoint_segments and checkpoint_completion_target](#checkpoint_segments-and-checkpoint_completion_target)
+  - [How to Report an issue or contribute to the module](#how-to-report-an-issue-or-contribute-to-the-module)
 
 # Overview
 
@@ -186,3 +188,8 @@ We suggest a middle ground of `128` for `checkpoint_segments` and `.9` for `chec
 As mentioned in the PostgreSQL Wiki, the larger value you use for `checkpoint_segments` affords you better performance but you sacrifice in potential recovery time.
 
 If you see messages like “LOG:  checkpoints are occurring too frequently (xx seconds apart)” then you definitely want to increase your `checkpoint_segments`.
+
+## How to Report an issue or contribute to the module
+
+If you are a PE user and need support using this module or are encountering issues, our Support team would be happy to help you resolve your issue and help reproduce any bugs. Just raise a ticket on the [support portal](https://support.puppet.com/hc/en-us/requests/new).
+If you have a reproducible bug or are a community user you can raise it directly on the Github issues page of the module [puppetlabs/puppetlabs-pe_databases](https://github.com/puppetlabs/puppetlabs-pe_databases/issues). We also welcome PR contributions to improve the module. Please see further details about contributing [here](https://puppet.com/docs/puppet/7.5/contributing.html#contributing_changes_to_module_repositories)
