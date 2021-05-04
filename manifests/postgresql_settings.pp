@@ -55,49 +55,49 @@ class pe_databases::postgresql_settings (
   # https://tickets.puppetlabs.com/browse/MODULES-2960
   # http://www.postgresql.org/docs/9.4/static/runtime-config-autovacuum.html
 
-  Postgresql_conf {
+  Pe_postgresql_conf {
     ensure => present,
     target => "/opt/puppetlabs/server/data/postgresql/${psql_version}/data/postgresql.conf",
     notify => $notify_postgresql_service,
   }
 
-  postgresql_conf { 'autovacuum_vacuum_scale_factor' :
+  pe_postgresql_conf { 'autovacuum_vacuum_scale_factor' :
     value => sprintf('%#.2f', $autovacuum_vacuum_scale_factor),
   }
 
-  postgresql_conf { 'autovacuum_analyze_scale_factor' :
+  pe_postgresql_conf { 'autovacuum_analyze_scale_factor' :
     value => sprintf('%#.2f', $autovacuum_analyze_scale_factor),
   }
 
-  postgresql_conf { 'autovacuum_max_workers' :
+  pe_postgresql_conf { 'autovacuum_max_workers' :
     value => String($autovacuum_max_workers),
   }
 
-  postgresql_conf { 'autovacuum_work_mem' :
+  pe_postgresql_conf { 'autovacuum_work_mem' :
     value => String($autovacuum_work_mem),
   }
 
-  postgresql_conf { 'log_autovacuum_min_duration' :
+  pe_postgresql_conf { 'log_autovacuum_min_duration' :
     value => String($log_autovacuum_min_duration),
   }
 
-  postgresql_conf { 'log_temp_files' :
+  pe_postgresql_conf { 'log_temp_files' :
     value => String($log_temp_files),
   }
 
-  postgresql_conf { 'maintenance_work_mem' :
+  pe_postgresql_conf { 'maintenance_work_mem' :
     value => String($maintenance_work_mem),
   }
 
-  postgresql_conf { 'work_mem' :
+  pe_postgresql_conf { 'work_mem' :
     value => String($work_mem),
   }
 
-  postgresql_conf { 'max_connections' :
+  pe_postgresql_conf { 'max_connections' :
     value => String($max_connections),
   }
 
-  postgresql_conf { 'checkpoint_completion_target' :
+  pe_postgresql_conf { 'checkpoint_completion_target' :
     value => sprintf('%#.2f', $checkpoint_completion_target),
   }
 
@@ -106,14 +106,14 @@ class pe_databases::postgresql_settings (
     default => 'absent',
   }
 
-  postgresql_conf { 'checkpoint_segments' :
+  pe_postgresql_conf { 'checkpoint_segments' :
     ensure => $checkpoint_segments_ensure,
     value  => String($checkpoint_segments),
   }
 
   if !empty($arbitrary_postgresql_conf_settings) {
     $arbitrary_postgresql_conf_settings.each | $key, $value | {
-      postgresql_conf { $key :
+      pe_postgresql_conf { $key :
         value => String($value),
       }
     }

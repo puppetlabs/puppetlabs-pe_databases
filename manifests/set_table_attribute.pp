@@ -10,7 +10,7 @@ define pe_databases::set_table_attribute (
 ) {
 
   # lint:ignore:140chars
-  postgresql_psql { "Set ${table_attribute}=${table_attribute_value} for ${table_name}" :
+  pe_postgresql_psql { "Set ${table_attribute}=${table_attribute_value} for ${table_name}" :
     command    => "ALTER TABLE ${table_name} SET ( ${table_attribute} = ${table_attribute_value} )",
     unless     => "SELECT reloptions FROM pg_class WHERE relname = '${table_name}' AND CAST(reloptions as text) LIKE '%${table_attribute}=${table_attribute_value}%'",
     db         => $db,
