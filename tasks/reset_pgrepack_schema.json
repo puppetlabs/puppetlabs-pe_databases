@@ -1,0 +1,5 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "This task will remove and recreate the pg_repack extension"
+}
