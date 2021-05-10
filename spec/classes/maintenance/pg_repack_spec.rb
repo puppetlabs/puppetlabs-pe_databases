@@ -71,15 +71,15 @@ describe 'pe_databases::maintenance::pg_repack' do
               ' -d pe-puppetdb --jobs 2 -t resource_events" > /var/log/puppetlabs/pe_databases_cron/resource_events_repack.log 2>&1')
         }
       end
-      context 'on >= PE 2019.8.0' do
+      context 'on >= PE 2019.8.2' do
         before :each do
-          facts['pe_server_version'] = '2019.8.0'
+          facts['pe_server_version'] = '2019.8.2'
           facts['pe_postgresql_info']['installed_server_version'] = 11
         end
         it {
-          is_expected.to contain_cron('pg_repack catalog_inputs tables')
+          is_expected.to contain_cron('pg_repack catalogs tables')
             .with_command('su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/apps/postgresql/11/bin/pg_repack'\
-              ' -d pe-puppetdb --jobs 2 -t catalog_inputs" > /var/log/puppetlabs/pe_databases_cron/catalog_inputs_repack.log 2>&1')
+              ' -d pe-puppetdb --jobs 0 -t catalogs -t catalog_resources -t catalog_inputs -t edges -t certnames" > /var/log/puppetlabs/pe_databases_cron/catalogs_repack.log 2>&1')
         }
       end
     end
