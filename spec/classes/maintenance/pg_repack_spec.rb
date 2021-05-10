@@ -79,7 +79,7 @@ describe 'pe_databases::maintenance::pg_repack' do
         it {
           is_expected.to contain_cron('pg_repack catalogs tables')
             .with_command('su - pe-postgres -s /bin/bash -c "/opt/puppetlabs/server/apps/postgresql/11/bin/pg_repack'\
-              ' -d pe-puppetdb --jobs 0 -t catalogs -t catalog_resources -t catalog_inputs -t edges -t certnames" > /var/log/puppetlabs/pe_databases_cron/catalogs_repack.log 2>&1')
+              ' -d pe-puppetdb --jobs 2 -t catalogs -t catalog_resources -t catalog_inputs -t edges -t certnames" > /var/log/puppetlabs/pe_databases_cron/catalogs_repack.log 2>&1')
         }
       end
     end
