@@ -111,6 +111,16 @@ This module provides cron jobs to VACUUM FULL tables in the `pe-puppetdb` databa
 
 With PE 2018.1.7 and 2019.0.2 and newer, this module uses `pg_repack` instead of `VACUUM FULL`.
 
+Please note that when using `pg_repack` as part of the pe_databases module, unclean exits can leave behind the schema when otherwise it should have been cleaned up. This can result in the messages similar to the following:
+
+```
+INFO: repacking table "public.fact_paths"
+WARNING: the table "public.fact_paths" already has a trigger called "repack_trigger"
+DETAIL: The trigger was probably installed during a previous attempt to run pg_repack on the table which was interrupted and for some reason failed to clean up the temporary objects. Please drop the trigger or drop and recreate the pg_repack extension altogether to remove all the temporary objects left over.
+```
+
+The module now contains a task `reset_pgrepack_schema` to mitigate this issue. This needs to be run against your Primary or Postgrsql server to resolve this and it will drop and recreate the extension, removing the temporary objects.
+
 ### Vacuuming
 
 Generally speaking, PostgreSQL keeps itself in good shape with a process called [auto vacuuming](https://www.postgresql.org/docs/11/runtime-config-autovacuum.html).
