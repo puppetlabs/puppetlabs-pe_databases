@@ -26,11 +26,12 @@ class pe_databases::maintenance::pg_repack (
   $repack_jobs     = "--jobs ${jobs}"
 
   $facts_tables    = '-t factsets -t fact_paths"'
-  $catalogs_tables = '-t catalogs -t catalog_resources -t edges -t certnames"'
+  $catalogs_tables = versioncmp($facts['pe_server_version'], '2019.8.1') ? {
+                      1       => '-t catalogs -t catalog_resources -t catalog_inputs -t edges -t certnames"',
+                      default => '-t catalogs -t catalog_resources -t edges -t certnames"' }
   $other_tables    = '-t producers -t resource_params -t resource_params_cache"'
   $reports_table   = '-t reports"'
   $resource_events_table = '-t resource_events"'
-  $catalog_inputs_table = '-t catalog_inputs"'
 
   Cron {
     ensure   => $ensure_cron,
@@ -57,20 +58,6 @@ class pe_databases::maintenance::pg_repack (
     hour     => 5,
     minute   => 30,
     command  => "${repack} ${repack_jobs} ${other_tables} > ${logging_directory}/other_repack.log 2>&1",
-  }
-
-  if versioncmp($facts['pe_server_version'], '2019.8.0') >= 0 {
-    cron { 'pg_repack catalog_inputs tables' :
-      monthday => 5,
-      hour     => 5,
-      minute   => 30,
-      command  => "${repack} ${repack_jobs} ${catalog_inputs_table} > ${logging_directory}/catalog_inputs_repack.log 2>&1",
-    }
-  }
-  else {
-    cron { 'pg_repack catalog_inputs tables' :
-      ensure   => 'absent',
-    }
   }
 
   if versioncmp($facts['pe_server_version'], '2019.7.0') < 0 {
