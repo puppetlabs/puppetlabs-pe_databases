@@ -8,6 +8,7 @@
   "project_page": "https://github.com/puppetlabs/puppetlabs-pe_databases",
   "issues_url": "https://github.com/puppetlabs/puppetlabs-pe_databases/issues",
   "dependencies": [
+
   ],
   "operatingsystem_support": [
     {

@@ -1,13 +1,34 @@
 ---
-mock_with: ':rspec'
+common:
 
+".gitlab-ci.yml":
+  delete: true
 appveyor.yml:
   delete: true
-.project:
-  delete: true
-.gitlab-ci.yml:
+.gitpod.Dockerfile:
+  unmanaged: true
+.gitpod.yml:
+  unmanaged: true
+.github/workflows/nightly.yml:
+  unmanaged: true
+.github/workflows/pr_test.yml:
+  unmanaged: true
+.github/workflows/auto_release.yml:
+  unmanaged: true
+.github/workflows/spec.yml:
+  checks: 'syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop'
+  unmanaged: true
+.github/workflows/release.yml:
+  unmanaged: true
+.travis.yml:
   delete: true
 
+Rakefile:
+  changelog_user: "puppetlabs"
+
+spec/spec_helper.rb:
+  mock_with: ":rspec"
+  coverage_report: true
 spec/default_facts.yml:
   extra_facts:
     pe_server_version: 2018.1.0
@@ -17,7 +38,6 @@ spec/default_facts.yml:
         "total_bytes": 17179869184
     processors:
       "count": 8
-
 spec/default_facts.yml:
   extra_facts:
     pe_postgresql_info:
