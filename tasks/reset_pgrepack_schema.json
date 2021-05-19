@@ -1,0 +1,8 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "This task will remove and recreate the pg_repack extension",
+  "implementations": [
+    {"name": "reset_pgrepack_schema.sh", "requirements": ["shell"], "files": ["pe_databases/files/common.sh"], "input_method": "environment"}
+  ]
+}
