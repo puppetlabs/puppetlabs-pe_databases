@@ -22,7 +22,10 @@ appveyor.yml:
   unmanaged: true
 .travis.yml:
   delete: true
-
+Gemfile:
+  optional:
+    ":development":
+    - gem: github_changelog_generator
 Rakefile:
   changelog_user: "puppetlabs"
 
