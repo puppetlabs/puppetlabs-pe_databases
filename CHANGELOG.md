@@ -1,66 +1,135 @@
-## Minor Release 1.1.0
+# Change log
 
-- The reports and resource_events tables are no longer repacked when the tables are partitioned
-- Update repack logging to separate files
-- Update Puppet VS Code Extension ID
-- Update to PDK 1.18.1
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## Minor Release 1.0.1
+## [v1.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v1.2.0) (2021-06-02)
 
-- Correct lint issues found on the Forge
-- Update to PDK 1.17.0
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v1.1.0...v1.2.0)
 
-## Major Release 1.0.0
+### Added
 
-- Move from the npwalker namespace to the puppetlabs namespace.
-- Remove support for unsupported versions of PE.
+- Adding catalog\_inputs to the pg\_repack scheme for PE 2019.8.0+ [\#54](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/54) ([coreymbe](https://github.com/coreymbe))
+- \(SUP-2372\) add pg\_repack schema reset task [\#53](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/53) ([pgrant87](https://github.com/pgrant87))
+- \(SUP-2374\) Remove external module deps [\#51](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/51) ([MartyEwings](https://github.com/MartyEwings))
+- \(sup-2095\) Remove cron\_core from dependencies [\#49](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/49) ([jarretlavallee](https://github.com/jarretlavallee))
 
-## Minor Release 0.15.0
+## [v1.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v1.1.0) (2020-08-07)
 
-- Make pg_repack the default way to perform maintenance [#25](https://github.com/npwalker/pe_databases/pull/25)
-- Start maintaining the reports table which we could not afford to perform a VACUUM FULL on
-- Rename typoed `pe_databases::maintenance::disable_maintenace` parameter to `pe_databases::maintenance::disable_maintenance`
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/1.0.1...v1.1.0)
 
-## Z Release 0.14.2
- - Allow not managing table settings [#21](https://github.com/npwalker/pe_databases/pull/21)
+### Added
 
-## Z Release 0.14.1
+- Changes to pg\_repack.pp per SUP-1949 [\#42](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/42) ([coreymbe](https://github.com/coreymbe))
 
- - Set permissions on pe_databases directories [#18](https://github.com/npwalker/pe_databases/pull/18)
- - Log pe-classifier truncation to log files instead of STDOUT [#18](https://github.com/npwalker/pe_databases/pull/18)
+### Fixed
 
-## Minor Release 0.14.0
+- \(GH-30\) Update repack logging to separate files [\#43](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/43) ([jarretlavallee](https://github.com/jarretlavallee))
 
-- Make compatible with PE 2018.1 [#17](https://github.com/npwalker/pe_databases/pull/17)
+## [1.0.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/1.0.1) (2020-03-25)
 
-## Minor Release 0.13.0
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/1.0.0...1.0.1)
 
- - Manage certnames and catalogs tables autovacuum_vacuum_scale_factor [#14](https://github.com/npwalker/pe_databases/pull/14)
- - Change way we cast strings to appease puppet lint
+## [1.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/1.0.0) (2020-03-20)
 
-## Z Release 0.12.1
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.15.0...1.0.0)
 
- - Add `--analyze` during VACUUM FULL commands run in maintenance [#13](https://github.com/npwalker/pe_databases/pull/13)
+### Added
 
-## Minor Release 0.12.0
+- Add resource events to pg repack [\#28](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/28) ([npwalker](https://github.com/npwalker))
 
- - Improve maintenance cron jobs [#12](https://github.com/npwalker/pe_databases/pull/12)
-   - Change from reindexing all tables to VACUUM FULL on just the smaller tables
+### Fixed
 
-## Z Release 0.11.2
+- Refactor shell scripts [\#36](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/36) ([m0dular](https://github.com/m0dular))
 
- - Fix metadata.json version
+## [0.15.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.15.0) (2019-02-06)
 
-## Z Release 0.11.1
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.14.2...0.15.0)
 
- - Correct logic for detecting PostgreSQL version
+### Added
 
-## Minor Release 0.11.0
+- Add pg\_repack as default maintenance strategy [\#25](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/25) ([npwalker](https://github.com/npwalker))
+- Allow not managing table settings [\#21](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/21) ([reidmv](https://github.com/reidmv))
 
- - Prepare for PostgreSQL 9.6 in PE 2017.3.0
- - Manage fact_values autovacuum again in 2017.3.0
+### Fixed
 
-## Z Release 0.10.1
+-  PE Database is a reserved node group name in 2019.0 [\#24](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/24) ([MartyEwings](https://github.com/MartyEwings))
+- Set permissions on /opt/puppetlabs/pe\_databases and /opt/puppetlabs/pe\_databases/scripts [\#18](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/18) ([mmarod](https://github.com/mmarod))
 
- - Bug Fixes
-   - Do not manage fact_values auto vacuum on PE 2017.2.0
+## [0.14.2](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.2) (2018-11-01)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.14.1...0.14.2)
+
+## [0.14.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.1) (2018-06-25)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.14.0...0.14.1)
+
+## [0.14.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.0) (2018-05-23)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.13.0...0.14.0)
+
+### Added
+
+- Update for compatibility with 2018.1.0 [\#17](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/17) ([npwalker](https://github.com/npwalker))
+- Add autovacuum settings for certnames and catalogs [\#14](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/14) ([npwalker](https://github.com/npwalker))
+
+## [0.13.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.13.0) (2017-12-01)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.12.1...0.13.0)
+
+## [0.12.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.12.1) (2017-11-02)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.12.0...0.12.1)
+
+### Added
+
+- Add analyze when performing VACUUM FULL [\#13](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/13) ([npwalker](https://github.com/npwalker))
+- Make cronjobs to vacuum full PuppetDB tables [\#12](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/12) ([npwalker](https://github.com/npwalker))
+
+## [0.12.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.12.0) (2017-10-18)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.11.2...0.12.0)
+
+## [0.11.2](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.2) (2017-09-19)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.11.1...0.11.2)
+
+## [0.11.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.1) (2017-09-19)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.11.0...0.11.1)
+
+## [0.11.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.0) (2017-09-19)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.10.1...0.11.0)
+
+### Fixed
+
+- Do not manage fact\_values table in PuppetDB in PE 2017.2+ [\#6](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/6) ([npwalker](https://github.com/npwalker))
+
+## [0.10.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.10.1) (2017-06-19)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.10.0...0.10.1)
+
+## [0.10.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.10.0) (2016-12-08)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.9.0...0.10.0)
+
+## [0.9.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.9.0) (2016-12-05)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.8.1...0.9.0)
+
+## [0.8.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.8.1) (2016-10-17)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.8.0...0.8.1)
+
+## [0.8.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.8.0) (2016-10-17)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/ed135c2576450d698a7338a70be62b9d7317761a...0.8.0)
+
+### Added
+
+- Add retention policy to backup script [\#4](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/4) ([npwalker](https://github.com/npwalker))
+- Make an actual backup script [\#2](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/2) ([npwalker](https://github.com/npwalker))
+
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
