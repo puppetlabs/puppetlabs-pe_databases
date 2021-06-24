@@ -1,0 +1,13 @@
+<%- | String $tables, String $command | -%>
+[Unit]
+Description=Service to repack PE database tables
+Wants=pe_databases-<%= $tables%>.timer
+
+[Service]
+User=pe-postgres
+Group=pe-postgres
+Type=oneshot
+ExecStart=<%= $command %>
+
+[Install]
+WantedBy=multi-user.target
