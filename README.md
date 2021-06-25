@@ -38,7 +38,7 @@ This module provides the following functionaility
 ## Usage
 
 In order to use this module, classify the node running PE PostgreSQL with the `pe_databases` class.
-That node is the Primary Server in most instances, but there may be one or more Servers with this role in an XL deployment  
+The Primary Server and Replica run PE PostgreSQL in most instances, but there may be one or more servers with this role in an XL deployment  
 
 To classify via the PE Console, create a new node group called "PE Database Maintenance".
 Then pin the node(s) running pe-postgresql to that node group.
@@ -53,7 +53,7 @@ Backups are not activated by default but can be enabled by setting the following
 Hiera classification example 
 
 ```
-pe_databases::manage_database_backups:: false
+pe_databases::manage_database_backups:: true
 ```
 
 You can modify the default backup schedule by provide an array of hashes that describes the databases to backup and their backup schedule.
@@ -73,7 +73,7 @@ You can configure the retention policy by setting `pe_databases::backup::retenti
 
 The maintenance SystemD timers will perform a `pg_repack` on various `pe-puppetdb` tables to keep them lean and fast.
 A `pg_repack` is a non-blocking maintence action, however, if for some reason you experience issues you can disable the maintenance SystemD timers,
-You can do so by setting `pe_databases::maintenance::disable_maintenance: true` in your hieradata.
+You can do so by setting `pe_databases::disable_maintenance: true` in your hieradata.
 
 
 # General PostgreSQL Recommendations
