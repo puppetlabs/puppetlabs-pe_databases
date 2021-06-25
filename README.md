@@ -13,8 +13,6 @@ Table of Contents
   - [Tuning](#tuning)
   - [Backups](#backups)
   - [Maintenance](#maintenance)
-    - [Vacuuming](#vacuuming)
-    - [Reindexing](#reindexing)
   - [PostgreSQL Settings](#postgresql-settings)
     - [maintenance_work_mem](#maintenance_work_mem)
     - [work_mem](#work_mem)
@@ -29,7 +27,7 @@ This module provides tuning, maintenance, and backups for PE PostgreSQL.
 
 ## What does this module provide?
 
-By default you get the following:
+This module provides the following functionaility
 
 1.  Customized settings for PE PostgreSQL
 1.  Maintenance to keep the `pe-puppetdb` database lean and fast
@@ -40,18 +38,26 @@ By default you get the following:
 ## Usage
 
 In order to use this module, classify the node running PE PostgreSQL with the `pe_databases` class.
-That node is the Primary Master in a Monolithic installation, or the PE PuppetDB host in a Split install.  
+That node is the Primary Server in most instances, but there may be one or more Servers with this role in an XL deployment  
 
 To classify via the PE Console, create a new node group called "PE Database Maintenance".
-Then pin the node running pe-postgresql to that node group.
+Then pin the node(s) running pe-postgresql to that node group.
 It is not recommended to classify using a pre-existing node group in the PE Console.
 
 ## Items you may want to configure
 
 ### Backup Schedule
 
+Backups are not activated by default but can be enabled by setting the following parameter:
+
+Hiera classification example 
+
+```
+pe_databases::manage_database_backups:: false
+```
+
 You can modify the default backup schedule by provide an array of hashes that describes the databases to backup and their backup schedule.
-Please refer to the [hieradata_examples](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/master/hieradata_examples) directory of this repository for examples.
+Please refer to the [hieradata_examples](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/main/hieradata_examples) directory of this repository for examples.
 
 > IMPORTANT NOTE: If you change the default schedule, it will stop managing the associated crontab entries, and there's not a clean way to automatically remove unmanaged crontab entries.
 So you should delete all pe-postgres crontab entries via `crontab -r -u pe-postgres` and let Puppet repopulate them if you change the default schedule.
@@ -65,12 +71,10 @@ You can configure the retention policy by setting `pe_databases::backup::retenti
 
 ### Disable Maintenance
 
-The maintenance cron jobs will perform a `VACUUM FULL` on various `pe-puppetdb` tables to keep them lean and fast.
-A `VACUUM FULL` is a blocking operation and you will see the PuppetDB command queue grow while the cron jobs run.
-The blocking should be short lived and the PuppetDB command queue should work itself down after, however, if for some reason you experience issues you can disable the maintenance cron jobs.
+The maintenance SystemD timers will perform a `pg_repack` on various `pe-puppetdb` tables to keep them lean and fast.
+A `pg_repack` is a non-blocking maintence action, however, if for some reason you experience issues you can disable the maintenance SystemD timers,
 You can do so by setting `pe_databases::maintenance::disable_maintenance: true` in your hieradata.
 
-With PE 2018.1.7 and 2019.0.2 and newer, this module uses `pg_repack` which does not block.
 
 # General PostgreSQL Recommendations
 
@@ -102,14 +106,15 @@ This module provides a script for backing up PE PostgreSQL databases and two def
 
 ## Maintenance
 
-This module provides cron jobs to VACUUM FULL tables in the `pe-puppetdb` database:
- - facts tables are VACUUMed Tuesdays and Saturdays at 4:30AM
- - catalogs tables are VACUUMed Sundays and Thursdays at 4:30AM
- - other tables are VACUUMed on the 20th of the month at 5:30AM
+This module provides SystemD timers to pg_repack tables in the `pe-puppetdb` database:
+ - facts tables are pg_repack'd  Tuesdays and Saturdays at 4:30AM
+ - catalogs tables are pg_repack'd  Sundays and Thursdays at 4:30AM
+ - reports table is pg_repack'd on the 10th of the month at 05:30AM on systems with PE 2019.7.0 or less
+ - resource_events table is pg_repack'd on the 15th of the month at 05:30AM on systems with PE 2019.3.0 or less
+ - other tables are pg_repack'd on the 20th of the month at 5:30AM
 
 > Note: You may be able to improve the performance (reduce time to completion) of maintenance tasks by increasing the [maintenance_work_mem](#maintenance_work_mem) setting.
 
-With PE 2018.1.7 and 2019.0.2 and newer, this module uses `pg_repack` instead of `VACUUM FULL`.
 
 Please note that when using `pg_repack` as part of the pe_databases module, unclean exits can leave behind the schema when otherwise it should have been cleaned up. This can result in the messages similar to the following:
 
@@ -121,38 +126,6 @@ DETAIL: The trigger was probably installed during a previous attempt to run pg_r
 
 The module now contains a task `reset_pgrepack_schema` to mitigate this issue. This needs to be run against your Primary or Postgrsql server to resolve this and it will drop and recreate the extension, removing the temporary objects.
 
-### Vacuuming
-
-Generally speaking, PostgreSQL keeps itself in good shape with a process called [auto vacuuming](https://www.postgresql.org/docs/11/runtime-config-autovacuum.html).
-This is enabled by default and tuned for Puppet Enterprise out of the box.
-
-Note that there is a difference between `VACUUM` and `VACUUM FULL`.
-`VACUUM FULL` rewrites a table on disk while `VACUUM` simply marks deleted row so the space that row occupied can be used for new data.
-
-`VACUUM FULL` is generally not necessary, and if run too-frequently can cause excessive disk I/O.
-However, in the case of `pe-puppetdb` the way it constantly receives and updates data causes bloat, and it is beneficial to VACUUM FULL the `facts` and `catalogs` tables every few days.
-We, however, do not recommend a `VACUUM FULL` on the `reports` or `resource_events` tables as they are large and `VACUUM FULL` may cause extended downtime.
-
-### Reindexing
-
-Reindexing is also a prudent exercise.
-It may not be necessary very often, but doing every month or so can definitely prevent performance issues in the long run.
-In the scope of what this module provides, a `VACUUM FULL` will rewrite the table and all of its indexes so tables are reindexed during the `VACUUM FULL` maintenance cron jobs.
-That only leaves the `reports` and `resource_events` tables to be reindexed.
-Unfortunately, the most common place to get a `DEADLOCK` error mentioned below is when reindexing the `reports` table.
-
-Reindexing is a blocking operation.
-While an index is rebuilt, the data in the table cannot change and other operations have to wait for the rebuild to complete.
-If you don’t have a large installation or you have a lot of memory or fast storage, you may be able to complete a reindex while your Puppet Enterprise installation is up.
-PuppetDB will backup commands in its command queue and the PE Console may throw errors about not being able to load data.
-After the reindex is complete, the PuppetDB command queue will be processed and the PE Console will work as expected.
-
-In some cases, you cannot complete a reindex while the Puppet Enterprise services are trying to use the database.
-You may receive a `DEADLOCK` error because the table that is supposed to be reindexed has too many requests on it and the reindex command cannot complete.
-In these cases you need to stop the Puppet Enterprise services, run the reindex, and then start the Puppet Enterprise services again.
-If you are getting a `DEADLOCK` error you can reduce the frequency of reindexing, the most important times to reindex are when you add new nodes, so reindexing is more important early in your PE installation when you are adding new nodes but less important to do frequently when you are in a steady state.
-
-With PE 2018.1.7 and 2019.0.2 and newer, this module uses `pg_repack` instead of `VACUUM FULL`.
 
 ## PostgreSQL Settings
 
