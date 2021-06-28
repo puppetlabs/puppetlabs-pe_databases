@@ -68,7 +68,7 @@ You can configure the retention policy by setting `pe_databases::backup::retenti
 The maintenance cron jobs will perform a `VACUUM FULL` on various `pe-puppetdb` tables to keep them lean and fast.
 A `VACUUM FULL` is a blocking operation and you will see the PuppetDB command queue grow while the cron jobs run.
 The blocking should be short lived and the PuppetDB command queue should work itself down after, however, if for some reason you experience issues you can disable the maintenance cron jobs.
-You can do so by setting `pe_databases::maintenance::disable_maintenance: true` in your hieradata.
+You can do so by setting `pe_databases::disable_maintenance: true` in your hieradata.
 
 With PE 2018.1.7 and 2019.0.2 and newer, this module uses `pg_repack` which does not block.
 

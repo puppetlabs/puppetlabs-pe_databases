@@ -4,7 +4,10 @@
 
 class pe_databases (
   Boolean $manage_database_backups     = false,
+  # Manage the inclusion of the pg_repack class
   Boolean $manage_database_maintenance = true,
+  # Manage the state of the maintenance tasks, i.e. systemd services and timers
+  Boolean $disable_maintenance         = lookup('pe_databases::disable_maintenance', {'default_value' => false}),
   Boolean $manage_postgresql_settings  = true,
   Boolean $manage_table_settings       = true,
   String  $install_dir                 = '/opt/puppetlabs/pe_databases',
@@ -30,7 +33,7 @@ class pe_databases (
   if $facts.dig('pe_databases', 'have_systemd') {
     if $manage_database_maintenance and (versioncmp('2019.0.2', $facts['pe_server_version']) <= 0) {
       class {'pe_databases::pg_repack':
-        disable_maintenance => lookup('pe_databases::maintenance::disable_maintenance', {'default_value' => false}),
+        disable_maintenance => $disable_maintenance,
       }
       if $manage_table_settings {
         # This is to provide for situations, like PE XL,
