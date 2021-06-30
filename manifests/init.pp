@@ -3,8 +3,11 @@
 # @summary Tuning, maintenance, and backups for PE PostgreSQL.
 
 class pe_databases (
-  Boolean $manage_database_backups     = false,
+  Variant[Boolean,Undef] $manage_database_backups     = undef,
+  # Manage the inclusion of the pg_repack class
   Boolean $manage_database_maintenance = true,
+  # Manage the state of the maintenance tasks, i.e. systemd services and timers
+  Boolean $disable_maintenance         = lookup('pe_databases::disable_maintenance', {'default_value' => false}),
   Boolean $manage_postgresql_settings  = true,
   Boolean $manage_table_settings       = true,
   String  $install_dir                 = '/opt/puppetlabs/pe_databases',
@@ -28,19 +31,22 @@ class pe_databases (
   }
 
   if $facts.dig('pe_databases', 'have_systemd') {
-    if $manage_database_maintenance and (versioncmp('2019.0.2', $facts['pe_server_version']) <= 0) {
-      class {'pe_databases::pg_repack':
-        disable_maintenance => lookup('pe_databases::maintenance::disable_maintenance', {'default_value' => false}),
+    if versioncmp('2019.0.2', $facts['pe_server_version']) <= 0 {
+      if $manage_database_maintenance {
+        class {'pe_databases::pg_repack':
+          disable_maintenance => $disable_maintenance,
+        }
+        if $manage_table_settings {
+          # This is to provide for situations, like PE XL,
+          # where the pe-puppetdb database does not exist on the PostgreSQL system being tuned.
+          # In PE XL, the Master and Replica run PostgreSQL for all databases *except* for pe-puppetdb.
+          include pe_databases::postgresql_settings::table_settings
+        }
       }
-      if $manage_table_settings {
-        # This is to provide for situations, like PE XL,
-        # where the pe-puppetdb database does not exist on the PostgreSQL system being tuned.
-        # In PE XL, the Master and Replica run PostgreSQL for all databases *except* for pe-puppetdb.
-        include pe_databases::postgresql_settings::table_settings
-      }
-
-      if $manage_database_backups {
-        include pe_databases::backup
+      if defined('$manage_database_backups') {
+        class { 'pe_databases::backup':
+          disable_maintenance => ! $manage_database_backups,
+        }
       }
     }
     else {
