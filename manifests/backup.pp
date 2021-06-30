@@ -56,7 +56,7 @@ class pe_databases::backup (
 
   # Reset the crontab for pe-postgres if the (databases backed up by default every day) change.
   exec { 'reset_pe-postgres_crontab':
-    path        => '/usr/local/bin/:/bin/',
+    path        => '/usr/local/bin/:/bin/:/usr/bin',
     command     => 'crontab -r -u pe-postgres',
     onlyif      => 'crontab -l -u pe-postgres',
     refreshonly => true,
