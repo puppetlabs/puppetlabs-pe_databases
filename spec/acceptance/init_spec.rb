@@ -8,9 +8,19 @@ describe 'pe_databases class' do
         MANIFEST
 
       # Run it twice and test for idempotency
-      expect(apply_manifest(pp).exit_code).not_to eq(1)
-      expect(apply_manifest(pp).exit_code).not_to eq(1)
       idempotent_apply(pp)
+    end
+  end
+
+  describe 'check pe_databases script directory' do
+    it 'scripts folder exists' do
+      expect(file('/opt/puppetlabs/pe_databases/scripts')).to be_directory
+    end
+  end
+
+  describe 'check systemd fact' do
+    it 'is true on all supported OS' do
+      expect(host_inventory['facter']['pe_databases']['have_systemd']).to eq true
     end
   end
 end
