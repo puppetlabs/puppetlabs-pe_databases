@@ -39,7 +39,7 @@ class pe_databases (
         if $manage_table_settings {
           # This is to provide for situations, like PE XL,
           # where the pe-puppetdb database does not exist on the PostgreSQL system being tuned.
-          # In PE XL, the Master and Replica run PostgreSQL for all databases *except* for pe-puppetdb.
+          # In PE XL, the Primary and Replica run PostgreSQL for all databases *except* for pe-puppetdb.
           include pe_databases::postgresql_settings::table_settings
         }
       }
