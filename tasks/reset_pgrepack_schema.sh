@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Puppet Task Name: reset_pgrepack_schema
 declare PT__installdir
