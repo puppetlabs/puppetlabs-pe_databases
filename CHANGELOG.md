@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v2.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.0.0) (2021-07-02)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v1.2.0...v2.0.0)
+
+### Changed
+
+- Remove Puppet 5 support and EOL PE versions [\#76](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/76) ([MartyEwings](https://github.com/MartyEwings))
+- SUP-2404 Migrate from cron to systemd timers [\#65](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/65) ([m0dular](https://github.com/m0dular))
+
+### Added
+
+- Addition of SLES 12 Test Platform [\#77](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/77) ([MartyEwings](https://github.com/MartyEwings))
+
+### Fixed
+
+- Fix path in backup.pp and reset pgrepack schema task [\#74](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/74) ([carabasdaniel](https://github.com/carabasdaniel))
+- Fix scope of disable\_maintenance param [\#73](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/73) ([m0dular](https://github.com/m0dular))
+
 ## [v1.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v1.2.0) (2021-06-02)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v1.1.0...v1.2.0)

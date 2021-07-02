@@ -8,14 +8,13 @@
 
 * [`pe_databases`](#pe_databases)
 * [`pe_databases::backup`](#pe_databasesbackup)
-* [`pe_databases::maintenance`](#pe_databasesmaintenance)
-* [`pe_databases::maintenance::pg_repack`](#pe_databasesmaintenancepg_repack)
-* [`pe_databases::maintenance::vacuum_full`](#pe_databasesmaintenancevacuum_full)
+* [`pe_databases::pg_repack`](#pe_databasespg_repack)
 * [`pe_databases::postgresql_settings`](#pe_databasespostgresql_settings)
 * [`pe_databases::postgresql_settings::table_settings`](#pe_databasespostgresql_settingstable_settings)
 
 ### Defined types
 
+* [`pe_databases::collect`](#pe_databasescollect): Create systemd units for repacking a given database type
 * [`pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero`](#pe_databasesset_puppetdb_table_autovacuum_cost_delay_zero)
 * [`pe_databases::set_table_attribute`](#pe_databasesset_table_attribute)
 
@@ -39,6 +38,7 @@ The following parameters are available in the `pe_databases` class:
 
 * [`manage_database_backups`](#manage_database_backups)
 * [`manage_database_maintenance`](#manage_database_maintenance)
+* [`disable_maintenance`](#disable_maintenance)
 * [`manage_postgresql_settings`](#manage_postgresql_settings)
 * [`manage_table_settings`](#manage_table_settings)
 * [`install_dir`](#install_dir)
@@ -46,11 +46,11 @@ The following parameters are available in the `pe_databases` class:
 
 ##### <a name="manage_database_backups"></a>`manage_database_backups`
 
-Data type: `Boolean`
+Data type: `Variant[Boolean,Undef]`
 
 
 
-Default value: ``true``
+Default value: ``undef``
 
 ##### <a name="manage_database_maintenance"></a>`manage_database_maintenance`
 
@@ -59,6 +59,14 @@ Data type: `Boolean`
 
 
 Default value: ``true``
+
+##### <a name="disable_maintenance"></a>`disable_maintenance`
+
+Data type: `Boolean`
+
+
+
+Default value: `lookup('pe_databases::disable_maintenance', {'default_value' => false})`
 
 ##### <a name="manage_postgresql_settings"></a>`manage_postgresql_settings`
 
@@ -107,6 +115,7 @@ The following parameters are available in the `pe_databases::backup` class:
 * [`daily_databases_path`](#daily_databases_path)
 * [`backup_logging_directory`](#backup_logging_directory)
 * [`retention_policy`](#retention_policy)
+* [`disable_maintenance`](#disable_maintenance)
 
 ##### <a name="databases_and_backup_schedule"></a>`databases_and_backup_schedule`
 
@@ -182,17 +191,24 @@ Data type: `Integer`
 
 Default value: `2`
 
-### <a name="pe_databasesmaintenance"></a>`pe_databases::maintenance`
+##### <a name="disable_maintenance"></a>`disable_maintenance`
 
-The pe_databases::maintenance class.
+Data type: `Boolean`
+
+
+
+Default value: ``true``
+
+### <a name="pe_databasespg_repack"></a>`pe_databases::pg_repack`
+
+The pe_databases::pg_repack class.
 
 #### Parameters
 
-The following parameters are available in the `pe_databases::maintenance` class:
+The following parameters are available in the `pe_databases::pg_repack` class:
 
 * [`disable_maintenance`](#disable_maintenance)
-* [`logging_directory`](#logging_directory)
-* [`script_directory`](#script_directory)
+* [`jobs`](#jobs)
 
 ##### <a name="disable_maintenance"></a>`disable_maintenance`
 
@@ -202,50 +218,6 @@ Data type: `Boolean`
 
 Default value: ``false``
 
-##### <a name="logging_directory"></a>`logging_directory`
-
-Data type: `String`
-
-
-
-Default value: `'/var/log/puppetlabs/pe_databases_cron'`
-
-##### <a name="script_directory"></a>`script_directory`
-
-Data type: `String`
-
-
-
-Default value: `$pe_databases::scripts_dir`
-
-### <a name="pe_databasesmaintenancepg_repack"></a>`pe_databases::maintenance::pg_repack`
-
-The pe_databases::maintenance::pg_repack class.
-
-#### Parameters
-
-The following parameters are available in the `pe_databases::maintenance::pg_repack` class:
-
-* [`disable_maintenance`](#disable_maintenance)
-* [`logging_directory`](#logging_directory)
-* [`jobs`](#jobs)
-
-##### <a name="disable_maintenance"></a>`disable_maintenance`
-
-Data type: `Boolean`
-
-
-
-Default value: `$pe_databases::maintenance::disable_maintenance`
-
-##### <a name="logging_directory"></a>`logging_directory`
-
-Data type: `String`
-
-
-
-Default value: `$pe_databases::maintenance::logging_directory`
-
 ##### <a name="jobs"></a>`jobs`
 
 Data type: `Integer`
@@ -253,42 +225,6 @@ Data type: `Integer`
 
 
 Default value: `/`
-
-### <a name="pe_databasesmaintenancevacuum_full"></a>`pe_databases::maintenance::vacuum_full`
-
-The pe_databases::maintenance::vacuum_full class.
-
-#### Parameters
-
-The following parameters are available in the `pe_databases::maintenance::vacuum_full` class:
-
-* [`disable_maintenance`](#disable_maintenance)
-* [`logging_directory`](#logging_directory)
-* [`script_directory`](#script_directory)
-
-##### <a name="disable_maintenance"></a>`disable_maintenance`
-
-Data type: `Boolean`
-
-
-
-Default value: `$pe_databases::maintenance::disable_maintenance`
-
-##### <a name="logging_directory"></a>`logging_directory`
-
-Data type: `String`
-
-
-
-Default value: `$pe_databases::maintenance::logging_directory`
-
-##### <a name="script_directory"></a>`script_directory`
-
-Data type: `String`
-
-
-
-Default value: `$pe_databases::maintenance::script_directory`
 
 ### <a name="pe_databasespostgresql_settings"></a>`pe_databases::postgresql_settings`
 
@@ -516,6 +452,51 @@ Data type: `Optional[Float[0,1]]`
 Default value: `0.75`
 
 ## Defined types
+
+### <a name="pe_databasescollect"></a>`pe_databases::collect`
+
+Create systemd units for repacking a given database type
+
+#### Parameters
+
+The following parameters are available in the `pe_databases::collect` defined type:
+
+* [`database_type`](#database_type)
+* [`command`](#command)
+* [`disable_maintenance`](#disable_maintenance)
+* [`on_cal`](#on_cal)
+
+##### <a name="database_type"></a>`database_type`
+
+Data type: `String`
+
+
+
+Default value: `$title`
+
+##### <a name="command"></a>`command`
+
+Data type: `String`
+
+
+
+Default value: ``undef``
+
+##### <a name="disable_maintenance"></a>`disable_maintenance`
+
+Data type: `Boolean`
+
+
+
+Default value: ``false``
+
+##### <a name="on_cal"></a>`on_cal`
+
+Data type: `String`
+
+
+
+Default value: ``undef``
 
 ### <a name="pe_databasesset_puppetdb_table_autovacuum_cost_delay_zero"></a>`pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero`
 
