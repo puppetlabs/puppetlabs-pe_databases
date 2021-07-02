@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-pe_databases",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "author": "puppetlabs",
   "summary": "A Puppet Module for Backing Up / Maintaining / Tuning Your Puppet Enterprise Databases",
   "license": "Apache-2.0",
@@ -46,12 +46,12 @@
         "20.04"
       ]
     },
-       {
+    {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
         "12"
       ]
-  }
+    }
   ],
   "requirements": [
     {
