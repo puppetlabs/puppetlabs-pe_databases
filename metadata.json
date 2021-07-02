@@ -45,7 +45,13 @@
         "18.04",
         "20.04"
       ]
-    }
+    },
+       {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "12"
+      ]
+  }
   ],
   "requirements": [
     {
