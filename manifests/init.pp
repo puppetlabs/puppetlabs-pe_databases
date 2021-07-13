@@ -9,7 +9,7 @@ class pe_databases (
   # Manage the state of the maintenance tasks, i.e. systemd services and timers
   Boolean $disable_maintenance         = lookup('pe_databases::disable_maintenance', {'default_value' => false}),
   Boolean $manage_postgresql_settings  = true,
-  Boolean $manage_table_settings       = true,
+  Boolean $manage_table_settings       = false,
   String  $install_dir                 = '/opt/puppetlabs/pe_databases',
   String  $scripts_dir                 = "${install_dir}/scripts"
 ) {
