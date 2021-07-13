@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v2.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.1.0) (2021-07-13)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.0.0...v2.1.0)
+
+### Added
+
+- \(SUP-2545\) Disable table maintenance by default [\#83](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/83) ([m0dular](https://github.com/m0dular))
+
 ## [v2.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.0.0) (2021-07-02)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v1.2.0...v2.0.0)
