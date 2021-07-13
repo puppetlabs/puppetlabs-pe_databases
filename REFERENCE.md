@@ -82,7 +82,7 @@ Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: ``false``
 
 ##### <a name="install_dir"></a>`install_dir`
 
