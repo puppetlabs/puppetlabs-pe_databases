@@ -1,7 +1,6 @@
 <%- | String $tables, String $on_cal | -%>
 [Unit]
 Description=Timer to trigger repacking PE database tables
-Requires=pe_databases-<%= $tables %>.service
 
 [Timer]
 OnCalendar=<%= $on_cal %>
