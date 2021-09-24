@@ -47,7 +47,10 @@ class pe_databases (
         class { 'pe_databases::backup':
           disable_maintenance => ! $manage_database_backups,
         }
-        warning('The backup functionality in the pe_databases module has been deprecated and will be removed in a future release.')
+        notify { 'pe_databases_backup_deprecate_warn':
+        message  => 'The backup functionality in the pe_databases module has been deprecated and will be removed in a future release.',
+        loglevel => warning,
+        }
       }
     }
     else {
