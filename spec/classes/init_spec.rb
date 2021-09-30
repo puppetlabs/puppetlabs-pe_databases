@@ -26,11 +26,12 @@ describe 'pe_databases' do
   end
 
   context 'backups are not included by default' do
-    it { is_expected.to_not contain_class('pe_databases::backup') }
+    it { is_expected.not_to contain_class('pe_databases::backup') }
   end
 
   context 'backups are included if configured' do
-    let(:params) { {manage_database_backups: true} }
+    let(:params) { { manage_database_backups: true } }
+
     it { is_expected.to contain_class('pe_databases::backup') }
   end
 end
