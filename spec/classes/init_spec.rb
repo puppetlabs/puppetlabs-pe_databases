@@ -1,14 +1,6 @@
 require 'spec_helper'
 
 describe 'pe_databases' do
-  let(:params) do
-    {
-      manage_database_backups:  false,
-      manage_postgresql_settings: false,
-      manage_table_settings:  false,
-    }
-  end
-
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
@@ -31,5 +23,14 @@ describe 'pe_databases' do
     let(:facts) { { pe_databases: { have_systemd: false } } }
 
     it { is_expected.to contain_notify('pe_databases_systemd_warn') }
+  end
+
+  context 'backups are not included by default' do
+    it { is_expected.to_not contain_class('pe_databases::backup') }
+  end
+
+  context 'backups are included if configured' do
+    let(:params) { {manage_database_backups: true} }
+    it { is_expected.to contain_class('pe_databases::backup') }
   end
 end
