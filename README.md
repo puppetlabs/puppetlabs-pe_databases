@@ -48,6 +48,11 @@ It is not recommended to classify using a pre-existing node group in the PE Cons
 
 ### Backup Schedule
 
+> WARNING: The backup functionality in this module has been deprecated and will be removed in a future release. 
+Please refer to the [PE Backup and Restore documentation](https://puppet.com/docs/pe/latest/backing_up_and_restoring_pe.html) for details on how to backup.
+You should ensure the parameter `pe_databases::manage_database_backups` and any parameters from the `pe_databases::backup` class are removed from classification or hiera.
+You should also clean up associated crontab entries.
+
 Backups are not activated by default but can be enabled by setting the following parameter:
 
 Hiera classification example 
@@ -89,6 +94,11 @@ This module attempts to provide default settings that accommodate both a Monolit
 Those defaults change based on the `$all_in_one_pe` parameter.
 
 ## Backups
+
+> WARNING: The backup functionality in this module has been deprecated and will be removed in a future release. 
+Please refer to the [PE Backup and Restore documentation](https://puppet.com/docs/pe/latest/backing_up_and_restoring_pe.html) for details on how to backup.
+You should ensure the parameter `pe_databases::manage_database_backups` and any parameters from the `pe_databases::backup` class are removed from classification or hiera.
+You should also clean up associated crontab entries.
 
 This is the documentation for Pupet Enterprise backups:
 
