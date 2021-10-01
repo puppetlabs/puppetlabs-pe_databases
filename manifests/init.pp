@@ -43,7 +43,9 @@ class pe_databases (
           include pe_databases::postgresql_settings::table_settings
         }
       }
-      if defined('$manage_database_backups') {
+      # Because this parameter is a value of undef with a data type of Undef,
+      # We can the NotUndef type to determine if the value has been set
+      if $manage_database_backups =~ NotUndef {
         class { 'pe_databases::backup':
           disable_maintenance => ! $manage_database_backups,
         }
