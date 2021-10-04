@@ -8,7 +8,7 @@ describe 'pe_databases with manage database backups' do
        }#{' '}
        MANIFEST
 
-    # Run it twice and test for idempotency
-    idempotent_apply(pp)
+    # Expect a change due to backup notify
+    apply_manifest(pp, expect_changes: true)
   end
 end
