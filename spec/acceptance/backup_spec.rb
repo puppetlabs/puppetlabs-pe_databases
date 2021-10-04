@@ -9,6 +9,7 @@ describe 'pe_databases with manage database backups' do
        MANIFEST
 
     # Expect a change due to backup notify
+    apply_manifest(pp)
     apply_manifest(pp, expect_changes: true)
   end
 end
