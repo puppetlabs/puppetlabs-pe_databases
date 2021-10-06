@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v2.1.2](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.1.2) (2021-10-06)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.1.1...v2.1.2)
+
+### Fixed
+
+- \(SUP-2571\) Purge legacy cron jobs if present [\#97](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/97) ([gavindidrichsen](https://github.com/gavindidrichsen))
+- \(SUP-2557\) Ensure backup class is not included by default [\#95](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/95) ([m0dular](https://github.com/m0dular))
+
+### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+
+- \(SUP-2677\) Deprecate backup functionality [\#96](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/96) ([elainemccloskey](https://github.com/elainemccloskey))
+
 ## [v2.1.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.1.1) (2021-09-30)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.1.0...v2.1.1)
