@@ -61,12 +61,19 @@ class pe_databases::pg_repack (
     }
   }
 
-  # Legacy cleanup
+  # Ensure legacy vaccum and pg_repack crons are purged.
+  # If someone upgrades from an ancient v0.x version of the pe_databases module to 2.0 or newer, 
+  # the old cron jobs running vaccuum full will not be cleaned up. This can result in a deadlock 
+  # when both pg_repack and vacuum full attempt to update a table
   $legacy_crons = [
     'pg_repack facts tables', 'pg_repack catalogs tables', 'pg_repack other tables',
-    'pg_repack reports tables', 'pg_repack resource_events tables'
+    'pg_repack reports tables', 'pg_repack resource_events tables',
+    'VACUUM FULL facts tables',
+    'VACUUM FULL catalogs tables',
+    'VACUUM FULL other tables',
+    'Maintain PE databases',
   ]
   cron { $legacy_crons:
       ensure => absent,
-    }
   }
+}
