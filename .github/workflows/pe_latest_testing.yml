@@ -50,14 +50,30 @@ jobs:
         buildevents step $TRACE_ID $STEP_ID $STEP_START 'Setup Environment'
         echo STEP_ID=Setup-Acceptance-Test-Matrix >> $GITHUB_ENV
         echo STEP_START=$(date +%s) >> $GITHUB_ENV
+
+    # Store the result of the curl call in $forge_response
+    - name: Curl Forge for PE versions
+      id: curl_forge
+      run: |
+        echo "::set-output name=forge_response::$(curl https://forge.puppet.com/private/versions/pe)"
+
+    - name: Set latest release
+      id: latest_release
+      run: |
+        out=$(jq -c '[.[] | select(.lts == false)][0].latest | {"collection": [.]}' <<<'${{ steps.curl_forge.outputs.forge_response }}')
+        echo "::set-output name=latest::$out"
+
     - name: Setup Acceptance Test Matrix
       id: get-matrix
       run: |
-          echo  "::set-output name=matrix::$(cat spec/fixtures/matrix/latest.json)"
+        out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/latest.json <<<'${{ steps.latest_release.outputs.latest }}')
+        echo "::set-output name=matrix::$out"
+
     - name: "Honeycomb: Record Setup Test Matrix time"
       if: ${{ always() }}
       run: |
         buildevents step $TRACE_ID $STEP_ID $STEP_START 'Setup Test Matrix'
+
   Acceptance:
     name: "${{matrix.platforms.label}}, ${{matrix.collection}}"
     needs:
