@@ -66,8 +66,12 @@ jobs:
     - name: Setup Acceptance Test Matrix
       id: get-matrix
       run: |
-        out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/lts.json <<<'${{ steps.latest_release.outputs.latest }}')
-        echo "::set-output name=matrix::$out"
+        if [[ -e spec/fixtures/matrix/lts.json ]]; then
+          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/lts.json <<<'${{ steps.latest_release.outputs.latest }}')
+          echo "::set-output name=matrix::$out"
+        else
+          echo "::set-output name=matris::{}"
+        fi
 
     - name: "Honeycomb: Record Setup Test Matrix time"
       if: ${{ always() }}
