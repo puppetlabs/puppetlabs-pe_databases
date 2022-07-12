@@ -6,12 +6,9 @@ Table of Contents
   - [What does this module provide?](#what-does-this-module-provide)
   - [Usage](#usage)
   - [Items you may want to configure](#items-you-may-want-to-configure)
-    - [Backup Schedule](#backup-schedule)
-    - [Backup Retention Policy](#backup-retention-policy)
     - [Disable Maintenance](#disable-maintenance)
 - [General PostgreSQL Recommendations](#general-postgresql-recommendations)
   - [Tuning](#tuning)
-  - [Backups](#backups)
   - [Maintenance](#maintenance)
   - [PostgreSQL Settings](#postgresql-settings)
     - [maintenance_work_mem](#maintenance_work_mem)
@@ -23,7 +20,7 @@ Table of Contents
 
 # Overview
 
-This module provides tuning, maintenance, and backups for PE PostgreSQL.
+This module provides tuning, and maintenance for PE PostgreSQL.
 
 ## What does this module provide?
 
@@ -31,9 +28,6 @@ This module provides the following functionaility
 
 1.  Customized settings for PE PostgreSQL
 1.  Maintenance to keep the `pe-puppetdb` database lean and fast
-1.  Backups for all PE PostgreSQL databases, disabled by default
-  - The `pe-puppetdb` database is backed up every week
-  - Other databases are backed up every night
 
 ## Usage
 
@@ -46,33 +40,11 @@ It is not recommended to classify using a pre-existing node group in the PE Cons
 
 ## Items you may want to configure
 
-### Backup Schedule
 
-> WARNING: The backup functionality in this module has been deprecated and will be removed in a future release. 
+> WARNING: The backup functionality in this module has been removed. 
 Please refer to the [PE Backup and Restore documentation](https://puppet.com/docs/pe/latest/backing_up_and_restoring_pe.html) for details on how to backup.
 You should ensure the parameter `pe_databases::manage_database_backups` and any parameters from the `pe_databases::backup` class are removed from classification or hiera.
 You should also clean up associated crontab entries.
-
-Backups are not activated by default but can be enabled by setting the following parameter:
-
-Hiera classification example 
-
-```
-pe_databases::manage_database_backups:: true
-```
-
-You can modify the default backup schedule by provide an array of hashes that describes the databases to backup and their backup schedule.
-Please refer to the [hieradata_examples](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/main/hieradata_examples) directory of this repository for examples.
-
-> IMPORTANT NOTE: If you change the default schedule, it will stop managing the associated crontab entries, and there's not a clean way to automatically remove unmanaged crontab entries.
-So you should delete all pe-postgres crontab entries via `crontab -r -u pe-postgres` and let Puppet repopulate them if you change the default schedule.
-Otherwise, you will create duplicate backups.
-
-### Backup Retention Policy
-
-By default, the backup script will retain two backups for each database.
-When the backup script runs, it will remove the older of the two backups before starting the backup itself.
-You can configure the retention policy by setting `pe_databases::backup::retention_policy: <NUMBER_OF_BACKUPS_TO_RETAIN>`.
 
 ### Disable Maintenance
 
@@ -92,27 +64,6 @@ If you are using a dedicated node for PE PostgreSQL, then some of the settings c
 
 This module attempts to provide default settings that accommodate both a Monolithic install and a dedicated PE PostgreSQL instance.
 Those defaults change based on the `$all_in_one_pe` parameter.
-
-## Backups
-
-> WARNING: The backup functionality in this module has been deprecated and will be removed in a future release. 
-Please refer to the [PE Backup and Restore documentation](https://puppet.com/docs/pe/latest/backing_up_and_restoring_pe.html) for details on how to backup.
-You should ensure the parameter `pe_databases::manage_database_backups` and any parameters from the `pe_databases::backup` class are removed from classification or hiera.
-You should also clean up associated crontab entries.
-
-This is the documentation for Pupet Enterprise backups:
-
-https://puppet.com/docs/pe/latest/backing_up_and_restoring_pe.html
-
-This module provides an alternative to backup just the PE PostgreSQL databases.
-
-It is recommended that you backup each database individually so that if you have an issue with one database you do not have to restore all databases.
-
-Under ideal conditions you would backup all databases daily, however, backing up large databases such as `pe-puppetdb`, results in excessive disk I/O so you may prefer to backup `pe-puppetdb` weekly while backing up the rest of the smaller databases daily.
-
-The choice to backup `pe-puppetdb` more frequently should be based on the business needs.
-
-This module provides a script for backing up PE PostgreSQL databases and two default cron jobs: one weekly to back up the `pe-puppetdb` database, and one daily to backup every database except `pe-puppetdb`.
 
 ## Maintenance
 

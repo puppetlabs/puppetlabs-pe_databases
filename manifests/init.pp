@@ -43,17 +43,7 @@ class pe_databases (
           include pe_databases::postgresql_settings::table_settings
         }
       }
-      # Because this parameter is a value of undef with a data type of Undef,
-      # We can the NotUndef type to determine if the value has been set
-      if $manage_database_backups =~ NotUndef {
-        class { 'pe_databases::backup':
-          disable_maintenance => ! $manage_database_backups,
-        }
-        notify { 'pe_databases_backup_deprecate_warn':
-          message  => 'The backup functionality in the pe_databases module has been deprecated and will be removed in a future release',
-          loglevel => warning,
-        }
-      }
+
     }
     else {
       notify { 'pe_databases_version_warn':

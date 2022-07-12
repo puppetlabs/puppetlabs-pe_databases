@@ -24,14 +24,4 @@ describe 'pe_databases' do
 
     it { is_expected.to contain_notify('pe_databases_systemd_warn') }
   end
-
-  context 'backups are not included by default' do
-    it { is_expected.not_to contain_class('pe_databases::backup') }
-  end
-
-  context 'backups are included if configured' do
-    let(:params) { { manage_database_backups: true } }
-
-    it { is_expected.to contain_class('pe_databases::backup') }
-  end
 end
