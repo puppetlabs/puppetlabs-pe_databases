@@ -1,6 +1,7 @@
-# Tuning, maintenance, and backups for PE PostgreSQL.
+# Tuning, maintenance for PE PostgreSQL.
 #
-# @summary Tuning, maintenance, and backups for PE PostgreSQL.
+# @summary 
+#   Tuning, maintenance for PE PostgreSQL.
 
 class pe_databases (
   Variant[Boolean,Undef] $manage_database_backups     = undef,

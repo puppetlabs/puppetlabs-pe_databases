@@ -1,6 +1,7 @@
 # Tune PostgreSQL
 #
-# @summary Tune PostgreSQL
+# @summary 
+#   Tune PostgreSQL settings 
 
 class pe_databases::postgresql_settings (
   # lint:ignore:140chars

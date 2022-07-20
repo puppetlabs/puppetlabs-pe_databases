@@ -1,6 +1,7 @@
 # Defined type for PostgreSQL table attributes
 #
-# @summary Defined type for PostgreSQL table attributes
+# @summary 
+#   Defined type for PostgreSQL table attributes
 
 define pe_databases::set_table_attribute (
   String $db,

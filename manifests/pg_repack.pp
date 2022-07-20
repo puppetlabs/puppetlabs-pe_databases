@@ -1,6 +1,7 @@
 # Maintenance pg_repack
 #
-# @summary Maintenance pg_repack
+# @summary 
+#   Provides systemd timers to pg_repack tables in the pe-puppetdb database
 
 class pe_databases::pg_repack (
   Boolean $disable_maintenance = false,
