@@ -6,17 +6,16 @@
 
 ### Classes
 
-* [`pe_databases`](#pe_databases)
-* [`pe_databases::backup`](#pe_databasesbackup)
-* [`pe_databases::pg_repack`](#pe_databasespg_repack)
-* [`pe_databases::postgresql_settings`](#pe_databasespostgresql_settings)
-* [`pe_databases::postgresql_settings::table_settings`](#pe_databasespostgresql_settingstable_settings)
+* [`pe_databases`](#pe_databases): Tuning, maintenance for PE PostgreSQL.
+* [`pe_databases::pg_repack`](#pe_databasespg_repack): Provides systemd timers to pg_repack tables in the pe-puppetdb database
+* [`pe_databases::postgresql_settings`](#pe_databasespostgresql_settings): Tune PostgreSQL settings
+* [`pe_databases::postgresql_settings::table_settings`](#pe_databasespostgresql_settingstable_settings): Tune PostgreSQL table settings
 
 ### Defined types
 
 * [`pe_databases::collect`](#pe_databasescollect): Create systemd units for repacking a given database type
-* [`pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero`](#pe_databasesset_puppetdb_table_autovacuum_cost_delay_zero)
-* [`pe_databases::set_table_attribute`](#pe_databasesset_table_attribute)
+* [`pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero`](#pe_databasesset_puppetdb_table_autovacuum_cost_delay_zero): Defined type for PostgreSQL autovacuum_cost_delay
+* [`pe_databases::set_table_attribute`](#pe_databasesset_table_attribute): Defined type for PostgreSQL table attributes
 
 ### Functions
 
@@ -30,27 +29,61 @@
 
 ### <a name="pe_databases"></a>`pe_databases`
 
-The pe_databases class.
+Tuning, maintenance for PE PostgreSQL.
 
 #### Parameters
 
 The following parameters are available in the `pe_databases` class:
 
-* [`manage_database_backups`](#manage_database_backups)
-* [`manage_database_maintenance`](#manage_database_maintenance)
 * [`disable_maintenance`](#disable_maintenance)
 * [`manage_postgresql_settings`](#manage_postgresql_settings)
 * [`manage_table_settings`](#manage_table_settings)
 * [`install_dir`](#install_dir)
 * [`scripts_dir`](#scripts_dir)
+* [`manage_database_maintenance`](#manage_database_maintenance)
 
-##### <a name="manage_database_backups"></a>`manage_database_backups`
+##### <a name="disable_maintenance"></a>`disable_maintenance`
 
-Data type: `Variant[Boolean,Undef]`
+Data type: `Boolean`
 
+true or false (Default: false)
+Disable or enable maintenance mode
 
+Default value: `lookup('pe_databases::disable_maintenance', {'default_value' => false})`
 
-Default value: ``undef``
+##### <a name="manage_postgresql_settings"></a>`manage_postgresql_settings`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+Manage PostgreSQL settings
+
+Default value: ``true``
+
+##### <a name="manage_table_settings"></a>`manage_table_settings`
+
+Data type: `Boolean`
+
+true or false (Default: false)
+Manage table settings
+
+Default value: ``false``
+
+##### <a name="install_dir"></a>`install_dir`
+
+Data type: `String`
+
+Directory to install module into (Default: "/opt/puppetlabs/pe_databases")
+
+Default value: `'/opt/puppetlabs/pe_databases'`
+
+##### <a name="scripts_dir"></a>`scripts_dir`
+
+Data type: `String`
+
+Directory to install scripts into (Default: "${install_dir}/scripts")
+
+Default value: `"${install_dir}/scripts"`
 
 ##### <a name="manage_database_maintenance"></a>`manage_database_maintenance`
 
@@ -60,148 +93,9 @@ Data type: `Boolean`
 
 Default value: ``true``
 
-##### <a name="disable_maintenance"></a>`disable_maintenance`
-
-Data type: `Boolean`
-
-
-
-Default value: `lookup('pe_databases::disable_maintenance', {'default_value' => false})`
-
-##### <a name="manage_postgresql_settings"></a>`manage_postgresql_settings`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="manage_table_settings"></a>`manage_table_settings`
-
-Data type: `Boolean`
-
-
-
-Default value: ``false``
-
-##### <a name="install_dir"></a>`install_dir`
-
-Data type: `String`
-
-
-
-Default value: `'/opt/puppetlabs/pe_databases'`
-
-##### <a name="scripts_dir"></a>`scripts_dir`
-
-Data type: `String`
-
-
-
-Default value: `"${install_dir}/scripts"`
-
-### <a name="pe_databasesbackup"></a>`pe_databases::backup`
-
-The pe_databases::backup class.
-
-#### Parameters
-
-The following parameters are available in the `pe_databases::backup` class:
-
-* [`databases_and_backup_schedule`](#databases_and_backup_schedule)
-* [`psql_version`](#psql_version)
-* [`backup_directory`](#backup_directory)
-* [`backup_script_path`](#backup_script_path)
-* [`daily_databases_path`](#daily_databases_path)
-* [`backup_logging_directory`](#backup_logging_directory)
-* [`retention_policy`](#retention_policy)
-* [`disable_maintenance`](#disable_maintenance)
-
-##### <a name="databases_and_backup_schedule"></a>`databases_and_backup_schedule`
-
-Data type: `Array[Hash]`
-
-
-
-Default value: `[
-    {
-      'databases' => pe_databases::version_based_databases(),
-      'schedule'  =>
-      {
-        'minute' => '30',
-        'hour'   => '22',
-      },
-    },
-    {
-      'databases' => ['pe-puppetdb'],
-      'schedule'  =>
-      {
-        'minute'  => '0',
-        'hour'    => '2',
-        'weekday' => '7',
-      },
-    }
-  ]`
-
-##### <a name="psql_version"></a>`psql_version`
-
-Data type: `String`
-
-
-
-Default value: `$pe_databases::psql_version`
-
-##### <a name="backup_directory"></a>`backup_directory`
-
-Data type: `String`
-
-
-
-Default value: `"/opt/puppetlabs/server/data/postgresql/${psql_version}/backups"`
-
-##### <a name="backup_script_path"></a>`backup_script_path`
-
-Data type: `String`
-
-
-
-Default value: `"${pe_databases::scripts_dir}/puppet_enterprise_database_backup.sh"`
-
-##### <a name="daily_databases_path"></a>`daily_databases_path`
-
-Data type: `String`
-
-
-
-Default value: `"${pe_databases::install_dir}/default_daily_databases.txt"`
-
-##### <a name="backup_logging_directory"></a>`backup_logging_directory`
-
-Data type: `String`
-
-
-
-Default value: `'/var/log/puppetlabs/pe_databases_backup'`
-
-##### <a name="retention_policy"></a>`retention_policy`
-
-Data type: `Integer`
-
-
-
-Default value: `2`
-
-##### <a name="disable_maintenance"></a>`disable_maintenance`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
 ### <a name="pe_databasespg_repack"></a>`pe_databases::pg_repack`
 
-The pe_databases::pg_repack class.
+Maintenance pg_repack
 
 #### Parameters
 
@@ -214,7 +108,8 @@ The following parameters are available in the `pe_databases::pg_repack` class:
 
 Data type: `Boolean`
 
-
+true or false (Default: false)
+Disable or enable maintenance mode
 
 Default value: ``false``
 
@@ -222,24 +117,26 @@ Default value: ``false``
 
 Data type: `Integer`
 
-
+How many jobs to run in parallel
 
 Default value: `/`
 
 ### <a name="pe_databasespostgresql_settings"></a>`pe_databases::postgresql_settings`
 
-The pe_databases::postgresql_settings class.
+Tune PostgreSQL
 
 #### Parameters
 
 The following parameters are available in the `pe_databases::postgresql_settings` class:
 
+* [`maintenance_work_mem`](#maintenance_work_mem)
+* [`work_mem`](#work_mem)
+* [`autovacumn_work_mem`](#autovacumn_work_mem)
+* [`autovacuum_max_workers`](#autovacuum_max_workers)
 * [`autovacuum_vacuum_scale_factor`](#autovacuum_vacuum_scale_factor)
 * [`autovacuum_analyze_scale_factor`](#autovacuum_analyze_scale_factor)
-* [`autovacuum_max_workers`](#autovacuum_max_workers)
 * [`log_autovacuum_min_duration`](#log_autovacuum_min_duration)
 * [`log_temp_files`](#log_temp_files)
-* [`work_mem`](#work_mem)
 * [`max_connections`](#max_connections)
 * [`arbitrary_postgresql_conf_settings`](#arbitrary_postgresql_conf_settings)
 * [`checkpoint_completion_target`](#checkpoint_completion_target)
@@ -249,9 +146,38 @@ The following parameters are available in the `pe_databases::postgresql_settings
 * [`manage_reports_autovacuum_cost_delay`](#manage_reports_autovacuum_cost_delay)
 * [`factsets_autovacuum_vacuum_scale_factor`](#factsets_autovacuum_vacuum_scale_factor)
 * [`reports_autovacuum_vacuum_scale_factor`](#reports_autovacuum_vacuum_scale_factor)
-* [`maintenance_work_mem`](#maintenance_work_mem)
 * [`autovacuum_work_mem`](#autovacuum_work_mem)
 * [`psql_version`](#psql_version)
+
+##### <a name="maintenance_work_mem"></a>`maintenance_work_mem`
+
+Data type: `String`
+
+Increase to improve speed of speed of vacuuming and reindexing (Example "1GB")
+
+Default value: `$all_in_one_pe_install`
+
+##### <a name="work_mem"></a>`work_mem`
+
+Data type: `String`
+
+Allows PostgreSQL to do larger in-memory sorts (Default: "4MB")
+
+Default value: `'8MB'`
+
+##### <a name="autovacumn_work_mem"></a>`autovacumn_work_mem`
+
+Data type: `String`
+
+Similar to but for maintenance_work_mem autovacuum processes only (Example "256MB")
+
+##### <a name="autovacuum_max_workers"></a>`autovacuum_max_workers`
+
+Data type: `Integer`
+
+Maximum number of autovacuum processes to run concurrently (Default: 3)
+
+Default value: `max(3, min(8, $facts['processors']['count'] / 3))`
 
 ##### <a name="autovacuum_vacuum_scale_factor"></a>`autovacuum_vacuum_scale_factor`
 
@@ -269,14 +195,6 @@ Data type: `Float[0,1]`
 
 Default value: `0.04`
 
-##### <a name="autovacuum_max_workers"></a>`autovacuum_max_workers`
-
-Data type: `Integer`
-
-
-
-Default value: `max(3, min(8, $facts['processors']['count'] / 3))`
-
 ##### <a name="log_autovacuum_min_duration"></a>`log_autovacuum_min_duration`
 
 Data type: `Integer`
@@ -292,14 +210,6 @@ Data type: `Integer`
 
 
 Default value: `-`
-
-##### <a name="work_mem"></a>`work_mem`
-
-Data type: `String`
-
-
-
-Default value: `'8MB'`
 
 ##### <a name="max_connections"></a>`max_connections`
 
@@ -373,14 +283,6 @@ Data type: `Optional[Float[0,1]]`
 
 Default value: `0.01`
 
-##### <a name="maintenance_work_mem"></a>`maintenance_work_mem`
-
-Data type: `String`
-
-
-
-Default value: `$all_in_one_pe_install`
-
 ##### <a name="autovacuum_work_mem"></a>`autovacuum_work_mem`
 
 Data type: `String`
@@ -399,7 +301,7 @@ Default value: `$pe_databases::psql_version`
 
 ### <a name="pe_databasespostgresql_settingstable_settings"></a>`pe_databases::postgresql_settings::table_settings`
 
-The pe_databases::postgresql_settings::table_settings class.
+Tune PostgreSQL table settings
 
 #### Parameters
 
@@ -470,7 +372,7 @@ The following parameters are available in the `pe_databases::collect` defined ty
 
 Data type: `String`
 
-
+The database to repack, uses titles from pg_repack.pp
 
 Default value: `$title`
 
@@ -478,7 +380,7 @@ Default value: `$title`
 
 Data type: `String`
 
-
+defined in pg_repack.pp
 
 Default value: ``undef``
 
@@ -486,7 +388,7 @@ Default value: ``undef``
 
 Data type: `Boolean`
 
-
+to disable maintenance mode (Default: false)
 
 Default value: ``false``
 
@@ -494,13 +396,13 @@ Default value: ``false``
 
 Data type: `String`
 
-
+values can be found in pg_repack.pp
 
 Default value: ``undef``
 
 ### <a name="pe_databasesset_puppetdb_table_autovacuum_cost_delay_zero"></a>`pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero`
 
-The pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero class.
+Defined type for PostgreSQL autovacuum_cost_delay
 
 #### Parameters
 
@@ -512,13 +414,13 @@ The following parameters are available in the `pe_databases::set_puppetdb_table_
 
 Data type: `String`
 
-
+Name of the table
 
 Default value: `$title`
 
 ### <a name="pe_databasesset_table_attribute"></a>`pe_databases::set_table_attribute`
 
-The pe_databases::set_table_attribute class.
+Defined type for PostgreSQL table attributes
 
 #### Parameters
 
@@ -533,25 +435,25 @@ The following parameters are available in the `pe_databases::set_table_attribute
 
 Data type: `String`
 
-
+Name of the database, this is pe-puppetdb for the uses of this module.
 
 ##### <a name="table_name"></a>`table_name`
 
 Data type: `String`
 
-
+Name of the table in the database.
 
 ##### <a name="table_attribute"></a>`table_attribute`
 
 Data type: `String`
 
-
+Set to the table attribute value.
 
 ##### <a name="table_attribute_value"></a>`table_attribute_value`
 
 Data type: `String`
 
-
+Value of setting for the table set in table_settings.pp
 
 ## Functions
 
