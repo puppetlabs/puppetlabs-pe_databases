@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v2.3.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.3.0) (2022-07-21)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.2.0...v2.3.0)
+
+### Added
+
+- \(SUP-3409\) Update puppet strings comments [\#104](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/104) ([elainemccloskey](https://github.com/elainemccloskey))
+- \(SUP-3408\) Remove deprecated backup functionality [\#103](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/103) ([elainemccloskey](https://github.com/elainemccloskey))
+
 ## [v2.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.2.0) (2021-10-06)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.1.1...v2.2.0)
