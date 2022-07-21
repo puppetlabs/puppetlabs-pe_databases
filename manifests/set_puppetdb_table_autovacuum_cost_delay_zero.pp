@@ -1,7 +1,10 @@
 # Defined type for PostgreSQL autovacuum_cost_delay
 #
-# @summary Defined type for PostgreSQL autovacuum_cost_delay
-
+# @summary 
+#   Defined type for PostgreSQL autovacuum_cost_delay
+# 
+# @param table_name [String]
+#   Name of the table
 define pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero (
   String $table_name = $title,
 ) {

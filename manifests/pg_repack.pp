@@ -1,7 +1,11 @@
 # Maintenance pg_repack
 #
-# @summary Maintenance pg_repack
-
+# @summary 
+#   Provides systemd timers to pg_repack tables in the pe-puppetdb database
+# 
+# @param disable_maintenance [Boolean] true or false (Default: false)
+#   Disable or enable maintenance mode
+# @param jobs [Integer] How many jobs to run in parallel
 class pe_databases::pg_repack (
   Boolean $disable_maintenance = false,
   Integer $jobs                = $facts['processors']['count'] / 4

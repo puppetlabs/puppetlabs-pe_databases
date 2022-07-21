@@ -1,7 +1,13 @@
 # Tune PostgreSQL
 #
-# @summary Tune PostgreSQL
-
+# @summary 
+#   Tune PostgreSQL settings 
+# 
+# @param maintenance_work_mem [String] Increase to improve speed of speed of vacuuming and reindexing (Example "1GB")
+# @param work_mem [String] Allows PostgreSQL to do larger in-memory sorts (Default: "4MB")
+# @param autovacumn_work_mem [String] Similar to but for maintenance_work_mem autovacuum processes only (Example "256MB")
+# @param autovacuum_max_workers [Integer] Maximum number of autovacuum processes to run concurrently (Default: 3)
+# 
 class pe_databases::postgresql_settings (
   # lint:ignore:140chars
   Float[0,1] $autovacuum_vacuum_scale_factor                    = 0.08,

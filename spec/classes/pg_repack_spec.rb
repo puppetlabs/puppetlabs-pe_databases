@@ -5,7 +5,6 @@ describe 'pe_databases::pg_repack' do
     context "on #{os}" do
       let(:pre_condition) do
         "class { 'pe_databases':
-          manage_database_backups    =>  false,
           manage_postgresql_settings =>  false,
           manage_table_settings      =>  false,
         }"
