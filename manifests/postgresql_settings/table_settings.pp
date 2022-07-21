@@ -2,7 +2,7 @@
 #
 # @summary 
 #   Tune PostgreSQL table settings
-
+# 
 class pe_databases::postgresql_settings::table_settings (
   # lint:ignore:140chars
   Boolean              $manage_reports_autovacuum_cost_delay     = lookup('pe_databases::postgresql_settings::manage_reports_autovacuum_cost_delay',    {'default_value' => true}),

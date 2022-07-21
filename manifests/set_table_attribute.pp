@@ -2,7 +2,16 @@
 #
 # @summary 
 #   Defined type for PostgreSQL table attributes
-
+# 
+# @param db [String]
+#   Name of the database, this is pe-puppetdb for the uses of this module.
+# @param table_name [String] 
+#   Name of the table in the database.
+# @param table_attribute [String]
+#   Set to the table attribute value.
+# @param table_attribute_value [String]
+#   Value of setting for the table set in table_settings.pp
+#
 define pe_databases::set_table_attribute (
   String $db,
   String $table_name,

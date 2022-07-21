@@ -1,10 +1,14 @@
-# Tuning, maintenance for PE PostgreSQL.
-#
-# @summary 
-#   Tuning, maintenance for PE PostgreSQL.
-
+# @summary Tuning, maintenance for PE PostgreSQL.
+# 
+# @param disable_maintenance [Boolean] true or false (Default: false)
+#   Disable or enable maintenance mode
+# @param manage_postgresql_settings [Boolean] true or false (Default: true)
+#   Manage PostgreSQL settings
+# @param manage_table_settings [Boolean] true or false (Default: false)
+#   Manage table settings
+# @param install_dir [String] Directory to install module into (Default: "/opt/puppetlabs/pe_databases")
+# @param scripts_dir [String] Directory to install scripts into (Default: "${install_dir}/scripts")
 class pe_databases (
-  Variant[Boolean,Undef] $manage_database_backups     = undef,
   # Manage the inclusion of the pg_repack class
   Boolean $manage_database_maintenance = true,
   # Manage the state of the maintenance tasks, i.e. systemd services and timers

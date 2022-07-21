@@ -1,4 +1,9 @@
 # Create systemd units for repacking a given database type
+# @param database_type [String] The database to repack, uses titles from pg_repack.pp
+# @param command [String] defined in pg_repack.pp
+# @param disable_maintenance [Boolean] to disable maintenance mode (Default: false)
+# @param on_cal [String] values can be found in pg_repack.pp
+#
 define pe_databases::collect (
   String  $database_type       = $title,
   String  $command             = undef,
