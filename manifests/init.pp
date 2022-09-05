@@ -10,13 +10,23 @@
 #   Manage table settings
 # @param install_dir [String] Directory to install module into (Default: "/opt/puppetlabs/pe_databases")
 # @param scripts_dir [String] Directory to install scripts into (Default: "${install_dir}/scripts")
+# @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
+# @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
+# @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
+# @param reports_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'reports' tables
+# @param resource_events_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'resource_events' tables
 class pe_databases (
-  Boolean $manage_database_maintenance = true,
-  Boolean $disable_maintenance         = false,
-  Boolean $manage_postgresql_settings  = true,
-  Boolean $manage_table_settings       = false,
-  String  $install_dir                 = '/opt/puppetlabs/pe_databases',
-  String  $scripts_dir                 = "${install_dir}/scripts"
+  Boolean $manage_database_maintenance           = true,
+  Boolean $disable_maintenance                   = false,
+  Boolean $manage_postgresql_settings            = true,
+  Boolean $manage_table_settings                 = false,
+  String[1] $install_dir                         = '/opt/puppetlabs/pe_databases',
+  String[1] $scripts_dir                         = "${install_dir}/scripts",
+  String[1] $facts_tables_repack_timer           = 'Tue,Sat *-*-* 04:30:00',
+  String[1] $catalogs_tables_repack_timer        = 'Sun,Thu *-*-* 04:30:00',
+  String[1] $other_tables_repack_timer           = '*-*-20 05:30:00',
+  String[1] $reports_tables_repack_timer         = '*-*-10 05:30:00',
+  String[1] $resource_events_tables_repack_timer = '*-*-15 05:30:00',
 ) {
   $psql_version = $facts['pe_postgresql_info']['installed_server_version'] ? {
     undef   => undef,
