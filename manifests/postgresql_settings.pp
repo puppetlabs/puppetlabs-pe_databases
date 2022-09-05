@@ -26,17 +26,16 @@ class pe_databases::postgresql_settings (
   Optional[Float[0,1]] $factsets_autovacuum_vacuum_scale_factor = 0.80,
   Optional[Float[0,1]] $reports_autovacuum_vacuum_scale_factor  = 0.01,
   String     $maintenance_work_mem                              = $all_in_one_pe_install ? {
-                                                                    false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3}MB",
-                                                                    true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8}MB",
-                                                                  },
+    false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3}MB",
+    true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8}MB",
+  },
   String     $autovacuum_work_mem                               = $all_in_one_pe_install ? {
-                                                                    false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3 / $autovacuum_max_workers}MB",
-                                                                    true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8 / $autovacuum_max_workers}MB",
-                                                                  },
+    false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3 / $autovacuum_max_workers}MB",
+    true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8 / $autovacuum_max_workers}MB",
+  },
   String     $psql_version                                      = $pe_databases::psql_version,
   # lint:endignore
 ) {
-
   $postgresql_service_resource_name = 'postgresqld'
   $postgresql_service_name          = 'pe-postgresql'
   $notify_postgresql_service        = $manage_postgresql_service ? {
