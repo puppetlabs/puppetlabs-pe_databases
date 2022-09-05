@@ -5,36 +5,28 @@
 # 
 # @param maintenance_work_mem [String] Increase to improve speed of speed of vacuuming and reindexing (Example "1GB")
 # @param work_mem [String] Allows PostgreSQL to do larger in-memory sorts (Default: "4MB")
-# @param autovacumn_work_mem [String] Similar to but for maintenance_work_mem autovacuum processes only (Example "256MB")
+# @param autovacuum_work_mem [String] Similar to but for maintenance_work_mem autovacuum processes only (Example "256MB")
 # @param autovacuum_max_workers [Integer] Maximum number of autovacuum processes to run concurrently (Default: 3)
 # 
 class pe_databases::postgresql_settings (
-  # lint:ignore:140chars
-  Float[0,1] $autovacuum_vacuum_scale_factor                    = 0.08,
-  Float[0,1] $autovacuum_analyze_scale_factor                   = 0.04,
-  Integer    $autovacuum_max_workers                            = max(3, min(8, $facts['processors']['count'] / 3)),
-  Integer    $log_autovacuum_min_duration                       = -1,
-  Integer    $log_temp_files                                    = -1,
-  String     $work_mem                                          = '8MB',
-  Integer    $max_connections                                   = 1000,
-  Hash       $arbitrary_postgresql_conf_settings                = {},
-  Float[0,1] $checkpoint_completion_target                      = 0.9,
-  Integer    $checkpoint_segments                               = 128,
-  Boolean    $manage_postgresql_service                         = true,
-  Boolean    $all_in_one_pe_install                             = true,
-  Boolean    $manage_reports_autovacuum_cost_delay              = true,
-  Optional[Float[0,1]] $factsets_autovacuum_vacuum_scale_factor = 0.80,
-  Optional[Float[0,1]] $reports_autovacuum_vacuum_scale_factor  = 0.01,
-  String     $maintenance_work_mem                              = $all_in_one_pe_install ? {
-    false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3}MB",
-    true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8}MB",
-  },
-  String     $autovacuum_work_mem                               = $all_in_one_pe_install ? {
-    false => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 3 / $autovacuum_max_workers}MB",
-    true  => "${facts['memory']['system']['total_bytes'] / 1024 / 1024 / 8 / $autovacuum_max_workers}MB",
-  },
+  Float[0,1] $autovacuum_vacuum_scale_factor                    = $pe_databases::autovacuum_vacuum_scale_factor,
+  Float[0,1] $autovacuum_analyze_scale_factor                   = $pe_databases::autovacuum_analyze_scale_factor,
+  Integer    $autovacuum_max_workers                            = $pe_databases::autovacuum_max_workers,
+  Integer    $log_autovacuum_min_duration                       = $pe_databases::log_autovacuum_min_duration,
+  Integer    $log_temp_files                                    = $pe_databases::log_temp_files,
+  String     $work_mem                                          = $pe_databases::work_mem,
+  Integer    $max_connections                                   = $pe_databases::max_connections,
+  Hash       $arbitrary_postgresql_conf_settings                = $pe_databases::arbitrary_postgresql_conf_settings,
+  Float[0,1] $checkpoint_completion_target                      = $pe_databases::checkpoint_completion_target,
+  Integer    $checkpoint_segments                               = $pe_databases::checkpoint_segments,
+  Boolean    $manage_postgresql_service                         = $pe_databases::manage_postgresql_service,
+  Boolean    $all_in_one_pe_install                             = $pe_databases::all_in_one_pe_install,
+  Boolean    $manage_reports_autovacuum_cost_delay              = $pe_databases::manage_reports_autovacuum_cost_delay,
+  Optional[Float[0,1]] $factsets_autovacuum_vacuum_scale_factor = $pe_databases::factsets_autovacuum_vacuum_scale_factor,
+  Optional[Float[0,1]] $reports_autovacuum_vacuum_scale_factor  = $pe_databases::reports_autovacuum_vacuum_scale_factor,
+  String     $maintenance_work_mem                              = $pe_databases::maintenance_work_mem,
+  String     $autovacuum_work_mem                               = $pe_databases::autovacuum_work_mem,
   String     $psql_version                                      = $pe_databases::psql_version,
-  # lint:endignore
 ) {
   $postgresql_service_resource_name = 'postgresqld'
   $postgresql_service_name          = 'pe-postgresql'

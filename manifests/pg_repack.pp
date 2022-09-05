@@ -12,8 +12,8 @@
 # @param reports_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'reports' tables
 # @param resource_events_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'resource_events' tables
 class pe_databases::pg_repack (
-  Boolean $disable_maintenance                   = false,
-  Integer $jobs                                  = $facts['processors']['count'] / 4,
+  Boolean $disable_maintenance                   = $pe_databases::disable_maintenance,
+  Integer $jobs                                  = $pe_databases::jobs,
   String[1] $facts_tables_repack_timer           = $pe_databases::facts_tables_repack_timer,
   String[1] $catalogs_tables_repack_timer        = $pe_databases::catalogs_tables_repack_timer,
   String[1] $other_tables_repack_timer           = $pe_databases::other_tables_repack_timer,

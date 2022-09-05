@@ -7,7 +7,7 @@
 define pe_databases::collect (
   String  $database_type       = $title,
   String  $command             = undef,
-  Boolean $disable_maintenance = false,
+  Boolean $disable_maintenance = $pe_databases::disable_maintenance,
   String  $on_cal              = undef,
 ) {
   Service {
