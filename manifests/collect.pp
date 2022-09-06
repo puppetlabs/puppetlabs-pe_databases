@@ -10,7 +10,6 @@ define pe_databases::collect (
   Boolean $disable_maintenance = false,
   String  $on_cal              = undef,
 ) {
-
   Service {
     notify  => Exec['pe_databases_daemon_reload'],
   }
@@ -28,11 +27,11 @@ define pe_databases::collect (
     default => present
   }
 
-  file {"/etc/systemd/system/pe_databases-${database_type}.service":
+  file { "/etc/systemd/system/pe_databases-${database_type}.service":
     ensure  => $ensure_file,
     content => epp('pe_databases/service.epp', { 'tables' => $database_type, 'command' => $command }),
   }
-  file {"/etc/systemd/system/pe_databases-${database_type}.timer":
+  file { "/etc/systemd/system/pe_databases-${database_type}.timer":
     ensure  => $ensure_file,
     content => epp('pe_databases/timer.epp', { 'tables' => $database_type, 'on_cal' => $on_cal }),
   }
