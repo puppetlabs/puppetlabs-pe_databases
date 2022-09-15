@@ -6,9 +6,19 @@
 # @param disable_maintenance [Boolean] true or false (Default: false)
 #   Disable or enable maintenance mode
 # @param jobs [Integer] How many jobs to run in parallel
+# @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
+# @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
+# @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
+# @param reports_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'reports' tables
+# @param resource_events_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'resource_events' tables
 class pe_databases::pg_repack (
-  Boolean $disable_maintenance = false,
-  Integer $jobs                = $facts['processors']['count'] / 4
+  Boolean $disable_maintenance                   = false,
+  Integer $jobs                                  = $facts['processors']['count'] / 4,
+  String[1] $facts_tables_repack_timer           = $pe_databases::facts_tables_repack_timer,
+  String[1] $catalogs_tables_repack_timer        = $pe_databases::catalogs_tables_repack_timer,
+  String[1] $other_tables_repack_timer           = $pe_databases::other_tables_repack_timer,
+  String[1] $reports_tables_repack_timer         = $pe_databases::reports_tables_repack_timer,
+  String[1] $resource_events_tables_repack_timer = $pe_databases::resource_events_tables_repack_timer,
 ) {
   # PE 2019.1 starting shipping versioned pe-postgres packages where all paths are versioned.
   # So, prior to 2019.1 use a non-versioned path, and after use a versioned path.
@@ -33,26 +43,26 @@ class pe_databases::pg_repack (
   pe_databases::collect { 'facts':
     disable_maintenance => $disable_maintenance,
     command             => "${repack} ${repack_jobs} ${facts_tables}",
-    on_cal              => 'Tue,Sat *-*-* 04:30:00',
+    on_cal              => $facts_tables_repack_timer,
   }
 
   pe_databases::collect { 'catalogs':
     disable_maintenance => $disable_maintenance,
     command             => "${repack} ${repack_jobs} ${catalogs_tables}",
-    on_cal              => 'Sun,Thu *-*-* 04:30:00',
+    on_cal              => $catalogs_tables_repack_timer,
   }
 
   pe_databases::collect { 'other':
     disable_maintenance => $disable_maintenance,
     command             => "${repack} ${repack_jobs} ${other_tables}",
-    on_cal              => '*-*-20 05:30:00',
+    on_cal              => $other_tables_repack_timer,
   }
 
   if versioncmp($facts['pe_server_version'], '2019.7.0') < 0 {
     pe_databases::collect { 'reports':
       disable_maintenance => $disable_maintenance,
       command             => "${repack} ${repack_jobs} ${reports_table}",
-      on_cal              => '*-*-10 05:30:00',
+      on_cal              => $reports_tables_repack_timer,
     }
   }
 
@@ -60,7 +70,7 @@ class pe_databases::pg_repack (
     pe_databases::collect { 'resource_events':
       disable_maintenance => $disable_maintenance,
       command             => "${repack} ${repack_jobs} ${resource_events_table}",
-      on_cal              => '*-*-15 05:30:00',
+      on_cal              => $resource_events_tables_repack_timer,
     }
   }
 
