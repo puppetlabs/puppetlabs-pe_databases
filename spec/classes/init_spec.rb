@@ -9,14 +9,25 @@ describe 'pe_databases' do
     end
   end
 
-  context 'on latest PE release' do
-    it { is_expected.to contain_class('pe_databases::pg_repack') }
-  end
+  context 'with default parameters' do
+    it {
+      is_expected.to contain_class('pe_databases::pg_repack').with(disable_maintenance: false)
 
-  context 'on unsupported PE release' do
-    let(:facts) { { pe_server_version: '2019.0.1' } }
+      is_expected.to contain_file('/opt/puppetlabs/pe_databases').with(
+        ensure: 'directory',
+        mode: '0755',
+      )
+      is_expected.to contain_file('/opt/puppetlabs/pe_databases/scripts').with(
+        ensure: 'directory',
+        mode: '0755',
+      )
 
-    it { is_expected.to contain_notify('pe_databases_version_warn') }
+      is_expected.to contain_exec('pe_databases_daemon_reload').with(
+        command: 'systemctl daemon-reload',
+        path: ['/bin', '/usr/bin'],
+        refreshonly: true,
+      )
+    }
   end
 
   context 'when systemd is not the init provider' do
