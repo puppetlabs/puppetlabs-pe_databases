@@ -48,6 +48,13 @@ describe 'pe_databases::pg_repack' do
         is_expected.to contain_file("/etc/systemd/system/pe_databases-#{name}.service").with_content(
           %r{ExecStart=#{repack_cmd} #{val[:tables]}},
         )
+
+        [
+          'pe_databases::pg_repack::reports_tables_repack_timer',
+          'pe_databases::pg_repack::resource_events_tables_repack_timer',
+        ].each do |deprecated_param|
+          is_expected.to contain_puppet_enterprise__deprecated_parameter(deprecated_param)
+        end
       end
 
       ['pg_repack facts tables', 'pg_repack catalogs tables', 'pg_repack other tables',

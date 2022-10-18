@@ -10,12 +10,17 @@
 # @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
 # @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
 class pe_databases::pg_repack (
-  Boolean $disable_maintenance                   = false,
-  Integer $jobs                                  = $facts['processors']['count'] / 4,
-  String[1] $facts_tables_repack_timer           = $pe_databases::facts_tables_repack_timer,
-  String[1] $catalogs_tables_repack_timer        = $pe_databases::catalogs_tables_repack_timer,
-  String[1] $other_tables_repack_timer           = $pe_databases::other_tables_repack_timer,
+  Boolean $disable_maintenance                          = false,
+  Integer $jobs                                         = $facts['processors']['count'] / 4,
+  String[1] $facts_tables_repack_timer                  = $pe_databases::facts_tables_repack_timer,
+  String[1] $catalogs_tables_repack_timer               = $pe_databases::catalogs_tables_repack_timer,
+  String[1] $other_tables_repack_timer                  = $pe_databases::other_tables_repack_timer,
+  Optional[String] $reports_tables_repack_timer         = undef,
+  Optional[String] $resource_events_tables_repack_timer = undef,
 ) {
+  puppet_enterprise::deprecated_parameter{'pe_databases::pg_repack::reports_tables_repack_timer': }
+  puppet_enterprise::deprecated_parameter{'pe_databases::pg_repack::resource_events_tables_repack_timer': }
+
   $postgresql_version = $facts['pe_postgresql_info']['installed_server_version']
   $repack_executable = "/opt/puppetlabs/server/apps/postgresql/${postgresql_version}/bin/pg_repack"
 

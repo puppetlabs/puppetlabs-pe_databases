@@ -27,6 +27,15 @@ describe 'pe_databases' do
         path: ['/bin', '/usr/bin'],
         refreshonly: true,
       )
+
+      [
+        'pe_databases::manage_postgresql_settings',
+        'pe_databases::manage_table_settings',
+        'pe_databases::reports_tables_repack_timer',
+        'pe_databases::resource_events_tables_repack_timer',
+      ].each do |deprecated_param|
+        is_expected.to contain_puppet_enterprise__deprecated_parameter(deprecated_param)
+      end
     }
   end
 
