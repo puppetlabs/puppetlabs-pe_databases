@@ -3,6 +3,11 @@ require 'spec_helper'
 describe 'pe_databases' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
+      let(:pre_condition) do
+        <<-PRE_COND
+        define puppet_enterprise::deprecated_parameter() {}
+        PRE_COND
+      end
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
@@ -10,6 +15,12 @@ describe 'pe_databases' do
   end
 
   context 'with default parameters' do
+    let(:pre_condition) do
+      <<-PRE_COND
+      define puppet_enterprise::deprecated_parameter() {}
+      PRE_COND
+    end
+
     it {
       is_expected.to contain_class('pe_databases::pg_repack').with(disable_maintenance: false)
 
@@ -40,6 +51,11 @@ describe 'pe_databases' do
   end
 
   context 'when systemd is not the init provider' do
+    let(:pre_condition) do
+      <<-PRE_COND
+      define puppet_enterprise::deprecated_parameter() {}
+      PRE_COND
+    end
     let(:facts) { { pe_databases: { have_systemd: false } } }
 
     it { is_expected.to contain_notify('pe_databases_systemd_warn') }

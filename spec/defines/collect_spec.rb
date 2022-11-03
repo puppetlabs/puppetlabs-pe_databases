@@ -2,7 +2,12 @@ require 'spec_helper'
 
 describe 'pe_databases::collect' do
   context 'when repacking tables' do
-    let(:pre_condition) { 'include pe_databases' }
+    let(:pre_condition) do
+      <<-PRE_COND
+      define puppet_enterprise::deprecated_parameter() {}
+      include pe_databases
+      PRE_COND
+    end
     let(:title) { 'test' }
     let(:params) do
       {
@@ -30,7 +35,12 @@ describe 'pe_databases::collect' do
   end
 
   context 'when disabling maintenance' do
-    let(:pre_condition) { 'include pe_databases' }
+    let(:pre_condition) do
+      <<-PRE_COND
+      define puppet_enterprise::deprecated_parameter() {}
+      include pe_databases
+      PRE_COND
+    end
     let(:title) { 'test' }
     let(:params) do
       {

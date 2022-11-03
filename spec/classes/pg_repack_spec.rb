@@ -22,7 +22,13 @@ describe 'pe_databases::pg_repack' do
 
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      let(:pre_condition) { 'include pe_databases' }
+      let(:pre_condition) do
+        <<-PRE_COND
+        define puppet_enterprise::deprecated_parameter() {}
+
+        include pe_databases
+        PRE_COND
+      end
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
@@ -30,7 +36,13 @@ describe 'pe_databases::pg_repack' do
   end
 
   context 'with default parameters' do
-    let(:pre_condition) { 'include pe_databases' }
+    let(:pre_condition) do
+      <<-PRE_COND
+      define puppet_enterprise::deprecated_parameter() {}
+
+      include pe_databases
+      PRE_COND
+    end
 
     it {
       tables_hash.each do |name, val|
@@ -69,7 +81,13 @@ describe 'pe_databases::pg_repack' do
   end
 
   context 'when customizing timers' do
-    let(:pre_condition) { "class {'pe_databases': facts_tables_repack_timer => 'Tue *-*-* 04:20:00'}" }
+    let(:pre_condition) do
+      <<-PRE_COND
+        define puppet_enterprise::deprecated_parameter() {}
+
+        class {'pe_databases': facts_tables_repack_timer => 'Tue *-*-* 04:20:00'}
+        PRE_COND
+    end
 
     it {
       is_expected.to contain_pe_databases__collect('facts').with(
