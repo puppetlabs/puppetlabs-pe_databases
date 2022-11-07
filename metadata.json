@@ -2,7 +2,7 @@
   "name": "puppetlabs-pe_databases",
   "version": "2.3.0",
   "author": "puppetlabs",
-  "summary": "A Puppet Module for Backing Up / Maintaining / Tuning Your Puppet Enterprise Databases",
+  "summary": "A Puppet Module for Maintaining Your Puppet Enterprise Databases",
   "license": "Apache-2.0",
   "source": "https://github.com/puppetlabs/puppetlabs-pe_databases",
   "project_page": "https://github.com/puppetlabs/puppetlabs-pe_databases",
