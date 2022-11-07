@@ -18,8 +18,6 @@ Table of Contents
 
 # Overview
 
-This module maintenance jobs for PE PostgreSQL.
-
 ## What does this module provide?
 
 This module provides maintenance tasks to keep the `pe-puppetdb` database lean and fast
