@@ -8,18 +8,10 @@
 
 * [`pe_databases`](#pe_databases): Tuning, maintenance for PE PostgreSQL.
 * [`pe_databases::pg_repack`](#pe_databasespg_repack): Provides systemd timers to pg_repack tables in the pe-puppetdb database
-* [`pe_databases::postgresql_settings`](#pe_databasespostgresql_settings): Tune PostgreSQL settings
-* [`pe_databases::postgresql_settings::table_settings`](#pe_databasespostgresql_settingstable_settings): Tune PostgreSQL table settings
 
 ### Defined types
 
 * [`pe_databases::collect`](#pe_databasescollect): Create systemd units for repacking a given database type
-* [`pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero`](#pe_databasesset_puppetdb_table_autovacuum_cost_delay_zero): Defined type for PostgreSQL autovacuum_cost_delay
-* [`pe_databases::set_table_attribute`](#pe_databasesset_table_attribute): Defined type for PostgreSQL table attributes
-
-### Functions
-
-* [`pe_databases::version_based_databases`](#pe_databasesversion_based_databases)
 
 ### Tasks
 
@@ -35,12 +27,26 @@ Tuning, maintenance for PE PostgreSQL.
 
 The following parameters are available in the `pe_databases` class:
 
+* [`manage_database_maintenance`](#manage_database_maintenance)
 * [`disable_maintenance`](#disable_maintenance)
-* [`manage_postgresql_settings`](#manage_postgresql_settings)
-* [`manage_table_settings`](#manage_table_settings)
 * [`install_dir`](#install_dir)
 * [`scripts_dir`](#scripts_dir)
-* [`manage_database_maintenance`](#manage_database_maintenance)
+* [`facts_tables_repack_timer`](#facts_tables_repack_timer)
+* [`catalogs_tables_repack_timer`](#catalogs_tables_repack_timer)
+* [`other_tables_repack_timer`](#other_tables_repack_timer)
+* [`manage_postgresql_settings`](#manage_postgresql_settings)
+* [`manage_table_settings`](#manage_table_settings)
+* [`reports_tables_repack_timer`](#reports_tables_repack_timer)
+* [`resource_events_tables_repack_timer`](#resource_events_tables_repack_timer)
+
+##### <a name="manage_database_maintenance"></a>`manage_database_maintenance`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+Manage the inclusion of the pg_repack class
+
+Default value: ``true``
 
 ##### <a name="disable_maintenance"></a>`disable_maintenance`
 
@@ -49,29 +55,11 @@ Data type: `Boolean`
 true or false (Default: false)
 Disable or enable maintenance mode
 
-Default value: `lookup('pe_databases::disable_maintenance', {'default_value' => false})`
-
-##### <a name="manage_postgresql_settings"></a>`manage_postgresql_settings`
-
-Data type: `Boolean`
-
-true or false (Default: true)
-Manage PostgreSQL settings
-
-Default value: ``true``
-
-##### <a name="manage_table_settings"></a>`manage_table_settings`
-
-Data type: `Boolean`
-
-true or false (Default: false)
-Manage table settings
-
 Default value: ``false``
 
 ##### <a name="install_dir"></a>`install_dir`
 
-Data type: `String`
+Data type: `String[1]`
 
 Directory to install module into (Default: "/opt/puppetlabs/pe_databases")
 
@@ -79,19 +67,67 @@ Default value: `'/opt/puppetlabs/pe_databases'`
 
 ##### <a name="scripts_dir"></a>`scripts_dir`
 
-Data type: `String`
+Data type: `String[1]`
 
 Directory to install scripts into (Default: "${install_dir}/scripts")
 
 Default value: `"${install_dir}/scripts"`
 
-##### <a name="manage_database_maintenance"></a>`manage_database_maintenance`
+##### <a name="facts_tables_repack_timer"></a>`facts_tables_repack_timer`
 
-Data type: `Boolean`
+Data type: `String[1]`
+
+The Systemd timer for the pg_repack job affecting the 'facts' tables
+
+Default value: `'Tue,Sat *-*-* 04:30:00'`
+
+##### <a name="catalogs_tables_repack_timer"></a>`catalogs_tables_repack_timer`
+
+Data type: `String[1]`
+
+The Systemd timer for the pg_repack job affecting the 'catalog' tables
+
+Default value: `'Sun,Thu *-*-* 04:30:00'`
+
+##### <a name="other_tables_repack_timer"></a>`other_tables_repack_timer`
+
+Data type: `String[1]`
+
+The Systemd timer for the pg_repack job affecting the 'other' tables
+
+Default value: `'*-*-20 05:30:00'`
+
+##### <a name="manage_postgresql_settings"></a>`manage_postgresql_settings`
+
+Data type: `Optional[Boolean]`
 
 
 
-Default value: ``true``
+Default value: ``undef``
+
+##### <a name="manage_table_settings"></a>`manage_table_settings`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: ``undef``
+
+##### <a name="reports_tables_repack_timer"></a>`reports_tables_repack_timer`
+
+Data type: `Optional[String]`
+
+
+
+Default value: ``undef``
+
+##### <a name="resource_events_tables_repack_timer"></a>`resource_events_tables_repack_timer`
+
+Data type: `Optional[String]`
+
+
+
+Default value: ``undef``
 
 ### <a name="pe_databasespg_repack"></a>`pe_databases::pg_repack`
 
@@ -103,6 +139,11 @@ The following parameters are available in the `pe_databases::pg_repack` class:
 
 * [`disable_maintenance`](#disable_maintenance)
 * [`jobs`](#jobs)
+* [`facts_tables_repack_timer`](#facts_tables_repack_timer)
+* [`catalogs_tables_repack_timer`](#catalogs_tables_repack_timer)
+* [`other_tables_repack_timer`](#other_tables_repack_timer)
+* [`reports_tables_repack_timer`](#reports_tables_repack_timer)
+* [`resource_events_tables_repack_timer`](#resource_events_tables_repack_timer)
 
 ##### <a name="disable_maintenance"></a>`disable_maintenance`
 
@@ -121,237 +162,45 @@ How many jobs to run in parallel
 
 Default value: `/`
 
-### <a name="pe_databasespostgresql_settings"></a>`pe_databases::postgresql_settings`
+##### <a name="facts_tables_repack_timer"></a>`facts_tables_repack_timer`
 
-Tune PostgreSQL
+Data type: `String[1]`
 
-#### Parameters
+The Systemd timer for the pg_repack job affecting the 'facts' tables
 
-The following parameters are available in the `pe_databases::postgresql_settings` class:
+Default value: `$pe_databases::facts_tables_repack_timer`
 
-* [`maintenance_work_mem`](#maintenance_work_mem)
-* [`work_mem`](#work_mem)
-* [`autovacumn_work_mem`](#autovacumn_work_mem)
-* [`autovacuum_max_workers`](#autovacuum_max_workers)
-* [`autovacuum_vacuum_scale_factor`](#autovacuum_vacuum_scale_factor)
-* [`autovacuum_analyze_scale_factor`](#autovacuum_analyze_scale_factor)
-* [`log_autovacuum_min_duration`](#log_autovacuum_min_duration)
-* [`log_temp_files`](#log_temp_files)
-* [`max_connections`](#max_connections)
-* [`arbitrary_postgresql_conf_settings`](#arbitrary_postgresql_conf_settings)
-* [`checkpoint_completion_target`](#checkpoint_completion_target)
-* [`checkpoint_segments`](#checkpoint_segments)
-* [`manage_postgresql_service`](#manage_postgresql_service)
-* [`all_in_one_pe_install`](#all_in_one_pe_install)
-* [`manage_reports_autovacuum_cost_delay`](#manage_reports_autovacuum_cost_delay)
-* [`factsets_autovacuum_vacuum_scale_factor`](#factsets_autovacuum_vacuum_scale_factor)
-* [`reports_autovacuum_vacuum_scale_factor`](#reports_autovacuum_vacuum_scale_factor)
-* [`autovacuum_work_mem`](#autovacuum_work_mem)
-* [`psql_version`](#psql_version)
+##### <a name="catalogs_tables_repack_timer"></a>`catalogs_tables_repack_timer`
 
-##### <a name="maintenance_work_mem"></a>`maintenance_work_mem`
+Data type: `String[1]`
 
-Data type: `String`
+The Systemd timer for the pg_repack job affecting the 'catalog' tables
 
-Increase to improve speed of speed of vacuuming and reindexing (Example "1GB")
+Default value: `$pe_databases::catalogs_tables_repack_timer`
 
-Default value: `$all_in_one_pe_install`
+##### <a name="other_tables_repack_timer"></a>`other_tables_repack_timer`
 
-##### <a name="work_mem"></a>`work_mem`
+Data type: `String[1]`
 
-Data type: `String`
+The Systemd timer for the pg_repack job affecting the 'other' tables
 
-Allows PostgreSQL to do larger in-memory sorts (Default: "4MB")
+Default value: `$pe_databases::other_tables_repack_timer`
 
-Default value: `'8MB'`
+##### <a name="reports_tables_repack_timer"></a>`reports_tables_repack_timer`
 
-##### <a name="autovacumn_work_mem"></a>`autovacumn_work_mem`
+Data type: `Optional[String]`
 
-Data type: `String`
 
-Similar to but for maintenance_work_mem autovacuum processes only (Example "256MB")
 
-##### <a name="autovacuum_max_workers"></a>`autovacuum_max_workers`
+Default value: ``undef``
 
-Data type: `Integer`
+##### <a name="resource_events_tables_repack_timer"></a>`resource_events_tables_repack_timer`
 
-Maximum number of autovacuum processes to run concurrently (Default: 3)
+Data type: `Optional[String]`
 
-Default value: `max(3, min(8, $facts['processors']['count'] / 3))`
 
-##### <a name="autovacuum_vacuum_scale_factor"></a>`autovacuum_vacuum_scale_factor`
 
-Data type: `Float[0,1]`
-
-
-
-Default value: `0.08`
-
-##### <a name="autovacuum_analyze_scale_factor"></a>`autovacuum_analyze_scale_factor`
-
-Data type: `Float[0,1]`
-
-
-
-Default value: `0.04`
-
-##### <a name="log_autovacuum_min_duration"></a>`log_autovacuum_min_duration`
-
-Data type: `Integer`
-
-
-
-Default value: `-`
-
-##### <a name="log_temp_files"></a>`log_temp_files`
-
-Data type: `Integer`
-
-
-
-Default value: `-`
-
-##### <a name="max_connections"></a>`max_connections`
-
-Data type: `Integer`
-
-
-
-Default value: `1000`
-
-##### <a name="arbitrary_postgresql_conf_settings"></a>`arbitrary_postgresql_conf_settings`
-
-Data type: `Hash`
-
-
-
-Default value: `{}`
-
-##### <a name="checkpoint_completion_target"></a>`checkpoint_completion_target`
-
-Data type: `Float[0,1]`
-
-
-
-Default value: `0.9`
-
-##### <a name="checkpoint_segments"></a>`checkpoint_segments`
-
-Data type: `Integer`
-
-
-
-Default value: `128`
-
-##### <a name="manage_postgresql_service"></a>`manage_postgresql_service`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="all_in_one_pe_install"></a>`all_in_one_pe_install`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="manage_reports_autovacuum_cost_delay"></a>`manage_reports_autovacuum_cost_delay`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="factsets_autovacuum_vacuum_scale_factor"></a>`factsets_autovacuum_vacuum_scale_factor`
-
-Data type: `Optional[Float[0,1]]`
-
-
-
-Default value: `0.80`
-
-##### <a name="reports_autovacuum_vacuum_scale_factor"></a>`reports_autovacuum_vacuum_scale_factor`
-
-Data type: `Optional[Float[0,1]]`
-
-
-
-Default value: `0.01`
-
-##### <a name="autovacuum_work_mem"></a>`autovacuum_work_mem`
-
-Data type: `String`
-
-
-
-Default value: `$all_in_one_pe_install`
-
-##### <a name="psql_version"></a>`psql_version`
-
-Data type: `String`
-
-
-
-Default value: `$pe_databases::psql_version`
-
-### <a name="pe_databasespostgresql_settingstable_settings"></a>`pe_databases::postgresql_settings::table_settings`
-
-Tune PostgreSQL table settings
-
-#### Parameters
-
-The following parameters are available in the `pe_databases::postgresql_settings::table_settings` class:
-
-* [`manage_reports_autovacuum_cost_delay`](#manage_reports_autovacuum_cost_delay)
-* [`factsets_autovacuum_vacuum_scale_factor`](#factsets_autovacuum_vacuum_scale_factor)
-* [`reports_autovacuum_vacuum_scale_factor`](#reports_autovacuum_vacuum_scale_factor)
-* [`catalogs_autovacuum_vacuum_scale_factor`](#catalogs_autovacuum_vacuum_scale_factor)
-* [`certnames_autovacuum_vacuum_scale_factor`](#certnames_autovacuum_vacuum_scale_factor)
-
-##### <a name="manage_reports_autovacuum_cost_delay"></a>`manage_reports_autovacuum_cost_delay`
-
-Data type: `Boolean`
-
-
-
-Default value: `lookup('pe_databases::postgresql_settings::manage_reports_autovacuum_cost_delay',    {'default_value' => true})`
-
-##### <a name="factsets_autovacuum_vacuum_scale_factor"></a>`factsets_autovacuum_vacuum_scale_factor`
-
-Data type: `Optional[Float[0,1]]`
-
-
-
-Default value: `lookup('pe_databases::postgresql_settings::factsets_autovacuum_vacuum_scale_factor', {'default_value' => 0.80})`
-
-##### <a name="reports_autovacuum_vacuum_scale_factor"></a>`reports_autovacuum_vacuum_scale_factor`
-
-Data type: `Optional[Float[0,1]]`
-
-
-
-Default value: `lookup('pe_databases::postgresql_settings::reports_autovacuum_vacuum_scale_factor',  {'default_value' => 0.01})`
-
-##### <a name="catalogs_autovacuum_vacuum_scale_factor"></a>`catalogs_autovacuum_vacuum_scale_factor`
-
-Data type: `Optional[Float[0,1]]`
-
-
-
-Default value: `0.75`
-
-##### <a name="certnames_autovacuum_vacuum_scale_factor"></a>`certnames_autovacuum_vacuum_scale_factor`
-
-Data type: `Optional[Float[0,1]]`
-
-
-
-Default value: `0.75`
+Default value: ``undef``
 
 ## Defined types
 
@@ -399,75 +248,6 @@ Data type: `String`
 values can be found in pg_repack.pp
 
 Default value: ``undef``
-
-### <a name="pe_databasesset_puppetdb_table_autovacuum_cost_delay_zero"></a>`pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero`
-
-Defined type for PostgreSQL autovacuum_cost_delay
-
-#### Parameters
-
-The following parameters are available in the `pe_databases::set_puppetdb_table_autovacuum_cost_delay_zero` defined type:
-
-* [`table_name`](#table_name)
-
-##### <a name="table_name"></a>`table_name`
-
-Data type: `String`
-
-Name of the table
-
-Default value: `$title`
-
-### <a name="pe_databasesset_table_attribute"></a>`pe_databases::set_table_attribute`
-
-Defined type for PostgreSQL table attributes
-
-#### Parameters
-
-The following parameters are available in the `pe_databases::set_table_attribute` defined type:
-
-* [`db`](#db)
-* [`table_name`](#table_name)
-* [`table_attribute`](#table_attribute)
-* [`table_attribute_value`](#table_attribute_value)
-
-##### <a name="db"></a>`db`
-
-Data type: `String`
-
-Name of the database, this is pe-puppetdb for the uses of this module.
-
-##### <a name="table_name"></a>`table_name`
-
-Data type: `String`
-
-Name of the table in the database.
-
-##### <a name="table_attribute"></a>`table_attribute`
-
-Data type: `String`
-
-Set to the table attribute value.
-
-##### <a name="table_attribute_value"></a>`table_attribute_value`
-
-Data type: `String`
-
-Value of setting for the table set in table_settings.pp
-
-## Functions
-
-### <a name="pe_databasesversion_based_databases"></a>`pe_databases::version_based_databases`
-
-Type: Puppet Language
-
-The pe_databases::version_based_databases function.
-
-#### `pe_databases::version_based_databases()`
-
-The pe_databases::version_based_databases function.
-
-Returns: `Array[String]`
 
 ## Tasks
 

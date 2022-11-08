@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v3.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v3.0.0) (2022-11-08)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.3.0...v3.0.0)
+
+### Changed
+
+- \(SUP-3672\) Remove legacy code and add spec tests [\#112](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/112) ([m0dular](https://github.com/m0dular))
+
+### Added
+
+- make systemd timers configurable [\#109](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/109) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
+
 ## [v2.3.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.3.0) (2022-07-21)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.2.0...v2.3.0)

@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-pe_databases",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "author": "puppetlabs",
   "summary": "A Puppet Module for Maintaining Your Puppet Enterprise Databases",
   "license": "Apache-2.0",
