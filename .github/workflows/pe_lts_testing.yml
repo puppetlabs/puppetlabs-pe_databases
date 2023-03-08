@@ -20,13 +20,6 @@ jobs:
         ruby-version: "2.7"
         bundler-cache: true
 
-    - name: Print bundle environment
-      if: ${{ github.repository_owner == 'puppetlabs' }}
-      run: |
-        echo ::group::bundler environment
-        buildevents cmd $TRACE_ID $STEP_ID 'bundle env' -- bundle env
-        echo ::endgroup::
-
     # Store the result of the curl call in $forge_response
     - name: Curl Forge for PE versions
       id: curl_forge
@@ -70,11 +63,6 @@ jobs:
         ruby-version: "2.7"
         bundler-cache: true
 
-    - name: Print bundle environment
-      run: |
-        echo ::group::bundler environment
-        buildevents cmd $TRACE_ID $STEP_ID 'bundle env' -- bundle env
-        echo ::endgroup::
     - name: Provision test environment
       run: |
         buildevents cmd $TRACE_ID $STEP_ID 'rake litmus:provision ${{ matrix.platforms.image }}' -- bundle exec rake 'litmus:provision[${{matrix.platforms.provider}},${{ matrix.platforms.image }}]'
