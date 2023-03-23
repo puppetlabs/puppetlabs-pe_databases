@@ -44,14 +44,14 @@ jobs:
       id: get-matrix
       run: |
         if [[ -e spec/fixtures/matrix/nightly.json ]]; then
-          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/nightly.json <<<${{ '{"collection":["${{ steps.latest.outputs.ver }}"]}'}})
+          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/nightly.json
           echo "::set-output name=matrix::$out"
         else
           echo "::set-output name=matris::{}"
         fi
 
   Acceptance:
-    name: "${{matrix.platforms.label}}, ${{matrix.collection}}"
+    name: "${{matrix.platforms.label}}, ${{ steps.latest.outputs.ver }}"
     needs:
       - setup_matrix
     if: ${{ needs.setup_matrix.outputs.matrix != '{}' }}
