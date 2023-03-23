@@ -1,4 +1,4 @@
-name: "PE Nightly Acceptance Testing"
+name: "PE Latest Acceptance Testing"
 
 on:
   workflow_dispatch:
@@ -47,7 +47,7 @@ jobs:
           out=`cat spec/fixtures/matrix/nightly.json`
           echo "::set-output name=matrix::$out"
         else
-          echo "::set-output name=matrix::${}"
+          echo "::set-output name=matris::{}"
         fi
 
   Acceptance:
@@ -95,7 +95,7 @@ jobs:
         echo ::endgroup::
         echo INVENTORY_PATH=$FILE >> $GITHUB_ENV
 
-    - name: 'Activate twingate'
+    - name: 'Activate'
       uses: twingate/github-action@v1
       with:
         service-key: ${{ secrets.TWINGATE_PUBLIC_REPO_KEY }}
