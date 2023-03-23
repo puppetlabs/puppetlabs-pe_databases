@@ -43,8 +43,8 @@ jobs:
     - name: Setup Acceptance Test Matrix
       id: get-matrix
       run: |
-        if [[ -e spec/fixtures/matrix/nightly.json ]]; then
-          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/nightly.json)
+        if [[ -e spec/fixtures/matrix/latest.json ]]; then
+          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/latest.json)
           echo "::set-output name=matrix::$out"
         else
           echo "::set-output name=matrix::{}"
@@ -102,7 +102,7 @@ jobs:
 
     - name: Install PE
       run: |
-        bundle exec bolt --tmpdir /tmp --log-level debug  --modulepath spec/fixtures/modules  -i ./$INVENTORY_PATH plan run deploy_pe::provision_master --params '{"download_url":"https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-${{matrix.platforms.os-family}}.tar","pe_settings":{"password":"puppetlabs", "configure_tuning": false}}'  --targets all --stream
+        bundle exec bolt --tmpdir /tmp --log-level debug  --modulepath spec/fixtures/modules  -i ./$INVENTORY_PATH plan run deploy_pe::provision_master --params '{"download_url":"https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-${{matrix.platforms.osfamily}}.tar","pe_settings":{"password":"puppetlabs", "configure_tuning": false}}'  --targets all --stream
 
     - name: Install module
       run: |
