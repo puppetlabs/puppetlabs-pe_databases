@@ -45,7 +45,7 @@ jobs:
       id: get-matrix
       run: |
         if [[ -e spec/fixtures/matrix/nightly.json ]]; then
-          out=$(cat spec/fixtures/matrix/nightly.json )
+          out=$(jq -c . < spec/fixtures/matrix/nightly.json)"
           echo "::set-output name=matrix::$out"
         else
           echo "::set-output name=matrix::${}"
