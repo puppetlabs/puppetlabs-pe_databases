@@ -51,6 +51,9 @@ jobs:
         else
           echo "::set-output name=matris::{}"
         fi
+    - run: |
+          echo "${{steps.get-maxtric.outputs.out}}"
+          echo "${{fromJson(steps.get-maxtric.outputs.out)}}"
 
   Acceptance:
     name: "${{matrix.platforms.label}}, ${{matrix.collection}}"
