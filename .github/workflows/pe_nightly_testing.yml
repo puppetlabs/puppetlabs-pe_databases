@@ -43,14 +43,14 @@ jobs:
     - name: Set latest release
       id: latest_release
       run: |
-        out=$(jq -c '[.[] | {"collection": [.]}' <<<'${{ steps.latest.outputs.ver }}')
+        out='{"collection":["${{ steps.latest.outputs.ver }}"]}'
         echo "::set-output name=latest::$out"
 
     - name: Setup Acceptance Test Matrix
       id: get-matrix
       run: |
         if [[ -e spec/fixtures/matrix/nightly.json ]]; then
-          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/nightly.json <<<'${{ steps.latest_release.outputs.latest }}')
+          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/nightly.json <<<'${{ steps.latest.outputs.latest }}')
           echo "::set-output name=matrix::$out"
         else
           echo "::set-output name=matris::{}"
