@@ -51,7 +51,7 @@ jobs:
         fi
 
   Acceptance:
-    name: "${{matrix.platforms.label}}, ${{ steps.latest.outputs.ver }}"
+    name: "${{matrix.platforms.label}}, nightly"
     needs:
       - setup_matrix
     if: ${{ needs.setup_matrix.outputs.matrix != '{}' }}
