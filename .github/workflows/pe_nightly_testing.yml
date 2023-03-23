@@ -43,14 +43,12 @@ jobs:
     - name: Setup Acceptance Test Matrix
       id: get-matrix
       run: |
-        if [[ -e spec/fixtures/matrix/nightly.json ]]; then
-          out=`cat spec/fixtures/matrix/nightly.json`
+        if [[ -e spec/fixtures/matrix/latest.json ]]; then
+          out=`cat spec/fixtures/matrix/latest.json`
           echo "::set-output name=matrix::$out"
         else
           echo "::set-output name=matrix::${}"
         fi
-    - run: |
-        echo "${{fromJson(steps.get-matrix.outputs.out)}}"
 
   Acceptance:
     name: "${{matrix.platforms.label}}"
