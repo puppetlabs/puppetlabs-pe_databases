@@ -39,13 +39,13 @@ jobs:
       id: latest
       run: |
         echo "::set-output name=ver::$(curl -q https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/LATEST)"
-        echo "::set-output name=collection::$'{"collection":["nightly"]}'
+        echo "::set-output name=collection::${"collection":["nightly"]}"
 
     - name: Setup Acceptance Test Matrix
       id: get-matrix
       run: |
         if [[ -e spec/fixtures/matrix/latest.json ]]; then
-          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/latest.json <<<'${{ steps.latest.outputs.out }}')
+          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/latest.json <<<'${{ steps.latest.outputs.collection }}')
           echo "::set-output name=matrix::$out"
         else
           echo "::set-output name=matrix::${}"
