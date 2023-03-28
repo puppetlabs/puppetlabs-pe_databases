@@ -40,26 +40,18 @@ jobs:
       run: |
         echo "::set-output name=ver::$(curl -q https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/LATEST)"
 
-    - name: Setup Acceptance Test Matrix
-      id: get-matrix
-      run: |
-        if [[ -e spec/fixtures/matrix/nightly.json ]]; then
-          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/latest.json <<<'"{{ {"collection":["2021.7.2"] }} "')
-          echo "::set-output name=matrix::$out"
-        else
-          echo "::set-output name=matris::{}"
-        fi
-
   Acceptance:
-    name: "${{matrix.platforms.label}}"
-    needs:
-      - setup_matrix
-    if: ${{ needs.setup_matrix.outputs.matrix != '{}' }}
-
+    name: "Nightly"
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
-      matrix: ${{fromJson(needs.setup_matrix.outputs.matrix)}}
+      matrix:
+        provider: [provision::provision_service]
+        include:
+          - image: "centos-7"
+            osfamily: "el-7-x86_64"
+          - image: "ubuntu-2004-lts"
+            osfamily: "ubuntu-20.04-amd64"
 
     steps:
     - name: Checkout Source
@@ -78,7 +70,7 @@ jobs:
 
     - name: Provision test environment
       run: |
-        bundle exec rake 'litmus:provision[${{matrix.platforms.provider}},${{ matrix.platforms.image }}]'
+        bundle exec rake 'litmus:provision[${{matrix.provider}},${{ matrix.image }}]'
         echo ::group::=== REQUEST ===
         cat request.json || true
         echo
@@ -102,7 +94,7 @@ jobs:
 
     - name: Install PE
       run: |
-        bundle exec bolt --tmpdir /tmp --log-level debug  --modulepath spec/fixtures/modules  -i ./$INVENTORY_PATH plan run deploy_pe::provision_master --params '{"download_url":"https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-${{matrix.platforms.osfamily}}.tar","pe_settings":{"password":"puppetlabs", "configure_tuning": false}}'  --targets all --stream
+        bundle exec bolt --tmpdir /tmp --log-level debug  --modulepath spec/fixtures/modules  -i ./$INVENTORY_PATH plan run deploy_pe::provision_master --params '{"download_url":"https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-${{matrix.osfamily}}.tar","pe_settings":{"password":"puppetlabs", "configure_tuning": false}}'  --targets all --stream
 
     - name: Install module
       run: |
