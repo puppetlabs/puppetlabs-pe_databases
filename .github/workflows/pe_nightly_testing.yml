@@ -8,8 +8,6 @@ jobs:
   setup_matrix:
     name: "Setup Test Matrix"
     runs-on: ubuntu-20.04
-    outputs:
-      matrix: ${{ steps.get-matrix.outputs.matrix }}
 
     steps:
     - name: Checkout Source
@@ -46,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        provider: [provision::provision_service]
+        provider: ["provision::provision_service"]
         include:
           - image: "centos-7"
             osfamily: "el-7-x86_64"
