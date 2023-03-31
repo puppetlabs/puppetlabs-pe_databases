@@ -65,7 +65,7 @@ jobs:
           echo ::endgroup::
           echo ::group::provision
               bundle exec bolt plan run peadm_spec::provision_test_cluster \
-                --modulepath spec/fixtures/modules/ \
+                --modulepath spec/fixtures/modules/peadm/spec/acceptance/peadm_spec \
                 provider=provision_service \
                 image=${{ matrix.image }} \
                 architecture=${{ matrix.architecture }}
