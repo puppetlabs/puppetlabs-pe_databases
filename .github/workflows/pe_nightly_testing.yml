@@ -34,12 +34,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        provider: ["provision::provision_service"]
-        include:
-          - image: "centos-7"
-            osfamily: "el-7-x86_64"
-          - image: "ubuntu-2004-lts"
-            osfamily: "ubuntu-20.04-amd64"
+        architecture:
+          - 'standard'
+        image:
+          - 'almalinux-cloud/almalinux-8'
 
     steps:
     - name: Checkout Source
@@ -56,24 +54,30 @@ jobs:
         bundle env
         echo ::endgroup::
 
-    - name: Provision test environment
+    - name: 'Provision test environment'
+      timeout-minutes: 15
       run: |
-        bundle exec rake 'litmus:provision[${{matrix.provider}},${{ matrix.image }}]'
-        echo ::group::=== REQUEST ===
-        cat request.json || true
-        echo
-        echo ::endgroup::
-        echo ::group::=== INVENTORY ===
-        if [ -f 'spec/fixtures/litmus_inventory.yaml' ];
-        then
-          FILE='spec/fixtures/litmus_inventory.yaml'
-        elif [ -f 'inventory.yaml' ];
-        then
-          FILE='inventory.yaml'
-        fi
-        sed -e 's/password: .*/password: "[redacted]"/' < $FILE || true
-        echo ::endgroup::
-        echo INVENTORY_PATH=$FILE >> $GITHUB_ENV
+          echo ::group::prepare
+            mkdir -p $HOME/.ssh
+            echo 'Host *'                      >  $HOME/.ssh/config
+            echo '    ServerAliveInterval 150' >> $HOME/.ssh/config
+            echo '    ServerAliveCountMax 2'   >> $HOME/.ssh/config
+            buildevents cmd $TRACE_ID $STEP_ID 'rake spec_prep' -- bundle exec rake spec_prep
+          echo ::endgroup::
+          echo ::group::provision
+            buildevents cmd $TRACE_ID $STEP_ID 'bolt plan run peadm_spec::provision_test_cluster' -- \
+              bundle exec bolt plan run peadm_spec::provision_test_cluster \
+                --modulepath spec/fixtures/modules \
+                provider=provision_service \
+                image=${{ matrix.image }} \
+                architecture=${{ matrix.architecture }}
+          echo ::endgroup::
+          echo ::group::info:request
+            cat request.json || true; echo
+          echo ::endgroup::
+          echo ::group::info:inventory
+            sed -e 's/password: .*/password: "[redacted]"/' < spec/fixtures/litmus_inventory.yaml || true
+          echo ::endgroup::
 
     - name: 'Activate'
       uses: twingate/github-action@v1
@@ -85,9 +89,17 @@ jobs:
       run: |
         echo "::set-output name=ver::$(curl -q https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/LATEST)"
 
-    - name: Install PE
+    - name: 'Install PE on test cluster'
+      timeout-minutes: 120
       run: |
-        bundle exec bolt --tmpdir /tmp --log-level debug  --modulepath spec/fixtures/modules  -i ./$INVENTORY_PATH plan run deploy_pe::provision_master --params '{"base_url":"https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local", "version":"main","nightly":true,"pe_settings":{"password":"puppetlabs", "configure_tuning": false}}'  --targets all --stream
+          buildevents cmd $TRACE_ID $STEP_ID 'bolt plan run peadm_spec::install_test_cluster' -- \
+            bundle exec bolt plan run peadm_spec::install_test_cluster \
+              --inventoryfile spec/fixtures/litmus_inventory.yaml \
+              --modulepath spec/fixtures/modules \
+              permit_unsafe_versions=true \
+              download_mode="bolthost" \
+              architecture=${{ matrix.architecture }} \
+              pe_installer_source="https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-el-8-x86_64.tar"
 
     - name: Install module
       run: |
