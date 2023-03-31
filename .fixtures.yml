@@ -23,4 +23,4 @@ fixtures:
     container_inventory: 'https://gitlab.com/nwops/bolt-container_inventory'
     peadm: 'https://github.com/puppetlabs/puppetlabs-peadm.git'
   symlinks:
-    "peadm_spec": "peadm/spec/acceptance/peadm_spec"
+    "peadm_spec": "peadm/spec/acceptance/peadm_spec/"
