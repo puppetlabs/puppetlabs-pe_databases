@@ -22,4 +22,5 @@ fixtures:
     format: 'https://github.com/voxpupuli/puppet-format'
     container_inventory: 'https://gitlab.com/nwops/bolt-container_inventory'
     peadm: 'https://github.com/puppetlabs/puppetlabs-peadm.git'
-    peadm-spec: 'https://github.com/puppetlabs/puppetlabs-peadm/tree/main/spec/acceptance/peadm_spec'
+  symlinks:
+    "peadm_spec": "/spec/fixtures/modules/peadm/spec/acceptance/peadm_spec"
