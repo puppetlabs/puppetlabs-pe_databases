@@ -62,10 +62,10 @@ jobs:
             echo 'Host *'                      >  $HOME/.ssh/config
             echo '    ServerAliveInterval 150' >> $HOME/.ssh/config
             echo '    ServerAliveCountMax 2'   >> $HOME/.ssh/config
-            buildevents cmd $TRACE_ID $STEP_ID 'rake spec_prep' -- bundle exec rake spec_prep
+            'rake spec_prep' -- bundle exec rake spec_prep
           echo ::endgroup::
           echo ::group::provision
-            buildevents cmd $TRACE_ID $STEP_ID 'bolt plan run peadm_spec::provision_test_cluster' -- \
+          'bolt plan run peadm_spec::provision_test_cluster' -- \
               bundle exec bolt plan run peadm_spec::provision_test_cluster \
                 --modulepath spec/fixtures/modules \
                 provider=provision_service \
