@@ -62,6 +62,7 @@ jobs:
             echo 'Host *'                      >  $HOME/.ssh/config
             echo '    ServerAliveInterval 150' >> $HOME/.ssh/config
             echo '    ServerAliveCountMax 2'   >> $HOME/.ssh/config
+            bundle exec rake spec_prep
           echo ::endgroup::
           echo ::group::provision
               bundle exec bolt plan show
