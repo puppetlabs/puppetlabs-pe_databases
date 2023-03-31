@@ -6,8 +6,6 @@ ipaddress: "172.16.254.254"
 ipaddress6: "FE80:0000:0000:0000:AAAA:AAAA:AAAA"
 is_pe: false
 macaddress: "AA:AA:AA:AA:AA:AA"
-pe_databases:
-  have_systemd: true
 pe_postgresql_info:
   installed_server_version: 11
 pe_server_version: 2019.8.6
