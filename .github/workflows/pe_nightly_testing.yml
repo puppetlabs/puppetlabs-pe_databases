@@ -62,7 +62,6 @@ jobs:
             echo 'Host *'                      >  $HOME/.ssh/config
             echo '    ServerAliveInterval 150' >> $HOME/.ssh/config
             echo '    ServerAliveCountMax 2'   >> $HOME/.ssh/config
-            'rake spec_prep' -- bundle exec rake spec_prep
           echo ::endgroup::
           echo ::group::provision
           'bolt plan run peadm_spec::provision_test_cluster' -- \
