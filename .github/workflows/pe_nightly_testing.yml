@@ -93,7 +93,6 @@ jobs:
     - name: 'Install PE on test cluster'
       timeout-minutes: 120
       run: |
-          buildevents cmd $TRACE_ID $STEP_ID 'bolt plan run peadm_spec::install_test_cluster' -- \
             bundle exec bolt plan run peadm_spec::install_test_cluster \
               --inventoryfile spec/fixtures/litmus_inventory.yaml \
               --modulepath spec/fixtures/modules \
