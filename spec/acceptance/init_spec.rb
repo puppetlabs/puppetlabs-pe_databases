@@ -19,6 +19,7 @@ describe 'pe_databases class' do
   end
 
   describe 'check systemd fact' do
+    run_shell('/opt/puppetlabs/bin/puppet plugin download')
     it 'is true on all supported OS' do
       expect(host_inventory['facter']['pe_databases']['have_systemd']).to eq true
     end
