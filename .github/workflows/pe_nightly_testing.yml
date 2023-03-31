@@ -37,7 +37,7 @@ jobs:
         architecture:
           - 'standard'
         image:
-          - 'almalinux-cloud/almalinux-8'
+          - 'centos-7'
 
     steps:
     - name: Checkout Source
@@ -65,8 +65,6 @@ jobs:
             bundle exec rake spec_prep
           echo ::endgroup::
           echo ::group::provision
-              bundle exec bolt plan show
-              ls -la spec/fixtures/modules
               bundle exec bolt plan run peadm_spec::provision_test_cluster \
                 --modulepath spec/fixtures/modules \
                 provider=provision_service \
