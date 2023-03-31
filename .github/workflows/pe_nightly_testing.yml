@@ -64,7 +64,6 @@ jobs:
             echo '    ServerAliveCountMax 2'   >> $HOME/.ssh/config
           echo ::endgroup::
           echo ::group::provision
-          'bolt plan run peadm_spec::provision_test_cluster' -- \
               bundle exec bolt plan run peadm_spec::provision_test_cluster \
                 --modulepath spec/fixtures/modules/ \
                 provider=provision_service \
