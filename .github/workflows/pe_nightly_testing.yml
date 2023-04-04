@@ -99,7 +99,9 @@ jobs:
               --log-level debug \
               architecture=${{ matrix.architecture }} \
               pe_installer_source="https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-el-7-x86_64.tar"
-
+    - name: Install module
+      run: |
+        bundle exec rake 'litmus:install_module'
     - name: Run acceptance tests
       run: |
         bundle exec rake 'litmus:acceptance:parallel'
