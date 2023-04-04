@@ -102,7 +102,7 @@ jobs:
     - name: Install module
       run: |
         export DEBUG=true
-        bundle exec rake 'litmus:install_module'
+        bundle exec rake 'litmus:install_module' --trace
     - name: Run acceptance tests
       run: |
         bundle exec rake 'litmus:acceptance:parallel'
