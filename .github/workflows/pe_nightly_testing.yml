@@ -95,7 +95,6 @@ jobs:
               --inventoryfile spec/fixtures/litmus_inventory.yaml \
               --modulepath spec/fixtures/modules \
               permit_unsafe_versions=true \
-              code_manager_auto_configure=false \
               download_mode="bolthost" \
               --log-level debug \
               architecture=${{ matrix.architecture }} \
