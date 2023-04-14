@@ -41,7 +41,7 @@ jobs:
         include:
           - image: centos-7
             os: el-7-x86_64
-          - image: ubuntu-20.04
+          - image: ubuntu-2004-lts
             os: ubuntu-20.04-amd64
 
     steps:
