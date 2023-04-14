@@ -3,6 +3,8 @@ name: "PE Nightly Acceptance Testing"
 on:
   workflow_dispatch:
   workflow_call:
+  schedule:
+    - cron:  '25 5 * * *'
 
 jobs:
   setup_matrix:
@@ -34,10 +36,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        architecture:
-          - 'standard'
-        image:
-          - 'centos-7'
+        architecture: [standard]
+        include:
+          - image: centos-7
+            os: el-7-x86_64
+          - image: ubuntu-20.04
+            os: ubuntu-20.04-amd64
 
     steps:
     - name: Checkout Source
@@ -99,7 +103,7 @@ jobs:
               download_mode="bolthost" \
               --log-level debug \
               architecture=${{ matrix.architecture }} \
-              pe_installer_source="https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-el-7-x86_64.tar"
+              pe_installer_source="https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-${{ matrix.os }}.tar"
     - name: Install module
       run: |
         bundle exec rake 'litmus:install_module'
