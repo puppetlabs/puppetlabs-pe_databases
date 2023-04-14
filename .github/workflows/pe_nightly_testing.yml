@@ -48,7 +48,7 @@ jobs:
           - image: ubuntu-2004-lts
             os: ubuntu-20.04-amd64
           - image: rhel-8
-            os: el-7-x86_64
+            os: el-8-x86_64
 
 
     steps:
