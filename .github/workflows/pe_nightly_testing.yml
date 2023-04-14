@@ -37,12 +37,27 @@ jobs:
       fail-fast: false
       matrix:
         architecture: [standard]
-        image: [centos-7, ubuntu-2004-lts]
+        image: [centos-7, ubuntu-1804-lts, ubuntu-2004-lts, rhel-7, rhel-8, sles-12, sles-15, almalinux-cloud, rocky-linux-cloud]
         include:
           - image: centos-7
             os: el-7-x86_64
+          - image: ubuntu-1804-lts
+            os: ubuntu-18.04-amd64
+          - image: rhel-7
+            os: el-7-x86_64
           - image: ubuntu-2004-lts
             os: ubuntu-20.04-amd64
+          - image: rhel-8
+            os: el-7-x86_64
+          - image: sles-12
+            os: sles-12-x86_64
+          - image: sles-15
+            os: sles-15-x86_64
+          - image: almalinux-cloud
+            os: el-8-x86_64
+          - image: rocky-linux-cloud
+            os: el-8-x86_64
+
 
     steps:
     - name: Checkout Source
