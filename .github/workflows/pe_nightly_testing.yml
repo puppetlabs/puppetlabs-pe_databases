@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         architecture: [standard]
-        image: [centos-7, ubuntu-20.04]
+        image: [centos-7, ubuntu-2004-lts]
         include:
           - image: centos-7
             os: el-7-x86_64
