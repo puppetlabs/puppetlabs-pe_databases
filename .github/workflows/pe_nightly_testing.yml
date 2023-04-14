@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Checkout Source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       if: ${{ github.repository_owner == 'puppetlabs' }}
 
     - name: Activate Ruby 2.7
@@ -37,16 +37,16 @@ jobs:
       fail-fast: false
       matrix:
         architecture: [standard]
-        image: [centos-7, ubuntu-1804-lts, ubuntu-2004-lts, rhel-7, rhel-8]
+        image: [centos-7, sles-12, sles-15, rhel-7, rhel-8]
         include:
           - image: centos-7
             os: el-7-x86_64
-          - image: ubuntu-1804-lts
-            os: ubuntu-18.04-amd64
+          - image: sles-12
+            os: sles-12-x86_64
           - image: rhel-7
             os: el-7-x86_64
-          - image: ubuntu-2004-lts
-            os: ubuntu-20.04-amd64
+          - image: sles-15
+            os: sles-15-x86_64
           - image: rhel-8
             os: el-8-x86_64
 
