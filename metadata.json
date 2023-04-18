@@ -21,22 +21,19 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "7"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "7"
       ]
     },
     {
-      "operatingsystem": "Debian",
+      "operatingsystem": "Scientific",
       "operatingsystemrelease": [
-        "9",
-        "10"
+        "7"
       ]
     },
     {
@@ -49,14 +46,27 @@
     {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "12"
+        "12",
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "RockyLinux",
+      "operatingsystemrelease": [
+        "8"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.16.0 < 8.0.0"
+      "version_requirement": ">= 7.18.0 < 8.0.0"
     }
   ],
   "pdk-version": "2.4.0",
