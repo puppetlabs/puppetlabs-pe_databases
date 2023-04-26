@@ -9,6 +9,10 @@
 # @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
 # @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
 # @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
+# @param manage_postgresql_settings [Boolean] Deprecated Parameter will be removed in future releases
+# @param manage_table_settings [Boolean] Deprecated Parameter will be removed in future releases
+# @param reports_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
+# @param resource_events_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
 class pe_databases (
   Boolean $manage_database_maintenance           = true,
   Boolean $disable_maintenance                   = false,
@@ -22,10 +26,10 @@ class pe_databases (
   Optional[String] $reports_tables_repack_timer         = undef,
   Optional[String] $resource_events_tables_repack_timer = undef,
 ) {
-  puppet_enterprise::deprecated_parameter{'pe_databases::manage_postgresql_settings': }
-  puppet_enterprise::deprecated_parameter{'pe_databases::manage_table_settings': }
-  puppet_enterprise::deprecated_parameter{'pe_databases::reports_tables_repack_timer': }
-  puppet_enterprise::deprecated_parameter{'pe_databases::resource_events_tables_repack_timer': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::manage_postgresql_settings': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::manage_table_settings': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::reports_tables_repack_timer': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::resource_events_tables_repack_timer': }
 
   file { [$install_dir, $scripts_dir]:
     ensure => directory,
