@@ -36,8 +36,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        architecture: [standards]
-        image: [centos-7, sles-12, sles-15, rhel-7, rhel-8]
+        architecture: [standard]
+        image: [centos-7, sles-12, sles-15, rhel-7, rhel-8, centos-15]
         include:
           - image: centos-7
             os: el-7-x86_64
