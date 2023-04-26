@@ -22,10 +22,10 @@ class pe_databases (
   Optional[String] $reports_tables_repack_timer         = undef,
   Optional[String] $resource_events_tables_repack_timer = undef,
 ) {
-  puppet_enterprise::deprecated_parameter{'pe_databases::manage_postgresql_settings': }
-  puppet_enterprise::deprecated_parameter{'pe_databases::manage_table_settings': }
-  puppet_enterprise::deprecated_parameter{'pe_databases::reports_tables_repack_timer': }
-  puppet_enterprise::deprecated_parameter{'pe_databases::resource_events_tables_repack_timer': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::manage_postgresql_settings': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::manage_table_settings': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::reports_tables_repack_timer': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::resource_events_tables_repack_timer': }
 
   file { [$install_dir, $scripts_dir]:
     ensure => directory,

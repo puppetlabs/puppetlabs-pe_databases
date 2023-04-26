@@ -18,8 +18,8 @@ class pe_databases::pg_repack (
   Optional[String] $reports_tables_repack_timer         = undef,
   Optional[String] $resource_events_tables_repack_timer = undef,
 ) {
-  puppet_enterprise::deprecated_parameter{'pe_databases::pg_repack::reports_tables_repack_timer': }
-  puppet_enterprise::deprecated_parameter{'pe_databases::pg_repack::resource_events_tables_repack_timer': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::pg_repack::reports_tables_repack_timer': }
+  puppet_enterprise::deprecated_parameter { 'pe_databases::pg_repack::resource_events_tables_repack_timer': }
 
   $postgresql_version = $facts['pe_postgresql_info']['installed_server_version']
   $repack_executable = "/opt/puppetlabs/server/apps/postgresql/${postgresql_version}/bin/pg_repack"
