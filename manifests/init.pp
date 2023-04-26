@@ -9,6 +9,10 @@
 # @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
 # @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
 # @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
+# @param manage_postgresql_settings [Boolean] Deprecated Parameter will be removed in future releases
+# @param manage_table_settings [Boolean] Deprecated Parameter will be removed in future releases
+# @param reports_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
+# @param resource_events_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
 class pe_databases (
   Boolean $manage_database_maintenance           = true,
   Boolean $disable_maintenance                   = false,

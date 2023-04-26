@@ -9,6 +9,8 @@
 # @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
 # @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
 # @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
+# @param reports_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
+# @param resource_events_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
 class pe_databases::pg_repack (
   Boolean $disable_maintenance                          = false,
   Integer $jobs                                         = $facts['processors']['count'] / 4,
