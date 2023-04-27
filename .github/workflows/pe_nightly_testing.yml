@@ -16,11 +16,11 @@ jobs:
       uses: actions/checkout@v3
       if: ${{ github.repository_owner == 'puppetlabs' }}
 
-    - name: Activate Ruby 3.1
+    - name: Activate Ruby 2.7
       uses: ruby/setup-ruby@v1
       if: ${{ github.repository_owner == 'puppetlabs' }}
       with:
-        ruby-version: "3.1"
+        ruby-version: "2.7"
         bundler-cache: true
 
     - name: Print bundle environment
@@ -50,6 +50,8 @@ jobs:
           - image: rhel-8
             os: el-8-x86_64
 
+    env:
+      PUPPET_GEM_VERSION: '~> 7.24'
 
     steps:
     - name: Checkout Source
