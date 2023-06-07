@@ -3,12 +3,13 @@
 # @param command [String] defined in pg_repack.pp
 # @param disable_maintenance [Boolean] to disable maintenance mode (Default: false)
 # @param on_cal [String] values can be found in pg_repack.pp
-#
+# @param tables [Array] Array of tables to repack
 define pe_databases::collect (
   String  $database_type       = $title,
   String  $command             = undef,
   Boolean $disable_maintenance = false,
   String  $on_cal              = undef,
+  Array   $tables              = undef,
 ) {
   Service {
     notify  => Exec['pe_databases_daemon_reload'],
@@ -27,9 +28,13 @@ define pe_databases::collect (
     default => present
   }
 
+  $tables_command = $tables.map |$table| { "-t ${table}" }.join(' ')
+
+  $repack_command = "${command} ${tables_command}"
+
   file { "/etc/systemd/system/pe_databases-${database_type}.service":
     ensure  => $ensure_file,
-    content => epp('pe_databases/service.epp', { 'tables' => $database_type, 'command' => $command }),
+    content => epp('pe_databases/service.epp', { 'tables' => $database_type, 'command' => $repack_command }),
   }
   file { "/etc/systemd/system/pe_databases-${database_type}.timer":
     ensure  => $ensure_file,

@@ -1,23 +1,33 @@
 # Maintenance pg_repack
 #
-# @summary 
-#   Provides systemd timers to pg_repack tables in the pe-puppetdb database
-# 
+# @summary
+#   Provides systemd timers to pg_repack tables in a given database
+# @param fact_tables [Array] Array of 'fact' tables to repack
+# @param catalog_tables [Array] Array of 'catalog' tables to repack
+# @param other_tables [Array] Array of 'other' tables to repack
+# @param activity_tables [Array] Array of 'activity' tables to repack
 # @param disable_maintenance [Boolean] true or false (Default: false)
 #   Disable or enable maintenance mode
 # @param jobs [Integer] How many jobs to run in parallel
 # @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
 # @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
 # @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
+# @param activity_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'activity' tables
 # @param reports_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
 # @param resource_events_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
 class pe_databases::pg_repack (
-  Boolean $disable_maintenance                          = false,
-  Integer $jobs                                         = $facts['processors']['count'] / 4,
-  String[1] $facts_tables_repack_timer                  = $pe_databases::facts_tables_repack_timer,
-  String[1] $catalogs_tables_repack_timer               = $pe_databases::catalogs_tables_repack_timer,
-  String[1] $other_tables_repack_timer                  = $pe_databases::other_tables_repack_timer,
-  Optional[String] $reports_tables_repack_timer         = undef,
+  # Provided by module data
+  Array $fact_tables,
+  Array $catalog_tables,
+  Array $other_tables,
+  Array $activity_tables,
+  Boolean $disable_maintenance = false,
+  Integer $jobs = $facts['processors']['count'] / 4,
+  String[1] $facts_tables_repack_timer = $pe_databases::facts_tables_repack_timer,
+  String[1] $catalogs_tables_repack_timer = $pe_databases::catalogs_tables_repack_timer,
+  String[1] $other_tables_repack_timer = $pe_databases::other_tables_repack_timer,
+  String[1] $activity_tables_repack_timer = $pe_databases::activity_tables_repack_timer,
+  Optional[String] $reports_tables_repack_timer = undef,
   Optional[String] $resource_events_tables_repack_timer = undef,
 ) {
   puppet_enterprise::deprecated_parameter { 'pe_databases::pg_repack::reports_tables_repack_timer': }
@@ -26,28 +36,34 @@ class pe_databases::pg_repack (
   $postgresql_version = $facts['pe_postgresql_info']['installed_server_version']
   $repack_executable = "/opt/puppetlabs/server/apps/postgresql/${postgresql_version}/bin/pg_repack"
 
-  $repack_cmd = "${repack_executable} -d pe-puppetdb --jobs ${jobs}"
-
-  $fact_tables = '-t factsets -t fact_paths'
-  $catalog_tables = '-t catalogs -t catalog_resources -t catalog_inputs -t edges -t certnames'
-  $other_tables = '-t producers -t resource_params -t resource_params_cache'
+  $repack_cmd = "${repack_executable} --jobs ${jobs}"
 
   pe_databases::collect { 'facts':
     disable_maintenance => $disable_maintenance,
-    command             => "${repack_cmd} ${fact_tables}",
+    command             => "${repack_cmd} -d pe-puppetdb",
     on_cal              => $facts_tables_repack_timer,
+    tables              => $fact_tables,
   }
 
   pe_databases::collect { 'catalogs':
     disable_maintenance => $disable_maintenance,
-    command             => "${repack_cmd} ${catalog_tables}",
+    command             => "${repack_cmd} -d pe-puppetdb",
     on_cal              => $catalogs_tables_repack_timer,
+    tables              => $catalog_tables,
   }
 
   pe_databases::collect { 'other':
     disable_maintenance => $disable_maintenance,
-    command             => "${repack_cmd} ${other_tables}",
+    command             => "${repack_cmd} -d pe-puppetdb",
     on_cal              => $other_tables_repack_timer,
+    tables              => $other_tables,
+  }
+
+  pe_databases::collect { 'activity':
+    disable_maintenance => $disable_maintenance,
+    command             => "${repack_cmd} -d pe-activity",
+    on_cal              => $activity_tables_repack_timer,
+    tables              => $activity_tables,
   }
 
   # Ensure legacy vaccum and pg_repack crons are purged.
