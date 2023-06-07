@@ -21,6 +21,6 @@ fixtures:
     debug: 'https://github.com/nwops/puppet-debug'
     format: 'https://github.com/voxpupuli/puppet-format'
     container_inventory: 'https://gitlab.com/nwops/bolt-container_inventory'
-    peadm: 'https://github.com/elainemccloskey/puppetlabs-peadm.git'
+    peadm: 'https://github.com/puppetlabs/puppetlabs-peadm.git'
   symlinks:
     peadm_spec: "#{source_dir}/spec/fixtures/modules/peadm/spec/acceptance/peadm_spec/"
