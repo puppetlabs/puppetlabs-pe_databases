@@ -9,20 +9,23 @@
 # @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
 # @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
 # @param other_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'other' tables
+# @param activity_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'activity' tables
 # @param manage_postgresql_settings [Boolean] Deprecated Parameter will be removed in future releases
 # @param manage_table_settings [Boolean] Deprecated Parameter will be removed in future releases
 # @param reports_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
 # @param resource_events_tables_repack_timer [String] Deprecated Parameter will be removed in future releases
 class pe_databases (
+  # Provided by module data
+  String[1] $facts_tables_repack_timer,
+  String[1] $catalogs_tables_repack_timer,
+  String[1] $other_tables_repack_timer,
+  String[1] $activity_tables_repack_timer,
   Boolean $manage_database_maintenance           = true,
   Boolean $disable_maintenance                   = false,
   Optional[Boolean] $manage_postgresql_settings  = undef,
   Optional[Boolean] $manage_table_settings       = undef,
   String[1] $install_dir                         = '/opt/puppetlabs/pe_databases',
   String[1] $scripts_dir                         = "${install_dir}/scripts",
-  String[1] $facts_tables_repack_timer           = 'Tue,Sat *-*-* 04:30:00',
-  String[1] $catalogs_tables_repack_timer        = 'Sun,Thu *-*-* 04:30:00',
-  String[1] $other_tables_repack_timer           = '*-*-20 05:30:00',
   Optional[String] $reports_tables_repack_timer         = undef,
   Optional[String] $resource_events_tables_repack_timer = undef,
 ) {

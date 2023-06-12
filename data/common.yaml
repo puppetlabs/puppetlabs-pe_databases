@@ -1,0 +1,24 @@
+pe_databases::facts_tables_repack_timer:
+  'Tue,Sat *-*-* 04:30:00'
+pe_databases::catalogs_tables_repack_timer:
+  'Sun,Thu *-*-* 04:30:00'
+pe_databases::other_tables_repack_timer:
+  '*-*-20 05:30:00'
+pe_databases::activity_tables_repack_timer:
+  'Wed,Fri *-*-* 04:30:00'
+pe_databases::pg_repack::fact_tables:
+  - factsets
+  - fact_paths
+pe_databases::pg_repack::catalog_tables:
+  - catalogs
+  - catalog_resources
+  - catalog_inputs
+  - edges
+  - certnames
+pe_databases::pg_repack::other_tables:
+  - producers
+  - resource_params
+  - resource_params_cache
+pe_databases::pg_repack::activity_tables:
+  - events
+  - event_commits

@@ -2,20 +2,28 @@ require 'spec_helper'
 
 describe 'pe_databases::pg_repack' do
   let(:facts) { { processors: { count: 4 } } }
-  let(:repack_cmd) { '/opt/puppetlabs/server/apps/postgresql/11/bin/pg_repack -d pe-puppetdb --jobs 1' }
+  let(:repack_cmd) { '/opt/puppetlabs/server/apps/postgresql/11/bin/pg_repack --jobs 1' }
   let(:tables_hash) do
     {
       facts: {
         tables: '-t factsets -t fact_paths',
-        schedule: 'Tue,Sat \*-\*-\* 04:30:00'
+        schedule: 'Tue,Sat \*-\*-\* 04:30:00',
+        database: '-d pe-puppetdb',
       },
       catalogs: {
         tables: '-t catalogs -t catalog_resources -t catalog_inputs -t edges -t certnames',
         schedule: 'Sun,Thu \*-\*-\* 04:30:00',
+        database: '-d pe-puppetdb',
       },
       other: {
         tables: '-t producers -t resource_params -t resource_params_cache',
         schedule: '\*-\*-20 05:30:00',
+        database: '-d pe-puppetdb',
+      },
+      activity: {
+        tables: '-t events -t event_commits',
+        schedule: 'Wed,Fri \*-\*-\* 04:30:00',
+        database: '-d pe-activity',
       }
     }
   end
@@ -48,7 +56,7 @@ describe 'pe_databases::pg_repack' do
       tables_hash.each do |name, val|
         is_expected.to contain_pe_databases__collect(name).with(
           disable_maintenance: false,
-          command: "#{repack_cmd} #{val[:tables]}",
+          command: "#{repack_cmd} #{val[:database]}",
           # Strip the backslash character because this is not a regex
           on_cal: (val[:schedule]).to_s.tr('\\', ''),
         )
@@ -58,7 +66,7 @@ describe 'pe_databases::pg_repack' do
 
         is_expected.to contain_file("/etc/systemd/system/pe_databases-#{name}.timer").with_content(%r{OnCalendar=#{val[:schedule]}})
         is_expected.to contain_file("/etc/systemd/system/pe_databases-#{name}.service").with_content(
-          %r{ExecStart=#{repack_cmd} #{val[:tables]}},
+          %r{ExecStart=#{repack_cmd} #{val[:database]} #{val[:tables]}},
         )
 
         [

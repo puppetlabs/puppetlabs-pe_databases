@@ -13,6 +13,7 @@ describe 'pe_databases::collect' do
       {
         command: 'foo',
         on_cal: 'bar',
+        tables: ['baz'],
       }
     end
 
@@ -22,7 +23,7 @@ describe 'pe_databases::collect' do
 
       is_expected.to contain_file('/etc/systemd/system/pe_databases-test.timer').with_content(%r{bar})
       is_expected.to contain_file('/etc/systemd/system/pe_databases-test.service').with_content(
-        %r{ExecStart=foo},
+        %r{ExecStart=foo.*-t baz},
       )
 
       is_expected.to contain_service('pe_databases-test.service').that_notifies(
@@ -47,6 +48,7 @@ describe 'pe_databases::collect' do
         disable_maintenance: true,
         command: 'foo',
         on_cal: 'bar',
+        tables: ['baz'],
       }
     end
 
