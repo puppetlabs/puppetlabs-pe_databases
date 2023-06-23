@@ -7,11 +7,11 @@
 ### Classes
 
 * [`pe_databases`](#pe_databases): Tuning, maintenance for PE PostgreSQL.
-* [`pe_databases::pg_repack`](#pe_databasespg_repack): Provides systemd timers to pg_repack tables in the pe-puppetdb database
+* [`pe_databases::pg_repack`](#pe_databases--pg_repack): Provides systemd timers to pg_repack tables in a given database
 
 ### Defined types
 
-* [`pe_databases::collect`](#pe_databasescollect): Create systemd units for repacking a given database type
+* [`pe_databases::collect`](#pe_databases--collect): Create systemd units for repacking a given database type
 
 ### Tasks
 
@@ -27,37 +27,38 @@ Tuning, maintenance for PE PostgreSQL.
 
 The following parameters are available in the `pe_databases` class:
 
-* [`manage_database_maintenance`](#manage_database_maintenance)
-* [`disable_maintenance`](#disable_maintenance)
-* [`install_dir`](#install_dir)
-* [`scripts_dir`](#scripts_dir)
-* [`facts_tables_repack_timer`](#facts_tables_repack_timer)
-* [`catalogs_tables_repack_timer`](#catalogs_tables_repack_timer)
-* [`other_tables_repack_timer`](#other_tables_repack_timer)
-* [`manage_postgresql_settings`](#manage_postgresql_settings)
-* [`manage_table_settings`](#manage_table_settings)
-* [`reports_tables_repack_timer`](#reports_tables_repack_timer)
-* [`resource_events_tables_repack_timer`](#resource_events_tables_repack_timer)
+* [`manage_database_maintenance`](#-pe_databases--manage_database_maintenance)
+* [`disable_maintenance`](#-pe_databases--disable_maintenance)
+* [`install_dir`](#-pe_databases--install_dir)
+* [`scripts_dir`](#-pe_databases--scripts_dir)
+* [`facts_tables_repack_timer`](#-pe_databases--facts_tables_repack_timer)
+* [`catalogs_tables_repack_timer`](#-pe_databases--catalogs_tables_repack_timer)
+* [`other_tables_repack_timer`](#-pe_databases--other_tables_repack_timer)
+* [`activity_tables_repack_timer`](#-pe_databases--activity_tables_repack_timer)
+* [`manage_postgresql_settings`](#-pe_databases--manage_postgresql_settings)
+* [`manage_table_settings`](#-pe_databases--manage_table_settings)
+* [`reports_tables_repack_timer`](#-pe_databases--reports_tables_repack_timer)
+* [`resource_events_tables_repack_timer`](#-pe_databases--resource_events_tables_repack_timer)
 
-##### <a name="manage_database_maintenance"></a>`manage_database_maintenance`
+##### <a name="-pe_databases--manage_database_maintenance"></a>`manage_database_maintenance`
 
 Data type: `Boolean`
 
 true or false (Default: true)
 Manage the inclusion of the pg_repack class
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="disable_maintenance"></a>`disable_maintenance`
+##### <a name="-pe_databases--disable_maintenance"></a>`disable_maintenance`
 
 Data type: `Boolean`
 
 true or false (Default: false)
 Disable or enable maintenance mode
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="install_dir"></a>`install_dir`
+##### <a name="-pe_databases--install_dir"></a>`install_dir`
 
 Data type: `String[1]`
 
@@ -65,7 +66,7 @@ Directory to install module into (Default: "/opt/puppetlabs/pe_databases")
 
 Default value: `'/opt/puppetlabs/pe_databases'`
 
-##### <a name="scripts_dir"></a>`scripts_dir`
+##### <a name="-pe_databases--scripts_dir"></a>`scripts_dir`
 
 Data type: `String[1]`
 
@@ -73,63 +74,63 @@ Directory to install scripts into (Default: "${install_dir}/scripts")
 
 Default value: `"${install_dir}/scripts"`
 
-##### <a name="facts_tables_repack_timer"></a>`facts_tables_repack_timer`
+##### <a name="-pe_databases--facts_tables_repack_timer"></a>`facts_tables_repack_timer`
 
 Data type: `String[1]`
 
 The Systemd timer for the pg_repack job affecting the 'facts' tables
 
-Default value: `'Tue,Sat *-*-* 04:30:00'`
-
-##### <a name="catalogs_tables_repack_timer"></a>`catalogs_tables_repack_timer`
+##### <a name="-pe_databases--catalogs_tables_repack_timer"></a>`catalogs_tables_repack_timer`
 
 Data type: `String[1]`
 
 The Systemd timer for the pg_repack job affecting the 'catalog' tables
 
-Default value: `'Sun,Thu *-*-* 04:30:00'`
-
-##### <a name="other_tables_repack_timer"></a>`other_tables_repack_timer`
+##### <a name="-pe_databases--other_tables_repack_timer"></a>`other_tables_repack_timer`
 
 Data type: `String[1]`
 
 The Systemd timer for the pg_repack job affecting the 'other' tables
 
-Default value: `'*-*-20 05:30:00'`
+##### <a name="-pe_databases--activity_tables_repack_timer"></a>`activity_tables_repack_timer`
 
-##### <a name="manage_postgresql_settings"></a>`manage_postgresql_settings`
+Data type: `String[1]`
 
-Data type: `Optional[Boolean]`
+The Systemd timer for the pg_repack job affecting the 'activity' tables
 
-
-
-Default value: ``undef``
-
-##### <a name="manage_table_settings"></a>`manage_table_settings`
+##### <a name="-pe_databases--manage_postgresql_settings"></a>`manage_postgresql_settings`
 
 Data type: `Optional[Boolean]`
 
+Deprecated Parameter will be removed in future releases
 
+Default value: `undef`
 
-Default value: ``undef``
+##### <a name="-pe_databases--manage_table_settings"></a>`manage_table_settings`
 
-##### <a name="reports_tables_repack_timer"></a>`reports_tables_repack_timer`
+Data type: `Optional[Boolean]`
+
+Deprecated Parameter will be removed in future releases
+
+Default value: `undef`
+
+##### <a name="-pe_databases--reports_tables_repack_timer"></a>`reports_tables_repack_timer`
 
 Data type: `Optional[String]`
 
+Deprecated Parameter will be removed in future releases
 
+Default value: `undef`
 
-Default value: ``undef``
-
-##### <a name="resource_events_tables_repack_timer"></a>`resource_events_tables_repack_timer`
+##### <a name="-pe_databases--resource_events_tables_repack_timer"></a>`resource_events_tables_repack_timer`
 
 Data type: `Optional[String]`
 
+Deprecated Parameter will be removed in future releases
 
+Default value: `undef`
 
-Default value: ``undef``
-
-### <a name="pe_databasespg_repack"></a>`pe_databases::pg_repack`
+### <a name="pe_databases--pg_repack"></a>`pe_databases::pg_repack`
 
 Maintenance pg_repack
 
@@ -137,32 +138,61 @@ Maintenance pg_repack
 
 The following parameters are available in the `pe_databases::pg_repack` class:
 
-* [`disable_maintenance`](#disable_maintenance)
-* [`jobs`](#jobs)
-* [`facts_tables_repack_timer`](#facts_tables_repack_timer)
-* [`catalogs_tables_repack_timer`](#catalogs_tables_repack_timer)
-* [`other_tables_repack_timer`](#other_tables_repack_timer)
-* [`reports_tables_repack_timer`](#reports_tables_repack_timer)
-* [`resource_events_tables_repack_timer`](#resource_events_tables_repack_timer)
+* [`fact_tables`](#-pe_databases--pg_repack--fact_tables)
+* [`catalog_tables`](#-pe_databases--pg_repack--catalog_tables)
+* [`other_tables`](#-pe_databases--pg_repack--other_tables)
+* [`activity_tables`](#-pe_databases--pg_repack--activity_tables)
+* [`disable_maintenance`](#-pe_databases--pg_repack--disable_maintenance)
+* [`jobs`](#-pe_databases--pg_repack--jobs)
+* [`facts_tables_repack_timer`](#-pe_databases--pg_repack--facts_tables_repack_timer)
+* [`catalogs_tables_repack_timer`](#-pe_databases--pg_repack--catalogs_tables_repack_timer)
+* [`other_tables_repack_timer`](#-pe_databases--pg_repack--other_tables_repack_timer)
+* [`activity_tables_repack_timer`](#-pe_databases--pg_repack--activity_tables_repack_timer)
+* [`reports_tables_repack_timer`](#-pe_databases--pg_repack--reports_tables_repack_timer)
+* [`resource_events_tables_repack_timer`](#-pe_databases--pg_repack--resource_events_tables_repack_timer)
 
-##### <a name="disable_maintenance"></a>`disable_maintenance`
+##### <a name="-pe_databases--pg_repack--fact_tables"></a>`fact_tables`
+
+Data type: `Array`
+
+Array of 'fact' tables to repack
+
+##### <a name="-pe_databases--pg_repack--catalog_tables"></a>`catalog_tables`
+
+Data type: `Array`
+
+Array of 'catalog' tables to repack
+
+##### <a name="-pe_databases--pg_repack--other_tables"></a>`other_tables`
+
+Data type: `Array`
+
+Array of 'other' tables to repack
+
+##### <a name="-pe_databases--pg_repack--activity_tables"></a>`activity_tables`
+
+Data type: `Array`
+
+Array of 'activity' tables to repack
+
+##### <a name="-pe_databases--pg_repack--disable_maintenance"></a>`disable_maintenance`
 
 Data type: `Boolean`
 
 true or false (Default: false)
 Disable or enable maintenance mode
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="jobs"></a>`jobs`
+##### <a name="-pe_databases--pg_repack--jobs"></a>`jobs`
 
 Data type: `Integer`
 
 How many jobs to run in parallel
 
-Default value: `/`
+Default value: `$facts['processors']['count'] / 4`
 
-##### <a name="facts_tables_repack_timer"></a>`facts_tables_repack_timer`
+##### <a name="-pe_databases--pg_repack--facts_tables_repack_timer"></a>`facts_tables_repack_timer`
 
 Data type: `String[1]`
 
@@ -170,7 +200,7 @@ The Systemd timer for the pg_repack job affecting the 'facts' tables
 
 Default value: `$pe_databases::facts_tables_repack_timer`
 
-##### <a name="catalogs_tables_repack_timer"></a>`catalogs_tables_repack_timer`
+##### <a name="-pe_databases--pg_repack--catalogs_tables_repack_timer"></a>`catalogs_tables_repack_timer`
 
 Data type: `String[1]`
 
@@ -178,7 +208,7 @@ The Systemd timer for the pg_repack job affecting the 'catalog' tables
 
 Default value: `$pe_databases::catalogs_tables_repack_timer`
 
-##### <a name="other_tables_repack_timer"></a>`other_tables_repack_timer`
+##### <a name="-pe_databases--pg_repack--other_tables_repack_timer"></a>`other_tables_repack_timer`
 
 Data type: `String[1]`
 
@@ -186,25 +216,33 @@ The Systemd timer for the pg_repack job affecting the 'other' tables
 
 Default value: `$pe_databases::other_tables_repack_timer`
 
-##### <a name="reports_tables_repack_timer"></a>`reports_tables_repack_timer`
+##### <a name="-pe_databases--pg_repack--activity_tables_repack_timer"></a>`activity_tables_repack_timer`
+
+Data type: `String[1]`
+
+The Systemd timer for the pg_repack job affecting the 'activity' tables
+
+Default value: `$pe_databases::activity_tables_repack_timer`
+
+##### <a name="-pe_databases--pg_repack--reports_tables_repack_timer"></a>`reports_tables_repack_timer`
 
 Data type: `Optional[String]`
 
+Deprecated Parameter will be removed in future releases
 
+Default value: `undef`
 
-Default value: ``undef``
-
-##### <a name="resource_events_tables_repack_timer"></a>`resource_events_tables_repack_timer`
+##### <a name="-pe_databases--pg_repack--resource_events_tables_repack_timer"></a>`resource_events_tables_repack_timer`
 
 Data type: `Optional[String]`
 
+Deprecated Parameter will be removed in future releases
 
-
-Default value: ``undef``
+Default value: `undef`
 
 ## Defined types
 
-### <a name="pe_databasescollect"></a>`pe_databases::collect`
+### <a name="pe_databases--collect"></a>`pe_databases::collect`
 
 Create systemd units for repacking a given database type
 
@@ -212,12 +250,13 @@ Create systemd units for repacking a given database type
 
 The following parameters are available in the `pe_databases::collect` defined type:
 
-* [`database_type`](#database_type)
-* [`command`](#command)
-* [`disable_maintenance`](#disable_maintenance)
-* [`on_cal`](#on_cal)
+* [`database_type`](#-pe_databases--collect--database_type)
+* [`command`](#-pe_databases--collect--command)
+* [`disable_maintenance`](#-pe_databases--collect--disable_maintenance)
+* [`on_cal`](#-pe_databases--collect--on_cal)
+* [`tables`](#-pe_databases--collect--tables)
 
-##### <a name="database_type"></a>`database_type`
+##### <a name="-pe_databases--collect--database_type"></a>`database_type`
 
 Data type: `String`
 
@@ -225,29 +264,37 @@ The database to repack, uses titles from pg_repack.pp
 
 Default value: `$title`
 
-##### <a name="command"></a>`command`
+##### <a name="-pe_databases--collect--command"></a>`command`
 
 Data type: `String`
 
 defined in pg_repack.pp
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="disable_maintenance"></a>`disable_maintenance`
+##### <a name="-pe_databases--collect--disable_maintenance"></a>`disable_maintenance`
 
 Data type: `Boolean`
 
 to disable maintenance mode (Default: false)
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="on_cal"></a>`on_cal`
+##### <a name="-pe_databases--collect--on_cal"></a>`on_cal`
 
 Data type: `String`
 
 values can be found in pg_repack.pp
 
-Default value: ``undef``
+Default value: `undef`
+
+##### <a name="-pe_databases--collect--tables"></a>`tables`
+
+Data type: `Array`
+
+Array of tables to repack
+
+Default value: `undef`
 
 ## Tasks
 
