@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.0.0) (2023-06-23)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v3.0.0...v4.0.0)
+
+### Changed
+
+- \(SUP-3952\) Remove Puppet 6 as a supported platform [\#118](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/118) ([elainemccloskey](https://github.com/elainemccloskey))
+
+### Added
+
+- \(SUP-3972\) Add activity tables to repack [\#123](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/123) ([m0dular](https://github.com/m0dular))
+- \(SUP-4193\) Puppet 8 Compatibility [\#120](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/120) ([MartyEwings](https://github.com/MartyEwings))
+
 ## [v3.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v3.0.0) (2022-11-08)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.3.0...v3.0.0)
