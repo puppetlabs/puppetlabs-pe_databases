@@ -8,6 +8,9 @@
 # @param activity_tables [Array] Array of 'activity' tables to repack
 # @param disable_maintenance [Boolean] true or false (Default: false)
 #   Disable or enable maintenance mode
+# @param repack_log_level [Enum] Desired output level of logs
+# @param enable_echo [Boolean] true or false (Default: true)
+#   Enabling echo output in logs
 # @param jobs [Integer] How many jobs to run in parallel
 # @param facts_tables_repack_timer [String] The Systemd timer for the pg_repack job affecting the 'facts' tables
 # @param catalogs_tables_repack_timer [String]The Systemd timer for the pg_repack job affecting the 'catalog' tables
@@ -22,6 +25,8 @@ class pe_databases::pg_repack (
   Array $other_tables,
   Array $activity_tables,
   Boolean $disable_maintenance = false,
+  Enum['INFO','NOTICE','WARNING','ERROR','LOG','FATAL','PANIC','DEBUG'] $repack_log_level='DEBUG',
+  Boolean $enable_echo = true,
   Integer $jobs = $facts['processors']['count'] / 4,
   String[1] $facts_tables_repack_timer = $pe_databases::facts_tables_repack_timer,
   String[1] $catalogs_tables_repack_timer = $pe_databases::catalogs_tables_repack_timer,
@@ -36,7 +41,11 @@ class pe_databases::pg_repack (
   $postgresql_version = $facts['pe_postgresql_info']['installed_server_version']
   $repack_executable = "/opt/puppetlabs/server/apps/postgresql/${postgresql_version}/bin/pg_repack"
 
-  $repack_cmd = "${repack_executable} --jobs ${jobs}"
+  if $enable_echo {
+    $repack_cmd = "${repack_executable} --jobs ${jobs} --elevel ${repack_log_level} --echo"
+  } else {
+    $repack_cmd = "${repack_executable} --jobs ${jobs} --elevel ${repack_log_level}"
+  }
 
   pe_databases::collect { 'facts':
     disable_maintenance => $disable_maintenance,
