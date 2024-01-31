@@ -27,16 +27,16 @@ describe 'pe_databases::pg_repack' do
       }
     }
   end
+  let(:pre_condition) do
+    <<-PRE_COND
+    define puppet_enterprise::deprecated_parameter() {}
+
+    include pe_databases
+    PRE_COND
+  end
 
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      let(:pre_condition) do
-        <<-PRE_COND
-        define puppet_enterprise::deprecated_parameter() {}
-
-        include pe_databases
-        PRE_COND
-      end
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
@@ -44,19 +44,11 @@ describe 'pe_databases::pg_repack' do
   end
 
   context 'with default parameters' do
-    let(:pre_condition) do
-      <<-PRE_COND
-      define puppet_enterprise::deprecated_parameter() {}
-
-      include pe_databases
-      PRE_COND
-    end
-
     it {
       tables_hash.each do |name, val|
         is_expected.to contain_pe_databases__collect(name).with(
           disable_maintenance: false,
-          command: "#{repack_cmd} #{val[:database]}",
+          command: "#{repack_cmd} --elevel DEBUG --echo #{val[:database]}",
           # Strip the backslash character because this is not a regex
           on_cal: (val[:schedule]).to_s.tr('\\', ''),
         )
@@ -66,7 +58,7 @@ describe 'pe_databases::pg_repack' do
 
         is_expected.to contain_file("/etc/systemd/system/pe_databases-#{name}.timer").with_content(%r{OnCalendar=#{val[:schedule]}})
         is_expected.to contain_file("/etc/systemd/system/pe_databases-#{name}.service").with_content(
-          %r{ExecStart=#{repack_cmd} #{val[:database]} #{val[:tables]}},
+          %r{ExecStart=#{repack_cmd} --elevel DEBUG --echo #{val[:database]} #{val[:tables]}},
         )
 
         [
@@ -100,6 +92,23 @@ describe 'pe_databases::pg_repack' do
     it {
       is_expected.to contain_pe_databases__collect('facts').with(
         on_cal: 'Tue *-*-* 04:20:00',
+      )
+    }
+  end
+
+  context 'when customizing log parameters' do
+    # Load the rspec hieradata.  This data sets repack_log_level: 'INFO' and enable_echo: false
+    let(:hiera_config) { 'hiera-rspec.yaml' }
+
+    it {
+      # The command should have --elevel INFO and not contain --echo according to the hieradata
+      is_expected.to contain_pe_databases__collect('facts').with(
+        command: "#{repack_cmd} --elevel INFO #{tables_hash[:facts][:database]}",
+      )
+
+      # The service file should have --elevel INFO and not contain --echo according to the hieradata
+      is_expected.to contain_file('/etc/systemd/system/pe_databases-facts.service').with_content(
+        %r{ExecStart=#{repack_cmd} --elevel INFO #{tables_hash[:facts][:database]} #{tables_hash[:facts][:tables]}},
       )
     }
   end
