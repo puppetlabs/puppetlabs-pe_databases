@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.1.0) (2024-01-31)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v4.0.0...v4.1.0)
+
+### Added
+
+- \(SUP-4666\) Pe\_databases: pg\_repack enable debug mode [\#126](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/126) ([Aaronoftheages](https://github.com/Aaronoftheages))
+
 ## [v4.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.0.0) (2023-06-23)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v3.0.0...v4.0.0)
