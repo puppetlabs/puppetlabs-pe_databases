@@ -143,6 +143,8 @@ The following parameters are available in the `pe_databases::pg_repack` class:
 * [`other_tables`](#-pe_databases--pg_repack--other_tables)
 * [`activity_tables`](#-pe_databases--pg_repack--activity_tables)
 * [`disable_maintenance`](#-pe_databases--pg_repack--disable_maintenance)
+* [`repack_log_level`](#-pe_databases--pg_repack--repack_log_level)
+* [`enable_echo`](#-pe_databases--pg_repack--enable_echo)
 * [`jobs`](#-pe_databases--pg_repack--jobs)
 * [`facts_tables_repack_timer`](#-pe_databases--pg_repack--facts_tables_repack_timer)
 * [`catalogs_tables_repack_timer`](#-pe_databases--pg_repack--catalogs_tables_repack_timer)
@@ -183,6 +185,23 @@ true or false (Default: false)
 Disable or enable maintenance mode
 
 Default value: `false`
+
+##### <a name="-pe_databases--pg_repack--repack_log_level"></a>`repack_log_level`
+
+Data type: `Enum['INFO','NOTICE','WARNING','ERROR','LOG','FATAL','PANIC','DEBUG']`
+
+Desired output level of logs
+
+Default value: `'DEBUG'`
+
+##### <a name="-pe_databases--pg_repack--enable_echo"></a>`enable_echo`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+Enabling echo output in logs
+
+Default value: `true`
 
 ##### <a name="-pe_databases--pg_repack--jobs"></a>`jobs`
 
