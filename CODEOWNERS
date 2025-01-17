@@ -4,4 +4,4 @@
 # take ownership of parts of the code base that should be reviewed by another
 # team.
 
-*  @puppetlabs/support
+*  @puppetlabs/skeletor
