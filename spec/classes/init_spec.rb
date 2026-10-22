@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'pe_databases' do
@@ -21,33 +23,38 @@ describe 'pe_databases' do
       PRE_COND
     end
 
+    it { expect(catalogue).to contain_class('pe_databases::pg_repack').with(disable_maintenance: false) }
+
     it {
-      is_expected.to contain_class('pe_databases::pg_repack').with(disable_maintenance: false)
-
-      is_expected.to contain_file('/opt/puppetlabs/pe_databases').with(
+      expect(catalogue).to contain_file('/opt/puppetlabs/pe_databases').with(
         ensure: 'directory',
         mode: '0755',
       )
-      is_expected.to contain_file('/opt/puppetlabs/pe_databases/scripts').with(
+    }
+
+    it {
+      expect(catalogue).to contain_file('/opt/puppetlabs/pe_databases/scripts').with(
         ensure: 'directory',
         mode: '0755',
       )
+    }
 
-      is_expected.to contain_exec('pe_databases_daemon_reload').with(
+    it {
+      expect(catalogue).to contain_exec('pe_databases_daemon_reload').with(
         command: 'systemctl daemon-reload',
         path: ['/bin', '/usr/bin'],
         refreshonly: true,
       )
-
-      [
-        'pe_databases::manage_postgresql_settings',
-        'pe_databases::manage_table_settings',
-        'pe_databases::reports_tables_repack_timer',
-        'pe_databases::resource_events_tables_repack_timer',
-      ].each do |deprecated_param|
-        is_expected.to contain_puppet_enterprise__deprecated_parameter(deprecated_param)
-      end
     }
+
+    [
+      'pe_databases::manage_postgresql_settings',
+      'pe_databases::manage_table_settings',
+      'pe_databases::reports_tables_repack_timer',
+      'pe_databases::resource_events_tables_repack_timer',
+    ].each do |deprecated_param|
+      it { expect(catalogue).to contain_puppet_enterprise__deprecated_parameter(deprecated_param) }
+    end
   end
 
   context 'when systemd is not the init provider' do

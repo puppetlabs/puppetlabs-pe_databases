@@ -6,10 +6,10 @@
 # @param tables [Array] Array of tables to repack
 define pe_databases::collect (
   String  $database_type       = $title,
-  String  $command             = undef,
   Boolean $disable_maintenance = false,
-  String  $on_cal              = undef,
-  Array   $tables              = undef,
+  Optional[String]  $command   = undef,
+  Optional[String]  $on_cal    = undef,
+  Optional[Array]   $tables    = undef,
 ) {
   Service {
     notify  => Exec['pe_databases_daemon_reload'],
