@@ -1,9 +1,19 @@
 {
   "platforms": [
     {
+      "label": "RedHat-8",
+      "provider": "provision::provision_service",
+      "image": "rhel-8"
+    },
+    {
       "label": "RedHat-9",
       "provider": "provision::provision_service",
       "image": "rhel-9"
+    },
+    {
+      "label": "RedHat-10",
+      "provider": "provision::provision_service",
+      "image": "rhel-10"
     },
     {
       "label": "AlmaLinux-8",
@@ -34,6 +44,26 @@
       "label": "Ubuntu-2404",
       "provider": "provision::provision_service",
       "image": "ubuntu-2404-lts-amd64"
+    },
+    {
+      "label": "Oracle-Linux-8",
+      "provider": "provision::provision_service",
+      "image": "oracle-cloud/oracle-linux-8"
+    },
+    {
+      "label": "Oracle-Linux-9",
+      "provider": "provision::provision_service",
+      "image": "oracle-cloud/oracle-linux-9"
+    },
+    {
+      "label": "Sles-15",
+      "provider": "provision::provision_service",
+      "image": "sles-15"
+    },
+    {
+      "label": "Ubuntu-2604",
+      "provider": "provision::provision_service",
+      "image": "ubuntu-2604-lts-amd64"
     }
   ]
 }

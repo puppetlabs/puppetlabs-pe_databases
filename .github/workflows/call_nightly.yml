@@ -7,6 +7,7 @@ jobs:
   spec_testing:
     name: "Spec testing"
     uses: ./.github/workflows/spec.yml
+    secrets: inherit
 
   nightly_testing:
     if: github.repository != 'puppetlabs/puppetlabs-bash_task_helper' && github.repository != 'puppetlabs/puppetlabs-puppet_operations_appliance'
