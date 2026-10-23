@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
   workflow_call:
 
+env:
+  PUPPET_FORGE_TOKEN: ${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}
+  BUNDLE_RUBYGEMS___PUPPETCORE__PUPPET__COM: "forge-key:${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}"
+
 jobs:
   setup_matrix:
     name: "Setup Test Matrix"
@@ -33,6 +37,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         architecture: [standard]
         image: [rhel-8, rhel-9]

@@ -1,8 +1,12 @@
-name: "PE LTS Acceptance Testing"
+name: "PE Latest-1 Acceptance Testing"
 
 on:
   workflow_dispatch:
   workflow_call:
+
+env:
+  PUPPET_FORGE_TOKEN: ${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}
+  BUNDLE_RUBYGEMS___PUPPETCORE__PUPPET__COM: "forge-key:${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}"
 
 jobs:
   setup_matrix:
@@ -39,14 +43,14 @@ jobs:
     - name: Set latest release
       id: latest_release
       run: |
-        out=$(jq -c '[.[] | select(.lts == true)][0].latest | {"collection": [.]}' <<<'${{ steps.curl_forge.outputs.forge_response }}')
+        out=$(jq -c '.[1].latest | {"collection": [.]}' <<<'${{ steps.curl_forge.outputs.forge_response }}')
         echo "latest=$out" >> $GITHUB_OUTPUT
 
     - name: Setup Acceptance Test Matrix
       id: get-matrix
       run: |
-        if [[ -e spec/fixtures/matrix/lts.json ]]; then
-          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/lts.json <<<'${{ steps.latest_release.outputs.latest }}')
+        if [[ -e spec/fixtures/matrix/latest_m1.json ]]; then
+          out=$(jq -c '. + ($matrix | .[])' --slurpfile matrix spec/fixtures/matrix/latest_m1.json <<<'${{ steps.latest_release.outputs.latest }}')
           echo "matrix=$out" >> $GITHUB_OUTPUT
         else
           echo "matrix={}" >> $GITHUB_OUTPUT
@@ -62,10 +66,8 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix: ${{fromJson(needs.setup_matrix.outputs.matrix)}}
-      
-    env:
-      PUPPET_GEM_VERSION: '~> 8.0.1'
       
     steps:
     - name: Checkout Source
