@@ -41,6 +41,11 @@ jobs:
         run: |
           if [ '${{ github.repository_owner }}' == 'puppetlabs' ]; then
           bundle exec matrix_from_metadata_v2
+          # Also run the specs on Puppet 9 / Ruby 4.0.7. A later duplicate key in
+          # $GITHUB_OUTPUT overrides the earlier one, so re-emit the extended matrix.
+          matrix=$(grep '^spec_matrix=' "$GITHUB_OUTPUT" | tail -n1 | cut -d= -f2-)
+          extended=$(jq -c '.include += [{"puppet_version":"~> 9.0","ruby_version":"4.0.7"}] | .include |= unique' <<<"$matrix")
+          echo "spec_matrix=${extended}" >> "$GITHUB_OUTPUT"
           else
             echo  "spec_matrix={}" >> $GITHUB_OUTPUT
           fi
