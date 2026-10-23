@@ -2,57 +2,57 @@
   "platforms": [
     {
       "label": "RedHat-9",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "rhel-9"
     },
     {
       "label": "AlmaLinux-8",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "almalinux-cloud/almalinux-8"
     },
     {
       "label": "Alma-Linux-9",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "almalinux-cloud/almalinux-9"
     },
     {
       "label": "Rocky-Linux-8",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "rocky-linux-cloud/rocky-linux-8"
     },
     {
       "label": "Rocky-Linux-9",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "rocky-linux-cloud/rocky-linux-9"
     },
     {
       "label": "Ubuntu-2204",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "ubuntu-2204-lts"
     },
     {
       "label": "Ubuntu-2404",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "ubuntu-2404-lts-amd64"
     },
     {
       "label": "Oracle-Linux-8",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "oracle-cloud/oracle-linux-8"
     },
     {
       "label": "Oracle-Linux-9",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "oracle-cloud/oracle-linux-9"
     },
     {
       "label": "Sles-15",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "sles-15"
     },
     {
       "label": "Ubuntu-2604",
-      "provider": "provision::provision_service",
+      "provider": "provision_service",
       "image": "ubuntu-2604-lts-amd64"
     }
   ]
