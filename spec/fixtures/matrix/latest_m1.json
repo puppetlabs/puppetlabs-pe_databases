@@ -38,12 +38,12 @@
     {
       "label": "Oracle-Linux-8",
       "provider": "provision_service",
-      "image": "oracle-cloud/oracle-linux-8"
+      "image": "oracle-linux-cloud/oracle-linux-8"
     },
     {
       "label": "Oracle-Linux-9",
       "provider": "provision_service",
-      "image": "oracle-cloud/oracle-linux-9"
+      "image": "oracle-linux-cloud/oracle-linux-9"
     },
     {
       "label": "Sles-15",
