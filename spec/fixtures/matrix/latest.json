@@ -1,34 +1,9 @@
 {
     "platforms": [
         {
-            "label": "Rocky-Linux-8",
+            "label": "Sles-15",
             "provider": "provision_service",
-            "image": "rocky-linux-cloud/rocky-linux-8"
-        },
-        {
-            "label": "Rocky-Linux-9",
-            "provider": "provision_service",
-            "image": "rocky-linux-cloud/rocky-linux-9"
-        },
-        {
-            "label": "Oracle-Linux-8",
-            "provider": "provision_service",
-            "image": "oracle-linux-cloud/oracle-linux-8"
-        },
-        {
-            "label": "Oracle-Linux-9",
-            "provider": "provision_service",
-            "image": "oracle-linux-cloud/oracle-linux-9"
-        },
-        {
-            "label": "Ubuntu-2204",
-            "provider": "provision_service",
-            "image": "ubuntu-2204-lts"
-        },
-        {
-            "label": "Ubuntu-2404",
-            "provider": "provision_service",
-            "image": "ubuntu-2404-lts-amd64"
+            "image": "sles-15"
         }
     ]
 }
