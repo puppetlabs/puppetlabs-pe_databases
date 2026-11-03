@@ -108,7 +108,7 @@ jobs:
     - name: "EXPERIMENT: enable SLES15 Legacy module (net-tools zypper fix attempt)"
       continue-on-error: true
       run: |
-        bundle exec bolt command run 'sudo bash -c "source /etc/os-release && SUSEConnect -p sle-module-legacy/${VERSION_ID}/x86_64"' -i ./$INVENTORY_PATH --targets all --stream
+        bundle exec bolt command run '. /etc/os-release && sudo SUSEConnect -p sle-module-legacy/${VERSION_ID}/x86_64' -i ./$INVENTORY_PATH --targets all --stream
     - name: Install PE
       run: |
         # Retry the PE install to absorb transient installer/network flakiness.
