@@ -7,69 +7,59 @@
   "source": "https://github.com/puppetlabs/puppetlabs-pe_databases",
   "project_page": "https://github.com/puppetlabs/puppetlabs-pe_databases",
   "issues_url": "https://github.com/puppetlabs/puppetlabs-pe_databases/issues",
-  "dependencies": [
-
-  ],
+  "dependencies": [],
   "operatingsystem_support": [
     {
-      "operatingsystem": "RedHat",
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7"
+        "8",
+        "9"
       ]
     },
     {
-      "operatingsystem": "Scientific",
+      "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7"
+        "8",
+        "9",
+        "10"
       ]
     },
     {
-      "operatingsystem": "Ubuntu",
+      "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "18.04",
-        "20.04"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "12",
         "15"
       ]
     },
     {
-      "operatingsystem": "AlmaLinux",
+      "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "RockyLinux",
-      "operatingsystemrelease": [
-        "8"
+        "22.04",
+        "24.04",
+        "26.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 7.18.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     }
   ],
-  "pdk-version": "2.7.0",
+  "pdk-version": "4.0.1",
   "template-url": "https://github.com/puppetlabs/pdk-templates#main",
-  "template-ref": "heads/main-0-g1ca5ee4"
+  "template-ref": "heads/main-0-gde9a08b"
 }

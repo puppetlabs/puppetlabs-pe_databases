@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'pe_databases::pg_repack' do
@@ -24,7 +26,7 @@ describe 'pe_databases::pg_repack' do
         tables: '-t events -t event_commits',
         schedule: 'Wed,Fri \*-\*-\* 04:30:00',
         database: '-d pe-activity',
-      }
+      },
     }
   end
   let(:pre_condition) do
@@ -44,40 +46,54 @@ describe 'pe_databases::pg_repack' do
   end
 
   context 'with default parameters' do
-    it {
-      tables_hash.each do |name, val|
-        is_expected.to contain_pe_databases__collect(name).with(
-          disable_maintenance: false,
-          command: "#{repack_cmd} --elevel DEBUG --echo #{val[:database]}",
-          # Strip the backslash character because this is not a regex
-          on_cal: (val[:schedule]).to_s.tr('\\', ''),
-        )
+    deprecated_params = [
+      'pe_databases::pg_repack::reports_tables_repack_timer',
+      'pe_databases::pg_repack::resource_events_tables_repack_timer',
+    ]
+    old_crons = [
+      'pg_repack facts tables', 'pg_repack catalogs tables', 'pg_repack other tables',
+      'pg_repack reports tables', 'pg_repack resource_events tables',
+      'VACUUM FULL facts tables',
+      'VACUUM FULL catalogs tables',
+      'VACUUM FULL other tables',
+      'Maintain PE databases'
+    ]
 
-        is_expected.to contain_service("pe_databases-#{name}.timer").with_ensure('running')
-        is_expected.to contain_service("pe_databases-#{name}.service")
+    [:facts, :catalogs, :other, :activity].each do |name|
+      context "with the #{name} timer" do
+        let(:val) { tables_hash[name] }
 
-        is_expected.to contain_file("/etc/systemd/system/pe_databases-#{name}.timer").with_content(%r{OnCalendar=#{val[:schedule]}})
-        is_expected.to contain_file("/etc/systemd/system/pe_databases-#{name}.service").with_content(
-          %r{ExecStart=#{repack_cmd} --elevel DEBUG --echo #{val[:database]} #{val[:tables]}},
-        )
+        it {
+          expect(catalogue).to contain_pe_databases__collect(name).with(
+            disable_maintenance: false,
+            command: "#{repack_cmd} --elevel DEBUG --echo #{val[:database]}",
+            # Strip the backslash character because this is not a regex
+            on_cal: val[:schedule].to_s.tr('\\', ''),
+          )
+        }
 
-        [
-          'pe_databases::pg_repack::reports_tables_repack_timer',
-          'pe_databases::pg_repack::resource_events_tables_repack_timer',
-        ].each do |deprecated_param|
-          is_expected.to contain_puppet_enterprise__deprecated_parameter(deprecated_param)
-        end
+        it { expect(catalogue).to contain_service("pe_databases-#{name}.timer").with_ensure('running') }
+        it { expect(catalogue).to contain_service("pe_databases-#{name}.service") }
+
+        it {
+          expect(catalogue).to contain_file("/etc/systemd/system/pe_databases-#{name}.timer").with_content(%r{OnCalendar=#{val[:schedule]}})
+        }
+
+        it {
+          expect(catalogue).to contain_file("/etc/systemd/system/pe_databases-#{name}.service").with_content(
+            %r{ExecStart=#{repack_cmd} --elevel DEBUG --echo #{val[:database]} #{val[:tables]}},
+          )
+        }
       end
+    end
 
-      ['pg_repack facts tables', 'pg_repack catalogs tables', 'pg_repack other tables',
-       'pg_repack reports tables', 'pg_repack resource_events tables',
-       'VACUUM FULL facts tables',
-       'VACUUM FULL catalogs tables',
-       'VACUUM FULL other tables',
-       'Maintain PE databases'].each do |cron|
-         is_expected.to contain_cron(cron).with(ensure: 'absent')
-       end
-    }
+    deprecated_params.each do |deprecated_param|
+      it { expect(catalogue).to contain_puppet_enterprise__deprecated_parameter(deprecated_param) }
+    end
+
+    old_crons.each do |cron|
+      it { expect(catalogue).to contain_cron(cron).with(ensure: 'absent') }
+    end
   end
 
   context 'when customizing timers' do
@@ -86,11 +102,11 @@ describe 'pe_databases::pg_repack' do
         define puppet_enterprise::deprecated_parameter() {}
 
         class {'pe_databases': facts_tables_repack_timer => 'Tue *-*-* 04:20:00'}
-        PRE_COND
+      PRE_COND
     end
 
     it {
-      is_expected.to contain_pe_databases__collect('facts').with(
+      expect(catalogue).to contain_pe_databases__collect('facts').with(
         on_cal: 'Tue *-*-* 04:20:00',
       )
     }
@@ -102,12 +118,14 @@ describe 'pe_databases::pg_repack' do
 
     it {
       # The command should have --elevel INFO and not contain --echo according to the hieradata
-      is_expected.to contain_pe_databases__collect('facts').with(
+      expect(catalogue).to contain_pe_databases__collect('facts').with(
         command: "#{repack_cmd} --elevel INFO #{tables_hash[:facts][:database]}",
       )
+    }
 
+    it {
       # The service file should have --elevel INFO and not contain --echo according to the hieradata
-      is_expected.to contain_file('/etc/systemd/system/pe_databases-facts.service').with_content(
+      expect(catalogue).to contain_file('/etc/systemd/system/pe_databases-facts.service').with_content(
         %r{ExecStart=#{repack_cmd} --elevel INFO #{tables_hash[:facts][:database]} #{tables_hash[:facts][:tables]}},
       )
     }

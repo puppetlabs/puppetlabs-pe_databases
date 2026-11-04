@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'pe_databases::collect' do
@@ -17,19 +19,24 @@ describe 'pe_databases::collect' do
       }
     end
 
-    it {
-      is_expected.to contain_service('pe_databases-test.timer').with_ensure('running')
-      is_expected.to contain_service('pe_databases-test.service')
+    it { expect(catalogue).to contain_service('pe_databases-test.timer').with_ensure('running') }
+    it { expect(catalogue).to contain_service('pe_databases-test.service') }
+    it { expect(catalogue).to contain_file('/etc/systemd/system/pe_databases-test.timer').with_content(%r{bar}) }
 
-      is_expected.to contain_file('/etc/systemd/system/pe_databases-test.timer').with_content(%r{bar})
-      is_expected.to contain_file('/etc/systemd/system/pe_databases-test.service').with_content(
+    it {
+      expect(catalogue).to contain_file('/etc/systemd/system/pe_databases-test.service').with_content(
         %r{ExecStart=foo.*-t baz},
       )
+    }
 
-      is_expected.to contain_service('pe_databases-test.service').that_notifies(
+    it {
+      expect(catalogue).to contain_service('pe_databases-test.service').that_notifies(
         'Exec[pe_databases_daemon_reload]',
       )
-      is_expected.to contain_service('pe_databases-test.timer').that_subscribes_to(
+    }
+
+    it {
+      expect(catalogue).to contain_service('pe_databases-test.timer').that_subscribes_to(
         'File[/etc/systemd/system/pe_databases-test.timer]',
       )
     }
@@ -52,10 +59,8 @@ describe 'pe_databases::collect' do
       }
     end
 
-    it {
-      is_expected.to contain_file('/etc/systemd/system/pe_databases-test.timer').with_ensure('absent')
-      is_expected.to contain_file('/etc/systemd/system/pe_databases-test.service').with_ensure('absent')
-      is_expected.to contain_service('pe_databases-test.timer').with_ensure('stopped')
-    }
+    it { expect(catalogue).to contain_file('/etc/systemd/system/pe_databases-test.timer').with_ensure('absent') }
+    it { expect(catalogue).to contain_file('/etc/systemd/system/pe_databases-test.service').with_ensure('absent') }
+    it { expect(catalogue).to contain_service('pe_databases-test.timer').with_ensure('stopped') }
   end
 end

@@ -13,13 +13,16 @@ jobs:
   spec_testing:
     name: "Spec testing"
     uses: ./.github/workflows/spec.yml
+    secrets: inherit
 
-  lts_testing:
-    name: "PE LTS Testing"
+  latest_m1_testing:
+    name: "PE latest-1 Testing"
     needs: spec_testing
-    uses: ./.github/workflows/pe_lts_testing.yml
+    uses: ./.github/workflows/pe_latest_1.yml
+    secrets: inherit
 
   latest_testing:
     name: "PE latest Testing"
     needs: spec_testing
     uses: ./.github/workflows/pe_latest_testing.yml
+    secrets: inherit
