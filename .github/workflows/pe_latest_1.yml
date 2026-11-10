@@ -105,6 +105,11 @@ jobs:
         sed -e 's/password: .*/password: "[redacted]"/' < $FILE || true
         echo ::endgroup::
         echo INVENTORY_PATH=$FILE >> $GITHUB_ENV
+    - name: "SLES-15 workaround: enable Legacy module (net-tools zypper fix)"
+      if: ${{ matrix.platforms.label == 'Sles-15' }}
+      continue-on-error: true
+      run: |
+        bundle exec bolt command run 'sudo bash -c "source /etc/os-release && SUSEConnect -p sle-module-legacy/${VERSION_ID}/x86_64"' -i ./$INVENTORY_PATH --targets all --stream
     - name: Install PE
       run: |
         # Retry the PE install to absorb transient installer/network flakiness.
