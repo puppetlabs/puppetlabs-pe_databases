@@ -87,6 +87,13 @@ jobs:
         bundle env
         echo ::endgroup::
 
+    - name: Configure SSH keepalive
+      run: |
+        # Runner egress drops idle TCP flows after ~4 min; PE install has longer
+        # silent stretches. Bolt's net-ssh honors ServerAliveInterval from here.
+        mkdir -p ~/.ssh
+        printf 'Host *\n    ServerAliveInterval 60\n    ServerAliveCountMax 5\n' >> ~/.ssh/config
+
     - name: Provision test environment
       run: |
         bundle exec rake 'litmus:provision[${{matrix.platforms.provider}},${{ matrix.platforms.image }}]'
