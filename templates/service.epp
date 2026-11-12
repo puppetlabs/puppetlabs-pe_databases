@@ -1,4 +1,4 @@
-<%- | String $tables, String $command | -%>
+<%- | String $tables, String $command, String $max_runtime, String $cleanup_command, String $stop_timeout, String $wrapper_command | -%>
 [Unit]
 Description=Service to repack PE database tables
 Wants=pe_databases-<%= $tables%>.timer
@@ -7,7 +7,13 @@ Wants=pe_databases-<%= $tables%>.timer
 User=pe-postgres
 Group=pe-postgres
 Type=oneshot
-ExecStart=<%= $command %>
+TimeoutStartSec=<%= $max_runtime %>
+TimeoutStopSec=<%= $stop_timeout %>
+KillMode=mixed
+KillSignal=SIGTERM
+ExecStartPre=-<%= $cleanup_command %>
+ExecStart=<%= $wrapper_command %> <%= $cleanup_command %> -- <%= $command %>
+ExecStopPost=-<%= $cleanup_command %>
 
 [Install]
 WantedBy=multi-user.target

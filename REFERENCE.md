@@ -13,9 +13,14 @@
 
 * [`pe_databases::collect`](#pe_databases--collect): Create systemd units for repacking a given database type
 
+### Data types
+
+* [`Pe_databases::Database_name`](#Pe_databases--Database_name): A PostgreSQL database name
+* [`Pe_databases::Timespan`](#Pe_databases--Timespan): A systemd time span
+
 ### Tasks
 
-* [`reset_pgrepack_schema`](#reset_pgrepack_schema): This task will remove and recreate the pg_repack extension
+* [`reset_pgrepack_schema`](#reset_pgrepack_schema): This task will remove pg_repack leftovers from a database and recreate the pg_repack extension
 
 ## Classes
 
@@ -145,11 +150,19 @@ The following parameters are available in the `pe_databases::pg_repack` class:
 * [`disable_maintenance`](#-pe_databases--pg_repack--disable_maintenance)
 * [`repack_log_level`](#-pe_databases--pg_repack--repack_log_level)
 * [`enable_echo`](#-pe_databases--pg_repack--enable_echo)
+* [`kill_backend`](#-pe_databases--pg_repack--kill_backend)
+* [`wait_timeout`](#-pe_databases--pg_repack--wait_timeout)
+* [`max_runtime`](#-pe_databases--pg_repack--max_runtime)
+* [`stop_timeout`](#-pe_databases--pg_repack--stop_timeout)
 * [`jobs`](#-pe_databases--pg_repack--jobs)
 * [`facts_tables_repack_timer`](#-pe_databases--pg_repack--facts_tables_repack_timer)
 * [`catalogs_tables_repack_timer`](#-pe_databases--pg_repack--catalogs_tables_repack_timer)
 * [`other_tables_repack_timer`](#-pe_databases--pg_repack--other_tables_repack_timer)
 * [`activity_tables_repack_timer`](#-pe_databases--pg_repack--activity_tables_repack_timer)
+* [`facts_tables_repack_enabled`](#-pe_databases--pg_repack--facts_tables_repack_enabled)
+* [`catalogs_tables_repack_enabled`](#-pe_databases--pg_repack--catalogs_tables_repack_enabled)
+* [`other_tables_repack_enabled`](#-pe_databases--pg_repack--other_tables_repack_enabled)
+* [`activity_tables_repack_enabled`](#-pe_databases--pg_repack--activity_tables_repack_enabled)
 * [`reports_tables_repack_timer`](#-pe_databases--pg_repack--reports_tables_repack_timer)
 * [`resource_events_tables_repack_timer`](#-pe_databases--pg_repack--resource_events_tables_repack_timer)
 
@@ -203,6 +216,45 @@ Enabling echo output in logs
 
 Default value: `true`
 
+##### <a name="-pe_databases--pg_repack--kill_backend"></a>`kill_backend`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+When true, pg_repack cancels backends that hold conflicting locks. When false, pg_repack
+is run with --no-kill-backend, so a job skips a table it cannot lock, still exits 0, and the
+skip is visible only in the job's log.
+
+Default value: `true`
+
+##### <a name="-pe_databases--pg_repack--wait_timeout"></a>`wait_timeout`
+
+Data type: `Optional[Integer[1]]`
+
+Number of seconds pg_repack waits for a lock on a table (the -T option)
+before it cancels the conflicting backends. After twice that value it terminates them
+(when kill_backend is true). When unset, the option is not passed and the pg_repack default applies.
+
+Default value: `undef`
+
+##### <a name="-pe_databases--pg_repack--max_runtime"></a>`max_runtime`
+
+Data type: `Pe_databases::Timespan`
+
+Maximum time each repack service may run before systemd stops it, as a systemd
+time span (for example '12h'). systemd sends SIGTERM to the wrapper script, which stops pg_repack with SIGINT.
+
+Default value: `'12h'`
+
+##### <a name="-pe_databases--pg_repack--stop_timeout"></a>`stop_timeout`
+
+Data type: `Pe_databases::Timespan`
+
+Maximum time systemd waits for a stopping job, including pg_repack's abort and the
+cleanup, before it kills it, as a systemd time span (for example '10min').
+
+Default value: `'10min'`
+
 ##### <a name="-pe_databases--pg_repack--jobs"></a>`jobs`
 
 Data type: `Integer`
@@ -243,6 +295,42 @@ The Systemd timer for the pg_repack job affecting the 'activity' tables
 
 Default value: `$pe_databases::activity_tables_repack_timer`
 
+##### <a name="-pe_databases--pg_repack--facts_tables_repack_enabled"></a>`facts_tables_repack_enabled`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+Enable or disable the pg_repack job for the 'facts' tables
+
+Default value: `true`
+
+##### <a name="-pe_databases--pg_repack--catalogs_tables_repack_enabled"></a>`catalogs_tables_repack_enabled`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+Enable or disable the pg_repack job for the 'catalog' tables
+
+Default value: `true`
+
+##### <a name="-pe_databases--pg_repack--other_tables_repack_enabled"></a>`other_tables_repack_enabled`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+Enable or disable the pg_repack job for the 'other' tables
+
+Default value: `true`
+
+##### <a name="-pe_databases--pg_repack--activity_tables_repack_enabled"></a>`activity_tables_repack_enabled`
+
+Data type: `Boolean`
+
+true or false (Default: true)
+Enable or disable the pg_repack job for the 'activity' tables
+
+Default value: `true`
+
 ##### <a name="-pe_databases--pg_repack--reports_tables_repack_timer"></a>`reports_tables_repack_timer`
 
 Data type: `Optional[String]`
@@ -274,6 +362,12 @@ The following parameters are available in the `pe_databases::collect` defined ty
 * [`disable_maintenance`](#-pe_databases--collect--disable_maintenance)
 * [`on_cal`](#-pe_databases--collect--on_cal)
 * [`tables`](#-pe_databases--collect--tables)
+* [`database`](#-pe_databases--collect--database)
+* [`max_runtime`](#-pe_databases--collect--max_runtime)
+* [`stop_timeout`](#-pe_databases--collect--stop_timeout)
+* [`cleanup_script`](#-pe_databases--collect--cleanup_script)
+* [`wrapper_script`](#-pe_databases--collect--wrapper_script)
+* [`sibling_units`](#-pe_databases--collect--sibling_units)
 
 ##### <a name="-pe_databases--collect--database_type"></a>`database_type`
 
@@ -315,11 +409,86 @@ Array of tables to repack
 
 Default value: `undef`
 
+##### <a name="-pe_databases--collect--database"></a>`database`
+
+Data type: `Pe_databases::Database_name`
+
+The database the job repacks, passed to the cleanup script
+
+Default value: `'pe-puppetdb'`
+
+##### <a name="-pe_databases--collect--max_runtime"></a>`max_runtime`
+
+Data type: `Pe_databases::Timespan`
+
+Maximum time the service may run before systemd stops it (the TimeoutStartSec value)
+
+Default value: `'12h'`
+
+##### <a name="-pe_databases--collect--stop_timeout"></a>`stop_timeout`
+
+Data type: `Pe_databases::Timespan`
+
+Maximum time systemd waits for a stopping job, including pg_repack's abort and the
+cleanup, before it kills it (the TimeoutStopSec value)
+
+Default value: `'10min'`
+
+##### <a name="-pe_databases--collect--cleanup_script"></a>`cleanup_script`
+
+Data type: `String[1]`
+
+Path to the script that clears leftover pg_repack objects before and after each run
+
+Default value: `"${pe_databases::scripts_dir}/repack_cleanup.sh"`
+
+##### <a name="-pe_databases--collect--wrapper_script"></a>`wrapper_script`
+
+Data type: `String[1]`
+
+Path to the script that runs the cleanup and pg_repack commands for each job
+
+Default value: `"${pe_databases::scripts_dir}/repack_run.sh"`
+
+##### <a name="-pe_databases--collect--sibling_units"></a>`sibling_units`
+
+Data type: `Array[String[1]]`
+
+Names of systemd units for other jobs on the same database that the cleanup script
+checks for before it removes leftover objects
+
+Default value: `[]`
+
+## Data types
+
+### <a name="Pe_databases--Database_name"></a>`Pe_databases::Database_name`
+
+Accepts a string made of letters, digits, underscores and hyphens that does
+not start with a hyphen (for example 'pe-puppetdb').
+
+Alias of `Pattern[/\A[A-Za-z0-9_][A-Za-z0-9_-]*\z/]`
+
+### <a name="Pe_databases--Timespan"></a>`Pe_databases::Timespan`
+
+Accepts one or more numbers, each followed by a systemd time unit (for example
+'12h', '10min', '1.5h' or '1min 30s'). A bare number means seconds. A value of
+'0' means no limit.
+
+Alias of `Pattern[/\A([0-9]+(\.[0-9]+)?[ ]*(us|usec|ms|msec|s|sec|seconds|second|min|minutes|minute|m|hours|hour|hr|h|days|day|d|weeks|week|w|months|month|years|year|y)[ ]*)*[0-9]+(\.[0-9]+)?([ ]*(us|usec|ms|msec|s|sec|seconds|second|min|minutes|minute|m|hours|hour|hr|h|days|day|d|weeks|week|w|months|month|years|year|y))?\z/]`
+
 ## Tasks
 
 ### <a name="reset_pgrepack_schema"></a>`reset_pgrepack_schema`
 
-This task will remove and recreate the pg_repack extension
+This task will remove pg_repack leftovers from a database and recreate the pg_repack extension
 
 **Supports noop?** false
+
+#### Parameters
+
+##### `database`
+
+Data type: `Optional[Enum['pe-puppetdb', 'pe-activity']]`
+
+The database to clean up, must be one of pe-puppetdb or pe-activity. Defaults to pe-puppetdb.
 
