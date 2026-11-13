@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.2.0) (2026-11-13)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v4.1.0...v4.2.0)
+
+### Added
+
+- \(PE-47317\) pe\_databases: stop pg\_repack jobs from running away [\#133](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/133) ([coreymbe](https://github.com/coreymbe))
+
 ## [v4.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.1.0) (2024-01-31)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v4.0.0...v4.1.0)
