@@ -4,6 +4,12 @@ on:
   workflow_dispatch:
   workflow_call:
 
+env:
+  PUPPET_FORGE_TOKEN: ${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}
+  BUNDLE_RUBYGEMS___PUPPETCORE__PUPPET__COM: "forge-key:${{ secrets.PUPPET_FORGE_TOKEN || secrets.PUPPET_FORGE_TOKEN_PUBLIC }}"
+  PROVISION_MACHINE_TYPE: "n1-standard-4"
+  PROVISION_DISK_SIZE_GB: "40"
+
 jobs:
   setup_matrix:
     name: "Setup Test Matrix"
@@ -61,9 +67,8 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix: ${{fromJson(needs.setup_matrix.outputs.matrix)}}
-    env:
-      PUPPET_GEM_VERSION: '~> 8.0.1'
     steps:
     - name: Checkout Source
       uses: actions/checkout@v4
@@ -78,6 +83,13 @@ jobs:
         echo ::group::bundler environment
         bundle env
         echo ::endgroup::
+
+    - name: Configure SSH keepalive
+      run: |
+        # Runner egress drops idle TCP flows after ~4 min; PE install has longer
+        # silent stretches. Bolt's net-ssh honors ServerAliveInterval from here.
+        mkdir -p ~/.ssh
+        printf 'Host *\n    ServerAliveInterval 60\n    ServerAliveCountMax 5\n' >> ~/.ssh/config
 
     - name: Provision test environment
       run: |
@@ -97,6 +109,11 @@ jobs:
         sed -e 's/password: .*/password: "[redacted]"/' < $FILE || true
         echo ::endgroup::
         echo INVENTORY_PATH=$FILE >> $GITHUB_ENV
+    - name: "SLES-15 workaround: enable Legacy module (net-tools zypper fix)"
+      if: ${{ matrix.platforms.label == 'Sles-15' }}
+      continue-on-error: true
+      run: |
+        bundle exec bolt command run 'sudo bash -c "source /etc/os-release && SUSEConnect -p sle-module-legacy/${VERSION_ID}/x86_64"' -i ./$INVENTORY_PATH --targets all --stream
     - name: Install PE
       run: |
         # Retry the PE install to absorb transient installer/network flakiness.

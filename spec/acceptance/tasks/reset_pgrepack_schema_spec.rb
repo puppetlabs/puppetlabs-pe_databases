@@ -1,14 +1,17 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'reset_pgrepack_schema task' do
   before(:all) do
     pp = <<-MANIFEST
         include pe_databases
-        MANIFEST
+    MANIFEST
 
     # Run it twice and test for idempotency
     idempotent_apply(pp)
   end
+
   it 'returns success' do
     result = run_bolt_task('pe_databases::reset_pgrepack_schema')
     expect(result.stdout).to contain(%r{success})
@@ -42,6 +45,7 @@ describe 'reset_pgrepack_schema task' do
       30.times do
         held = run_shell("#{psql} -At -c \"#{held_sql}\"", expect_failures: true).stdout.to_s.strip.to_i
         break if held >= 1
+
         sleep 1
       end
       raise 'lock on public.fact_paths was not held within 30 seconds' unless held >= 1
@@ -52,6 +56,7 @@ describe 'reset_pgrepack_schema task' do
       30.times do
         state = run_shell('systemctl show -p ActiveState pe_databases-facts.service', expect_failures: true).stdout.to_s
         break if state.include?('ActiveState=activating')
+
         sleep 1
       end
       raise "pe_databases-facts.service never reached activating, last state: #{state.strip}" unless state.include?('ActiveState=activating')
@@ -62,13 +67,11 @@ describe 'reset_pgrepack_schema task' do
       run_shell('systemctl stop pe_databases-facts.service', expect_failures: true)
     end
 
-    it 'refuses to run' do
-      result = run_bolt_task('pe_databases::reset_pgrepack_schema', {}, expect_failures: true)
-      # The task prints its error as JSON, which Bolt returns as the result value
-      output = result.result['message'].to_s
-      expect(output).to match(%r{pe_databases-facts\.service})
-      expect(output).to match(%r{is running})
-    end
+    # The task prints its error as JSON, which Bolt returns as the result value
+    let(:output) { run_bolt_task('pe_databases::reset_pgrepack_schema', {}, expect_failures: true).result['message'].to_s }
+
+    it { expect(output).to match(%r{pe_databases-facts\.service}) }
+    it { expect(output).to match(%r{is running}) }
 
     # The examples run in order: the second one stops the unit and releases
     # the lock that the first one relies on.

@@ -14,10 +14,10 @@
 #   checks for before it removes leftover objects
 define pe_databases::collect (
   String  $database_type       = $title,
-  String  $command             = undef,
   Boolean $disable_maintenance = false,
-  String  $on_cal              = undef,
-  Array   $tables              = undef,
+  Optional[String]  $command   = undef,
+  Optional[String]  $on_cal    = undef,
+  Optional[Array]   $tables    = undef,
   Pe_databases::Database_name $database = 'pe-puppetdb',
   Pe_databases::Timespan $max_runtime = '12h',
   Pe_databases::Timespan $stop_timeout = '10min',
