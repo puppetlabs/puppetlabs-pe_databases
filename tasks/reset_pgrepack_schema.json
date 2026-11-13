@@ -1,8 +1,14 @@
 {
   "puppet_task_version": 1,
   "supports_noop": false,
-  "description": "This task will remove and recreate the pg_repack extension",
+  "description": "This task will remove pg_repack leftovers from a database and recreate the pg_repack extension",
+  "parameters": {
+    "database": {
+      "description": "The database to clean up, must be one of pe-puppetdb or pe-activity. Defaults to pe-puppetdb.",
+      "type": "Optional[Enum['pe-puppetdb', 'pe-activity']]"
+    }
+  },
   "implementations": [
-    {"name": "reset_pgrepack_schema.sh", "requirements": ["shell"], "files": ["pe_databases/files/common.sh"], "input_method": "environment"}
+    {"name": "reset_pgrepack_schema.sh", "requirements": ["shell"], "files": ["pe_databases/files/common.sh", "pe_databases/files/repack_cleanup.sh"], "input_method": "environment"}
   ]
 }

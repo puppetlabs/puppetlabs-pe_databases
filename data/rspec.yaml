@@ -7,7 +7,6 @@ pe_databases::other_tables_repack_timer:
 pe_databases::activity_tables_repack_timer:
   'Wed,Fri *-*-* 04:30:00'
 pe_databases::pg_repack::fact_tables:
-  - factsets
   - fact_paths
 pe_databases::pg_repack::catalog_tables:
   - catalogs
