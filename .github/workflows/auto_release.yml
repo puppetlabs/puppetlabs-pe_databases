@@ -25,6 +25,8 @@ jobs:
         args: 'pdk release prep --force --debug'
       env:
         CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Use public rubygems instead of the authenticated puppetcore source
+        BUNDLE_GEMSOURCE__PUBLIC: 'true'
 
     - name: "Get Version"
       if: ${{ github.repository_owner == 'puppetlabs' }}
