@@ -379,7 +379,7 @@ Default value: `$title`
 
 ##### <a name="-pe_databases--collect--command"></a>`command`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 defined in pg_repack.pp
 
@@ -395,7 +395,7 @@ Default value: `false`
 
 ##### <a name="-pe_databases--collect--on_cal"></a>`on_cal`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 values can be found in pg_repack.pp
 
@@ -403,7 +403,7 @@ Default value: `undef`
 
 ##### <a name="-pe_databases--collect--tables"></a>`tables`
 
-Data type: `Array`
+Data type: `Optional[Array]`
 
 Array of tables to repack
 
