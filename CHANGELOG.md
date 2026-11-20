@@ -25,7 +25,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - `pe_databases::collect`: `command`, `on_cal` and `tables` are now `Optional` so that their `undef` defaults are valid types. [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
 
-## [v4.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.2.0) (2026-11-13)
+## [v4.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.2.0) - 2026-11-13
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v4.1.0...v4.2.0)
 
@@ -33,7 +33,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - \(PE-47317\) pe\_databases: stop pg\_repack jobs from running away [\#133](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/133) ([coreymbe](https://github.com/coreymbe))
 
-## [v4.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.1.0) (2024-01-31)
+## [v4.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.1.0) - 2024-01-31
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v4.0.0...v4.1.0)
 
@@ -41,7 +41,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - \(SUP-4666\) Pe\_databases: pg\_repack enable debug mode [\#126](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/126) ([Aaronoftheages](https://github.com/Aaronoftheages))
 
-## [v4.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.0.0) (2023-06-23)
+## [v4.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.0.0) - 2023-06-23
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v3.0.0...v4.0.0)
 
@@ -54,7 +54,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - \(SUP-3972\) Add activity tables to repack [\#123](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/123) ([m0dular](https://github.com/m0dular))
 - \(SUP-4193\) Puppet 8 Compatibility [\#120](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/120) ([MartyEwings](https://github.com/MartyEwings))
 
-## [v3.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v3.0.0) (2022-11-08)
+## [v3.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v3.0.0) - 2022-11-08
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.3.0...v3.0.0)
 
@@ -66,7 +66,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - make systemd timers configurable [\#109](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/109) ([SimonHoenscheid](https://github.com/SimonHoenscheid))
 
-## [v2.3.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.3.0) (2022-07-21)
+## [v2.3.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.3.0) - 2022-07-21
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.2.0...v2.3.0)
 
@@ -75,7 +75,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - \(SUP-3409\) Update puppet strings comments [\#104](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/104) ([elainemccloskey](https://github.com/elainemccloskey))
 - \(SUP-3408\) Remove deprecated backup functionality [\#103](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/103) ([elainemccloskey](https://github.com/elainemccloskey))
 
-## [v2.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.2.0) (2021-10-06)
+## [v2.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.2.0) - 2021-10-06
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.1.1...v2.2.0)
 
@@ -88,7 +88,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - \(SUP-2571\) Purge legacy cron jobs if present [\#97](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/97) ([gavindidrichsen](https://github.com/gavindidrichsen))
 - \(SUP-2557\) Ensure backup class is not included by default [\#95](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/95) ([m0dular](https://github.com/m0dular))
 
-## [v2.1.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.1.1) (2021-09-30)
+## [v2.1.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.1.1) - 2021-09-30
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.1.0...v2.1.1)
 
@@ -96,7 +96,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - \(SUP-2682\) Remove Requires= property from timers [\#92](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/92) ([m0dular](https://github.com/m0dular))
 
-## [v2.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.1.0) (2021-07-13)
+## [v2.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.1.0) - 2021-07-13
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v2.0.0...v2.1.0)
 
@@ -104,7 +104,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - \(SUP-2545\) Disable table maintenance by default [\#83](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/83) ([m0dular](https://github.com/m0dular))
 
-## [v2.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.0.0) (2021-07-02)
+## [v2.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v2.0.0) - 2021-07-02
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v1.2.0...v2.0.0)
 
@@ -122,7 +122,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - Fix path in backup.pp and reset pgrepack schema task [\#74](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/74) ([carabasdaniel](https://github.com/carabasdaniel))
 - Fix scope of disable\_maintenance param [\#73](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/73) ([m0dular](https://github.com/m0dular))
 
-## [v1.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v1.2.0) (2021-06-02)
+## [v1.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v1.2.0) - 2021-06-02
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v1.1.0...v1.2.0)
 
@@ -133,7 +133,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - \(SUP-2374\) Remove external module deps [\#51](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/51) ([MartyEwings](https://github.com/MartyEwings))
 - \(sup-2095\) Remove cron\_core from dependencies [\#49](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/49) ([jarretlavallee](https://github.com/jarretlavallee))
 
-## [v1.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v1.1.0) (2020-08-07)
+## [v1.1.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v1.1.0) - 2020-08-07
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/1.0.1...v1.1.0)
 
@@ -145,11 +145,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - \(GH-30\) Update repack logging to separate files [\#43](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/43) ([jarretlavallee](https://github.com/jarretlavallee))
 
-## [1.0.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/1.0.1) (2020-03-25)
+## [1.0.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/1.0.1) - 2020-03-25
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/1.0.0...1.0.1)
 
-## [1.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/1.0.0) (2020-03-20)
+## [1.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/1.0.0) - 2020-03-20
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.15.0...1.0.0)
 
@@ -161,7 +161,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - Refactor shell scripts [\#36](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/36) ([m0dular](https://github.com/m0dular))
 
-## [0.15.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.15.0) (2019-02-06)
+## [0.15.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.15.0) - 2019-02-06
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.14.2...0.15.0)
 
@@ -175,15 +175,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 -  PE Database is a reserved node group name in 2019.0 [\#24](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/24) ([MartyEwings](https://github.com/MartyEwings))
 - Set permissions on /opt/puppetlabs/pe\_databases and /opt/puppetlabs/pe\_databases/scripts [\#18](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/18) ([mmarod](https://github.com/mmarod))
 
-## [0.14.2](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.2) (2018-11-01)
+## [0.14.2](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.2) - 2018-11-01
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.14.1...0.14.2)
 
-## [0.14.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.1) (2018-06-25)
+## [0.14.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.1) - 2018-06-25
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.14.0...0.14.1)
 
-## [0.14.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.0) (2018-05-23)
+## [0.14.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.14.0) - 2018-05-23
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.13.0...0.14.0)
 
@@ -192,11 +192,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - Update for compatibility with 2018.1.0 [\#17](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/17) ([npwalker](https://github.com/npwalker))
 - Add autovacuum settings for certnames and catalogs [\#14](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/14) ([npwalker](https://github.com/npwalker))
 
-## [0.13.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.13.0) (2017-12-01)
+## [0.13.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.13.0) - 2017-12-01
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.12.1...0.13.0)
 
-## [0.12.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.12.1) (2017-11-02)
+## [0.12.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.12.1) - 2017-11-02
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.12.0...0.12.1)
 
@@ -205,19 +205,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - Add analyze when performing VACUUM FULL [\#13](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/13) ([npwalker](https://github.com/npwalker))
 - Make cronjobs to vacuum full PuppetDB tables [\#12](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/12) ([npwalker](https://github.com/npwalker))
 
-## [0.12.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.12.0) (2017-10-18)
+## [0.12.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.12.0) - 2017-10-18
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.11.2...0.12.0)
 
-## [0.11.2](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.2) (2017-09-19)
+## [0.11.2](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.2) - 2017-09-19
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.11.1...0.11.2)
 
-## [0.11.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.1) (2017-09-19)
+## [0.11.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.1) - 2017-09-19
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.11.0...0.11.1)
 
-## [0.11.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.0) (2017-09-19)
+## [0.11.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.11.0) - 2017-09-19
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.10.1...0.11.0)
 
@@ -225,23 +225,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - Do not manage fact\_values table in PuppetDB in PE 2017.2+ [\#6](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/6) ([npwalker](https://github.com/npwalker))
 
-## [0.10.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.10.1) (2017-06-19)
+## [0.10.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.10.1) - 2017-06-19
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.10.0...0.10.1)
 
-## [0.10.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.10.0) (2016-12-08)
+## [0.10.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.10.0) - 2016-12-08
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.9.0...0.10.0)
 
-## [0.9.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.9.0) (2016-12-05)
+## [0.9.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.9.0) - 2016-12-05
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.8.1...0.9.0)
 
-## [0.8.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.8.1) (2016-10-17)
+## [0.8.1](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.8.1) - 2016-10-17
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/0.8.0...0.8.1)
 
-## [0.8.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.8.0) (2016-10-17)
+## [0.8.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/0.8.0) - 2016-10-17
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/ed135c2576450d698a7338a70be62b9d7317761a...0.8.0)
 
