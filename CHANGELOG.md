@@ -1,6 +1,18 @@
-# Change log
+<!-- markdownlint-disable MD024 -->
+# Changelog
 
-All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
+
+## [v5.0.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v5.0.0) - 2026-11-20
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v4.2.0...v5.0.0)
+
+### Other
+
+- Feature release prep fixes [#135](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/135) ([klab-systems](https://github.com/klab-systems))
+- Feature puppet9 [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
 
 ## [v4.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.2.0) (2026-11-13)
 
