@@ -9,10 +9,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-pe_databases/compare/v4.2.0...v5.0.0)
 
-### Other
+### Changed
 
-- Feature release prep fixes [#135](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/135) ([klab-systems](https://github.com/klab-systems))
-- Feature puppet9 [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
+- **Breaking:** Minimum supported Puppet is now 8.0.0 (was 7.18.0), and Puppet 9 is supported (`>= 8.0.0 < 10.0.0`). Puppet 7 is no longer supported. [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
+- **Breaking:** Supported operating systems now match what Puppet Enterprise supports and what is tested in CI. [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
+  - Removed: RedHat 7, CentOS 7, OracleLinux 7, Scientific 7, Ubuntu 18.04 and 20.04, SLES 12.
+  - Added: RedHat 9 and 10, OracleLinux 8 and 9, AlmaLinux 9, Rocky 9, Ubuntu 22.04, 24.04 and 26.04.
+  - Retained: RedHat 8, AlmaLinux 8, Rocky 8, SLES 15.
+- The CI test matrix now covers Puppet 8 and Puppet 9 (Ruby 4.0.7), plus the latest PE and the previous PE release. [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
+- Updated to PDK 4.0.1 templates, including gem installation from Puppetcore. [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
+- Acceptance tests use SSH keepalive and larger VMs, and work around SLES 15 provisioning issues. [#132](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/132) ([isaac-jha](https://github.com/isaac-jha))
+- Replaced the unmaintained `auto_release` workflow with the shared `release_prep` and `release` workflows. [#135](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/135) ([klab-systems](https://github.com/klab-systems))
+
+### Fixed
+
+- `pe_databases::collect`: `command`, `on_cal` and `tables` are now `Optional` so that their `undef` defaults are valid types. [#130](https://github.com/puppetlabs/puppetlabs-pe_databases/pull/130) ([klab-systems](https://github.com/klab-systems))
 
 ## [v4.2.0](https://github.com/puppetlabs/puppetlabs-pe_databases/tree/v4.2.0) (2026-11-13)
 
